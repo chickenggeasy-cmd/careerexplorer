@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Career Explorer Pro - สำรวจอาชีพในฝัน</title>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <nav>
+    <div class="nav-logo" onclick="goHome()">
+      <img src="https://www.otep.go.th/assets/images/otep_logo.png" alt="SUKSAPANPANIT Logo" style="height:48px; width:48px; object-fit:contain; border-radius:12px;" />
+      <div style="display:flex; flex-direction:column; line-height:1;">
+        <span style="font-size:20px; font-weight:800; color:white; letter-spacing:0.5px;">SUKSAPANPANIT</span>
+        <span style="font-size:10px; color:rgba(255,255,255,0.65); margin-top:4px; letter-spacing:2px; font-weight:500; text-transform:uppercase;">Career Explorer</span>
+      </div>
+    </div>
+
+    <button class="hamburger-btn" onclick="toggleMobileMenu()">
+      <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+
+    <div class="nav-menu" id="navMenu">
+      <div class="nav-main-links">
+        <a href="javascript:void(0)" class="nav-link" onclick="goHome(); toggleMobileMenu();">หน้าหลัก</a>
+        <a href="javascript:void(0)" class="nav-link" onclick="showPage('page-about'); toggleMobileMenu();">เกี่ยวกับเรา</a>
+        <a href="javascript:void(0)" class="nav-link" onclick="showPage('page-quiz'); toggleMobileMenu();">ทดสอบสายงาน</a>
+      </div>
+      <div class="nav-search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="searchInput" placeholder="ค้นหาอาชีพ ทักษะ หรือสายงาน..." oninput="handleSearch(this.value)" />
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== HOME PAGE ===== -->
+  <div id="page-home" class="page active">
+
+    <!-- Hero Section -->
+    <section class="hero-v2">
+      <div class="hero-bg-pattern"></div>
+      <div class="hero-glow hero-glow-1"></div>
+      <div class="hero-glow hero-glow-2"></div>
+      <div class="hero-content">
+        <div class="hero-eyebrow animate-up">
+          <span class="eyebrow-dot"></span>
+          <span>ค้นพบเส้นทางที่ใช่สำหรับคุณ</span>
+        </div>
+        <h1 class="hero-title animate-up" style="animation-delay:0.1s;">
+          สำรวจ<span class="hero-highlight">อาชีพ</span><br>ในฝันของคุณ
+        </h1>
+        <p class="hero-subtitle animate-up" style="animation-delay:0.2s;">
+          ฐานข้อมูลอาชีพที่ครอบคลุม พร้อมข้อมูลเงินเดือน การศึกษา และแนวทางการเติบโต<br>เพื่อช่วยให้คุณตัดสินใจได้อย่างมั่นใจ
+        </p>
+        <div class="hero-actions animate-up" style="animation-delay:0.3s;">
+          <button class="btn-primary-hero" onclick="document.getElementById('cat-section').scrollIntoView({behavior:'smooth'})">
+            สำรวจสายงาน
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <button class="btn-secondary-hero" onclick="showPage('page-quiz')">
+            ทำแบบทดสอบ
+          </button>
+        </div>
+      </div>
+      <div class="hero-stats-bar animate-up" style="animation-delay:0.4s;">
+        <div class="hero-stat-item">
+          <div class="stat-num">14</div>
+          <div class="stat-label">สายงานหลัก</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="hero-stat-item">
+          <div class="stat-num">400+</div>
+          <div class="stat-label">อาชีพทั้งหมด</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="hero-stat-item">
+          <div class="stat-num">100%</div>
+          <div class="stat-label">ข้อมูลอัปเดต</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Marquee Ticker -->
+    <div class="ticker-wrapper">
+      <div class="ticker-inner">
+        <div class="ticker-track" id="tickerTrack">
+          <span>🏥 การแพทย์</span><span class="ticker-dot">✦</span>
+          <span>💻 เทคโนโลยี</span><span class="ticker-dot">✦</span>
+          <span>💼 ธุรกิจ</span><span class="ticker-dot">✦</span>
+          <span>⚖️ กฎหมาย</span><span class="ticker-dot">✦</span>
+          <span>🎭 ศิลปะ</span><span class="ticker-dot">✦</span>
+          <span>🎓 การศึกษา</span><span class="ticker-dot">✦</span>
+          <span>🏆 กีฬา</span><span class="ticker-dot">✦</span>
+          <span>🍳 อาหาร</span><span class="ticker-dot">✦</span>
+          <span>✈️ การบิน</span><span class="ticker-dot">✦</span>
+          <span>🏗️ ก่อสร้าง</span><span class="ticker-dot">✦</span>
+          <span>🌱 เกษตรกรรม</span><span class="ticker-dot">✦</span>
+          <span>📦 โลจิสติกส์</span><span class="ticker-dot">✦</span>
+          <span>🏭 โรงงาน</span><span class="ticker-dot">✦</span>
+          <span>💅 ไลฟ์สไตล์</span><span class="ticker-dot">✦</span>
+          <span>🏥 การแพทย์</span><span class="ticker-dot">✦</span>
+          <span>💻 เทคโนโลยี</span><span class="ticker-dot">✦</span>
+          <span>💼 ธุรกิจ</span><span class="ticker-dot">✦</span>
+          <span>⚖️ กฎหมาย</span><span class="ticker-dot">✦</span>
+          <span>🎭 ศิลปะ</span><span class="ticker-dot">✦</span>
+          <span>🎓 การศึกษา</span><span class="ticker-dot">✦</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Section -->
+    <div class="container" id="cat-section">
+      <div class="section-header animate-up">
+        <div class="section-tag">สายงาน</div>
+        <h2 class="section-title-v2">เลือกสายงาน<br>ที่คุณสนใจ</h2>
+        <p class="section-desc">ค้นพบข้อมูลเชิงลึกของทุกสายงาน ตั้งแต่เงินเดือน การศึกษา ไปจนถึงทักษะที่ต้องการ</p>
+      </div>
+      <div class="cat-grid animate-up" id="catGrid" style="animation-delay:0.2s;"></div>
+    </div>
+
+    <!-- Feature Highlight Section -->
+    <section class="feature-section">
+      <div class="container">
+        <div class="feature-grid">
+          <div class="feature-card animate-up">
+            <div class="feature-icon">💰</div>
+            <h3>ข้อมูลเงินเดือน</h3>
+            <p>เปรียบเทียบเงินเดือนตั้งแต่ระดับเริ่มต้นถึงระดับผู้เชี่ยวชาญ พร้อมแผนภูมิที่เข้าใจง่าย</p>
+          </div>
+          <div class="feature-card animate-up" style="animation-delay:0.1s;">
+            <div class="feature-icon">🎓</div>
+            <h3>เส้นทางการศึกษา</h3>
+            <p>รู้ว่าต้องเรียนอะไร ที่ไหน นานแค่ไหน เพื่อเข้าสู่อาชีพที่คุณฝัน</p>
+          </div>
+          <div class="feature-card animate-up" style="animation-delay:0.2s;">
+            <div class="feature-icon">📈</div>
+            <h3>โอกาสเติบโต</h3>
+            <p>วิเคราะห์แนวโน้มตลาดแรงงานและทิศทางการเติบโตในระยะยาวของแต่ละสายงาน</p>
+          </div>
+          <div class="feature-card animate-up" style="animation-delay:0.3s;">
+            <div class="feature-icon">🧠</div>
+            <h3>แบบทดสอบอาชีพ</h3>
+            <p>ทำแบบทดสอบค้นหาอาชีพที่เหมาะกับบุคลิกและความสนใจของคุณโดยเฉพาะ</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- end page-home -->
+
+  <!-- ===== CATEGORY PAGE ===== -->
+  <div id="page-cat" class="page">
+    <div class="container">
+      <div class="breadcrumb animate-up">
+        <span onclick="goHome()">🏠 หน้าหลัก</span>
+        <span class="sep">›</span>
+        <span class="current" id="breadcat"></span>
+      </div>
+      <button class="back-btn animate-up" onclick="goHome()">← ย้อนกลับ</button>
+      <div class="section-title animate-up" id="catPageTitle"></div>
+      <div class="job-grid animate-up" id="jobGrid" style="animation-delay:0.1s;"></div>
+    </div>
+  </div>
+  
+  <!-- ===== DETAIL PAGE ===== -->
+  <div id="page-detail" class="page">
+    <div class="container">
+      <div class="breadcrumb animate-up">
+        <span onclick="goHome()">🏠 หน้าหลัก</span>
+        <span class="sep">›</span>
+        <span onclick="goBack()" id="breadcat2" style="cursor:pointer;"></span>
+        <span class="sep">›</span>
+        <span class="current" id="breadjob"></span>
+      </div>
+      <div style="margin-bottom:20px;" class="animate-up">
+        <button class="back-btn" onclick="goBack()">← ย้อนกลับ</button>
+      </div>
+      <div id="detailContent" class="animate-up" style="animation-delay:0.1s;"></div>
+    </div>
+  </div>
+  
+  <!-- ===== SEARCH PAGE ===== -->
+  <div id="page-search" class="page">
+    <div class="container">
+      <div class="breadcrumb">
+        <span onclick="goHome()">🏠 หน้าหลัก</span>
+        <span class="sep">›</span>
+        <span class="current">ผลการค้นหา</span>
+      </div>
+      <div class="section-title" id="searchTitle">ผลการค้นหา</div>
+      <div id="searchResults" class="animate-up"></div>
+    </div>
+  </div>
+
+  <!-- ===== QUIZ PAGE ===== -->
+  <div id="page-quiz" class="page">
+    <div class="container">
+      <div class="breadcrumb animate-up">
+        <span onclick="goHome()">🏠 หน้าหลัก</span>
+        <span class="sep">›</span>
+        <span class="current">ทดสอบสายงาน</span>
+      </div>
+      <div class="section-title animate-up">แบบทดสอบค้นหาอาชีพที่ใช่</div>
+      <div id="quizApp"></div>
+    </div>
+  </div>
+
+  <!-- ===== ABOUT PAGE ===== -->
+  <div id="page-about" class="page">
+    <div class="about-hero-full">
+      <div class="about-hero-bg"></div>
+      <div class="about-hero-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+      </div>
+      <div class="about-hero-inner">
+        <div class="about-logo-wrap animate-up">
+          <img src="https://www.suksapan.or.th/assets/uploads/media-uploader/bowt91728008761.png" alt="logo">
+        </div>
+        <div class="about-hero-tag animate-up" style="animation-delay:0.1s;">ก่อตั้ง พ.ศ. 2495 • มากกว่า 70 ปี</div>
+        <h1 class="about-hero-title animate-up" style="animation-delay:0.2s;">องค์การค้าของ สกสค.</h1>
+        <p class="about-hero-subtitle animate-up" style="animation-delay:0.3s;">ผู้ผลิตและจัดจำหน่ายสื่อการเรียนการสอนคุณภาพสูง เพื่อพัฒนาการศึกษาไทยอย่างยั่งยืน</p>
+        <div class="about-hero-links animate-up" style="animation-delay:0.4s;">
+          <a href="https://suksapanmall.com" target="_blank" class="about-hero-link">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            suksapanmall.com
+          </a>
+          <a href="https://web.facebook.com/suksapanpanitcenter" target="_blank" class="about-hero-link">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+            Facebook สกสค.
+          </a>
+        </div>
+      </div>
+      <div class="about-scroll-hint">
+        <div class="scroll-mouse">
+          <div class="scroll-wheel"></div>
+        </div>
+        <span>เลื่อนดู</span>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="breadcrumb animate-up" style="margin-top: 20px;">
+        <span onclick="goHome()">🏠 หน้าหลัก</span>
+        <span class="sep">›</span>
+        <span class="current">เกี่ยวกับเรา</span>
+      </div>
+
+      <!-- Stats Section -->
+      <div class="about-stats-row animate-up">
+        <div class="about-stat-card">
+          <div class="about-stat-num">70+</div>
+          <div class="about-stat-label">ปีแห่งประสบการณ์</div>
+        </div>
+        <div class="about-stat-card">
+          <div class="about-stat-num">10,000+</div>
+          <div class="about-stat-label">รายการสินค้า</div>
+        </div>
+        <div class="about-stat-card">
+          <div class="about-stat-num">400+</div>
+          <div class="about-stat-label">อาชีพในระบบ</div>
+        </div>
+        <div class="about-stat-card">
+          <div class="about-stat-num">14</div>
+          <div class="about-stat-label">สายงานหลัก</div>
+        </div>
+      </div>
+
+      <!-- Mission Section -->
+      <div class="about-two-col animate-up">
+        <div class="about-img-col">
+          <div class="about-img-wrap">
+            <img src="https://www.suksapan.or.th/assets/uploads/media-uploader/ladphao1729751846.jpg" alt="Education Store">
+            <div class="img-badge">ก่อตั้ง 2495</div>
+          </div>
+        </div>
+        <div class="about-text-col">
+          <div class="section-tag">ประวัติและพันธกิจ</div>
+          <h2 class="about-section-title">กว่า 70 ปีเพื่อการศึกษาไทย</h2>
+          <p class="about-body-text">องค์การค้าของ สกสค. ก่อตั้งขึ้นในปี พ.ศ. 2495 มีภารกิจหลักในการผลิต จัดหา และจำหน่ายสื่อการเรียนการสอน อุปกรณ์การศึกษา และดูแลสวัสดิการแก่ครูและบุคลากรทางการศึกษาทั่วประเทศ</p>
+          <div class="mission-list">
+            <div class="mission-item">
+              <div class="mission-dot"></div>
+              <div>
+                <strong>ผลิตและพัฒนาสื่อการเรียนการสอน</strong>
+                <p>ที่ทันสมัย ส่งเสริมการเรียนรู้แห่งศตวรรษที่ 21</p>
+              </div>
+            </div>
+            <div class="mission-item">
+              <div class="mission-dot"></div>
+              <div>
+                <strong>สนับสนุนการศึกษาของชาติ</strong>
+                <p>และดูแลสวัสดิการครูและบุคลากรการศึกษาอย่างยั่งยืน</p>
+              </div>
+            </div>
+            <div class="mission-item">
+              <div class="mission-dot"></div>
+              <div>
+                <strong>ลดความเหลื่อมล้ำทางการศึกษา</strong>
+                <p>ผ่านการพัฒนาแพลตฟอร์มดิจิทัลสำหรับนักเรียนไทยทั่วประเทศ</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Products Section -->
+      <div class="about-products-section animate-up">
+        <div class="section-header" style="text-align:center; margin-bottom: 48px;">
+          <div class="section-tag">สิ่งที่เรามอบให้</div>
+          <h2 class="section-title-v2">ผลิตภัณฑ์และบริการ</h2>
+          <p class="section-desc">ศูนย์รวมเครื่องมือและสื่อการเรียนรู้ที่ครบครันที่สุดสำหรับการศึกษาไทย</p>
+        </div>
+        <div class="products-grid-v2">
+          <div class="product-card-v2">
+            <div class="product-icon-wrap">
+              <img src="img/icons/book.png" alt="หนังสือ" class="product-icon-img">
+            </div>
+            <h4>แบบเรียนและหนังสือ</h4>
+            <p>จัดพิมพ์หนังสือเรียนและคู่มือครูที่ได้มาตรฐาน ครอบคลุมทุกระดับชั้น</p>
+            <div class="product-card-footer">มากกว่า 1,000 รายการ</div>
+          </div>
+          <div class="product-card-v2">
+            <div class="product-icon-wrap">
+              <img src="img/icons/folding-clothes.png" alt="เครื่องแบบ" class="product-icon-img">
+            </div>
+            <h4>เครื่องแบบนักเรียน</h4>
+            <p>ชุดนักเรียน ชุดลูกเสือ-เนตรนารี และอุปกรณ์ประกอบเครื่องแบบที่ถูกต้องตามระเบียบ</p>
+            <div class="product-card-footer">ถูกต้องตามระเบียบ</div>
+          </div>
+          <div class="product-card-v2">
+            <div class="product-icon-wrap">
+              <img src="img/icons/microscope.png" alt="วิทยาศาสตร์" class="product-icon-img">
+            </div>
+            <h4>อุปกรณ์วิทยาศาสตร์</h4>
+            <p>เครื่องมือทดลองและสารเคมีสำหรับห้องปฏิบัติการวิทยาศาสตร์ในโรงเรียน</p>
+            <div class="product-card-footer">มาตรฐานสากล</div>
+          </div>
+          <div class="product-card-v2">
+            <div class="product-icon-wrap">
+              <img src="img/icons/toys.png" alt="สื่อปฐมวัย" class="product-icon-img">
+            </div>
+            <h4>สื่อการสอนปฐมวัย</h4>
+            <p>ของเล่นเสริมพัฒนาการ สื่อทำมือ และเครื่องเขียนเพื่อส่งเสริมจินตนาการเด็ก</p>
+            <div class="product-card-footer">เสริมพัฒนาการ</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Career Explorer Section -->
+      <div class="about-career-section animate-up">
+        <div class="career-left">
+          <div class="section-tag">Career Explorer Pro</div>
+          <h2 class="about-section-title">แพลตฟอร์มค้นหาอาชีพที่ใช่</h2>
+          <p class="about-body-text">พัฒนาขึ้นเพื่อช่วยให้นักเรียน นักศึกษา และผู้ที่กำลังมองหาเส้นทางอาชีพ สามารถสำรวจข้อมูลอาชีพได้อย่างครบถ้วน เพื่อลดความเหลื่อมล้ำในการเข้าถึงข้อมูล</p>
+          <div class="career-features-list">
+            <div class="career-feat">
+              <div class="feat-check">✓</div>
+              <span>ครอบคลุม <strong>14 สายงานหลัก</strong> และ <strong>400+ อาชีพ</strong></span>
+            </div>
+            <div class="career-feat">
+              <div class="feat-check">✓</div>
+              <span>ข้อมูลเงินเดือน 3 ระดับพร้อมแผนภูมิ</span>
+            </div>
+            <div class="career-feat">
+              <div class="feat-check">✓</div>
+              <span>แบบทดสอบค้นหาอาชีพที่เหมาะกับคุณ</span>
+            </div>
+            <div class="career-feat">
+              <div class="feat-check">✓</div>
+              <span>วิเคราะห์ข้อดี-ข้อจำกัดของแต่ละอาชีพ</span>
+            </div>
+          </div>
+        </div>
+        <div class="career-right">
+          <div class="dashboard-mockup">
+            <div class="dash-header">
+              <div class="dash-dots">
+                <span></span><span></span><span></span>
+              </div>
+              <div class="dash-title">Career Explorer Pro</div>
+            </div>
+            <div class="dash-body">
+              <div class="dash-stat-row">
+                <div class="dash-stat"><div class="ds-num" style="color:#be185d;">14</div><div class="ds-lbl">สายงาน</div></div>
+                <div class="dash-stat"><div class="ds-num" style="color:#be185d;">400+</div><div class="ds-lbl">อาชีพ</div></div>
+                <div class="dash-stat"><div class="ds-num" style="color:#be185d;">100%</div><div class="ds-lbl">ฟรี</div></div>
+              </div>
+              <div class="dash-bar-section">
+                <div class="dash-bar-label">Entry Level</div>
+                <div class="dash-bar-track"><div class="dash-bar-fill" style="width:40%;"></div></div>
+                <div class="dash-bar-label">Mid Level</div>
+                <div class="dash-bar-track"><div class="dash-bar-fill" style="width:65%;"></div></div>
+                <div class="dash-bar-label">Senior Level</div>
+                <div class="dash-bar-track"><div class="dash-bar-fill" style="width:90%;"></div></div>
+              </div>
+              <div class="dash-tags">
+                <span>📊 เงินเดือน</span>
+                <span>🎓 การศึกษา</span>
+                <span>⚡ ทักษะ</span>
+                <span>📈 การเติบโต</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quote Section -->
+      <div class="about-quote-section animate-up">
+        <div class="quote-icon">"</div>
+        <blockquote>เราอยากให้คุณเจออาชีพที่ใช่ และก้าวไปสู่เป้าหมายอย่างมั่นใจ</blockquote>
+        <p class="quote-sub">— ทีมงาน Career Explorer Pro, องค์การค้าของ สกสค.</p>
+        <div class="quote-fact">💡 ศึกษาภัณฑ์พาณิชย์ มีสินค้ามากกว่า 10,000 รายการ เพื่อสนับสนุนทุกเส้นทางอาชีพ!</div>
+      </div>
+
+      <!-- Related Organizations -->
+      <section class="related-orgs-section animate-up">
+        <div class="section-header" style="text-align:center; margin-bottom:32px;">
+          <div class="section-tag">เครือข่าย</div>
+          <h2 class="section-title-v2" style="font-size:28px;">หน่วยงานที่เกี่ยวข้อง</h2>
+        </div>
+        <div class="logo-slider-container">
+          <div class="logo-track" id="logoTrack">
+            <a href="https://www.vec.go.th" target="_blank" class="logo-slide" title="สำนักงานคณะกรรมการการอาชีวศึกษา (สอศ.)">
+              <img src="https://www.suksapanpanit.com/assets/uploads/media-uploader/logo-ovec1712218961.png" alt="สอศ.">
+            </a>
+            <a href="https://www.mhesi.go.th" target="_blank" class="logo-slide" title="กระทรวงการอุดมศึกษา (อว.)">
+              <img src="https://www.suksapanpanit.com/assets/uploads/media-uploader/logo-mhesi1712219017.png" alt="อว.">
+            </a>
+            <a href="https://www.nacc.go.th/we/" target="_blank" class="logo-slide" title="สสวท.">
+              <img src="https://www.suksapanpanit.com/assets/uploads/media-uploader/logo-nacc1712219051.png" alt="สสวท.">
+            </a>
+            <a href="https://ecd.onec.go.th" target="_blank" class="logo-slide" title="ปฐมวัยไทยแลนด์">
+              <img src="https://www.suksapanpanit.com/assets/uploads/media-uploader/logo-ecd1712220459.png" alt="ปฐมวัยไทยแลนด์">
+            </a>
+            <a href="https://dole.go.th" target="_blank" class="logo-slide" title="กรมส่งเสริมการเรียนรู้ (สกร.)">
+              <img src="https://www.suksapanpanit.com/assets/uploads/media-uploader/logo-moe1712280913.png" alt="สกร.">
+            </a>
+            <a href="https://www.obec.go.th" target="_blank" class="logo-slide" title="สพฐ.">
+              <img src="https://www.suksapanpanit.com/assets/uploads/media-uploader/logo-obec1712216770.png" alt="สพฐ.">
+            </a>
+            <a href="http://www.onec.go.th" target="_blank" class="logo-slide" title="สกศ.">
+              <img src="https://www.suksapanpanit.com/assets/uploads/media-uploader/logo-onec1712216841.png" alt="สกศ.">
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Team Section -->
+      <div class="team-section animate-up">
+        <div class="section-header" style="text-align:center; margin-bottom:40px;">
+          <div class="section-tag">ผู้พัฒนา</div>
+          <h2 class="section-title-v2" style="font-size:28px;">ทีมงานผู้พัฒนา</h2>
+          <p class="section-desc">ผู้อยู่เบื้องหลังการสร้างสรรค์แพลตฟอร์มนี้</p>
+        </div>
+        <div class="team-grid">
+          <div class="team-card">
+            <div class="team-card-bg"></div>
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQF02Jj8T2t7PdkytAw42HDuuSz7yXguKn8Lg&s" alt="นาย ชโยดม บัวขาว">
+            <div class="team-info">
+              <div class="team-name">นาย ชโยดม บัวขาว</div>
+              <div class="team-role">นักศึกษาฝึกงาน / นักพัฒนาหลัก</div>
+              <div class="team-org">
+                <span>มหาวิทยาลัยกรุงเทพสุวรรณภูมิ (BSU)</span>
+                <span>คณะเทคโนโลยีสารสนเทศ (ITD)</span>
+              </div>
+            </div>
+          </div>
+          <div class="team-card">
+            <div class="team-card-bg"></div>
+            <img src="https://www.suksapan.or.th/assets/uploads/media-uploader/bowt91728008761.png" alt="สกสค." style="background:#fff; padding:8px; object-fit:contain;">
+            <div class="team-info">
+              <div class="team-name">องค์การค้าของ สกสค.</div>
+              <div class="team-role">หน่วยงานสนับสนุน</div>
+              <div class="team-org">
+                <span>ให้คำปรึกษาและประสานงาน</span>
+                <span>การพัฒนาโปรเจกต์ให้สมบูรณ์</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align:center; margin: 20px 0 60px;" class="animate-up">
+        <button class="btn-outline-pink" onclick="goHome()">← กลับสู่หน้าหลัก</button>
+      </div>
+    </div>
+  </div><!-- end page-about -->
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <div class="footer-inner">
+      <div class="ft-brand">
+        <div class="ft-brand-head">
+          <img src="https://www.suksapan.or.th/assets/uploads/media-uploader/bowt91728008761.png" alt="logo" />
+          <div class="ft-brand-name">
+            <div class="line1">Career</div>
+            <div class="line2">Explorer Pro</div>
+          </div>
+        </div>
+        <p class="ft-brand-desc">สร้างด้วย 🌸 เพื่อนักเรียนไทย<br />องค์การค้าของ สกสค. มีภารกิจในการผลิตและพัฒนาสื่อการเรียนการสอนที่ทันสมัย</p>
+        <div class="ft-social-btns">
+          <a href="https://web.facebook.com/suksapanpanitcenter" target="_blank" class="ft-social-btn">
+            <img src="https://static.xx.fbcdn.net/rsrc.php/y-/r/yhD4cqC_Wzs.webp" alt="fb" />
+            Facebook สกสค.
+          </a>
+          <a href="https://suksapanmall.com/#/" target="_blank" class="ft-social-btn">
+            <img src="https://www.suksapanpanit.com/assets/uploads/media-uploader/logo-ssp-6006001755761321.png" alt="mall" />
+            Suksapan Mall
+          </a>
+        </div>
+      </div>
+
+      <div class="ft-contact">
+        <div class="ft-col-title"><div class="ft-col-title-icon">📬</div>ติดต่อเรา</div>
+        <div class="ft-contact-list">
+          <div class="ft-contact-item">
+            <div class="ft-ci-icon">📍</div>
+            <div>
+              <div class="ft-ci-label">ที่อยู่</div>
+              <div class="ft-ci-value">2249 ถนนลาดพร้าว แขวงสะพานสอง<br />เขตวังทองหลาง กทม. 10310</div>
+            </div>
+          </div>
+          <div class="ft-contact-item">
+            <div class="ft-ci-icon">📞</div>
+            <div>
+              <div class="ft-ci-label">โทรศัพท์</div>
+              <div class="ft-ci-value">0 2514 4023-30 ต่อ 222, 223</div>
+            </div>
+          </div>
+          <div class="ft-contact-item">
+            <div class="ft-ci-icon">✉️</div>
+            <div>
+              <div class="ft-ci-label">อีเมล</div>
+              <div class="ft-ci-value"><a href="mailto:Eshop.Bowt2@Gmail.Com">Eshop.Bowt2@Gmail.Com</a></div>
+            </div>
+          </div>
+        </div>
+        <div class="ft-map">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.2764952044813!2d100.59609657508933!3d13.760233086641885!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e29e843f55e09d%3A0x6334f5905187e1f!2z4Liq4LiW4Liy4Lia4Liy4LiH4Liq4Liy4LiZ4Liq4Liy4Li44Lij4Li14LiZ4Liy4LiH4Liq4Li04LiX4Lii4Liy4Lio4Li44LiB4Lip4Liy!5e0!3m2!1sth!2sth!4v1716777000000!5m2!1sth!2sth" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+          <a href="https://maps.app.goo.gl/4yTzcFRytRqG7XG29" target="_blank" class="ft-map-pill">🗺️ เปิดใน Maps</a>
+        </div>
+      </div>
+
+      <div class="ft-download">
+        <div class="ft-col-title"><div class="ft-col-title-icon">📱</div>ดาวน์โหลดแอป</div>
+        <div class="ft-store-btns">
+          <a href="https://play.google.com/store/apps/details?id=td.webuild.ssp" target="_blank" class="ft-store-link">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" />
+            <div class="ft-store-text"><small>GET IT ON</small><strong>Google Play</strong></div>
+          </a>
+          <a href="https://apps.apple.com/us/app/suksapan-mall/id1587123179" target="_blank" class="ft-store-link">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="App Store" />
+            <div class="ft-store-text"><small>DOWNLOAD ON THE</small><strong>App Store</strong></div>
+          </a>
+        </div>
+        <div class="ft-qr-wrap">
+          <div class="ft-qr-img">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://suksapanmall.com" alt="QR Code" />
+          </div>
+          <div class="ft-qr-info">
+            <small>สแกน QR Code</small>
+            <p>ดาวน์โหลด Suksapan Mall<br/>ได้โดยตรงผ่านสมาร์ทโฟน</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bar">© 2026 All right reserved by SUKSAPANPANIT</div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/router.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/quiz.js"></script>
+  
+  <script>
+    function toggleMobileMenu() {
+      const navMenu = document.getElementById('navMenu');
+      if (navMenu) navMenu.classList.toggle('active');
+    }
+    
+    let lastScrollY = window.scrollY;
+    const nav = document.querySelector('nav'); 
+    window.addEventListener('scroll', () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > lastScrollY && currentScrollY > 70) nav.classList.add('nav-hidden');
+      else if (currentScrollY < lastScrollY) nav.classList.remove('nav-hidden');
+      lastScrollY = currentScrollY;
+    });
+
+    // Ticker
+    document.addEventListener('DOMContentLoaded', () => {
+      const ticker = document.getElementById('tickerTrack');
+      if (ticker) {
+        ticker.innerHTML += ticker.innerHTML;
+      }
+
+      // Logo Slider
+      const track = document.getElementById('logoTrack');
+      if (!track) return;
+      track.innerHTML += track.innerHTML;
+
+      let isDown = false;
+      let startX, scrollLeft;
+      let isAutoScrolling = true;
+
+      function autoScroll() {
+        if (isAutoScrolling && !isDown) {
+          track.scrollLeft += 1;
+          if (track.scrollLeft >= track.scrollWidth / 2) track.scrollLeft = 0;
+        }
+        requestAnimationFrame(autoScroll);
+      }
+      requestAnimationFrame(autoScroll);
+
+      track.addEventListener('mousedown', (e) => { isDown = true; isAutoScrolling = false; startX = e.pageX - track.offsetLeft; scrollLeft = track.scrollLeft; });
+      track.addEventListener('mouseleave', () => { isDown = false; isAutoScrolling = true; });
+      track.addEventListener('mouseup', () => { isDown = false; isAutoScrolling = true; });
+      track.addEventListener('mousemove', (e) => { if (!isDown) return; e.preventDefault(); const x = e.pageX - track.offsetLeft; track.scrollLeft = scrollLeft - (x - startX) * 2; });
+      track.addEventListener('touchstart', () => { isAutoScrolling = false; });
+      track.addEventListener('touchend', () => { isAutoScrolling = true; });
+    });
+  </script>
+</body>
+</html>
