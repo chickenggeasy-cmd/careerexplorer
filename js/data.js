@@ -68,7 +68,7 @@ const DATA = {
           nameT: "ทันตแพทย์ (หมอฟัน)",
           nameE: "Dentist",
           icon: "🦷",
-          img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvORBwO9US5Ht5OITJw6PeVL3QF5A5p0FmaA&s",
+          img: "https://bangkokdental.com/wp-content/uploads/2020/05/orthodontic-dental-clinic.jpg",
           salary: { entry: "50,000", mid: "150,000", senior: "300,000+" },
           salaryBar: { entry: 30, mid: 55, senior: 100 },
           education: "ทันตแพทยศาสตร์บัณฑิต",
@@ -368,24 +368,6 @@ const DATA = {
           cons: ["เรียนยาวและยาก","ความเครียดจากผู้ป่วยสูง","ต้องใช้ความเข้าใจและอารมณ์ร่วมมาก"],
           growth: "เติบโตสูงจากสังคมที่ให้ความสำคัญสุขภาพจิต",
           tags: ["สุขภาพจิต", "บำบัดทางจิต", "ปรึกษาปัญหา", "แพทย์เฉพาะทาง", "จิตเวช"]
-        },
-        {
-          id: "forensic_pathologist",
-          nameT: "นักนิติเวช",
-          nameE: "Forensic Pathologist",
-          icon: "⚕️",
-          img: "https://wp.stu.ca/forensicscience/wp-content/uploads/sites/22/2015/04/forensic-pathology.jpg",
-          salary: { entry: "80,000", mid: "120,000", senior: "250,000+" },
-          salaryBar: { entry: 35, mid: 65, senior: 100 },
-          education: "แพทยศาสตร์ / นิติเวชศาสตร์",
-          degree: "แพทยศาสตรบัณฑิต + วุฒิเฉพาะทาง",
-          years: "7-12 ปี",
-          skills: ["ชันสูตรศพ","วิเคราะห์สาเหตุการเสียชีวิต","นิติวิทยาศาสตร์","การแพทย์"],
-          description: "แพทย์ผู้เชี่ยวชาญด้านการชันสูตรพลิกศพ เพื่อค้นหาสาเหตุและลักษณะการเสียชีวิต ใช้ประกอบคดีทางกฎหมายและกระบวนการยุติธรรม",
-          pros: ["เป็นสายเฉพาะทางที่สำคัญ","รายได้สูง","มีบทบาทต่อกระบวนการยุติธรรม"],
-          cons: ["ใช้เวลาเรียนยาว","ความกดดันสูง","ต้องทำงานกับคดีที่ละเอียดอ่อน"],
-          growth: "เติบโตในโรงพยาบาล หน่วยงานรัฐ และสถาบันนิติเวช",
-          tags: ["ชันสูตรศพ", "นิติวิทยาศาสตร์", "หาสาเหตุการตาย", "กฎหมาย", "แพทย์เฉพาะทาง"]
         },
         {
           id: "genetics_counselor",
