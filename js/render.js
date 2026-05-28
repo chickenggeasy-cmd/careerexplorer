@@ -6,7 +6,6 @@
 function renderCategories() {
   const catGrid = document.getElementById('catGrid');
   
-  // ข้อมูลรูปภาพพื้นหลังสำหรับทั้ง 14 สายงาน
   const catImages = {
     medical: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&q=80",
     tech: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&q=80",
@@ -24,7 +23,6 @@ function renderCategories() {
     lifestyle: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=600&q=80"
   };
   
-  // ข้อมูลสี Gradient สำหรับทั้ง 14 สายงาน
   const catGradients = {
     medical: "linear-gradient(135deg, #be185d, #f472b6)",
     tech: "linear-gradient(135deg, #1d4ed8, #60a5fa)",
@@ -49,11 +47,8 @@ function renderCategories() {
     html += `
       <div class="cat-card-new" onclick="showCategory('${cat.id}')" 
            style="animation: fadeInUp 0.5s ease forwards; opacity: 0; animation-delay: ${0.2 + (index * 0.1)}s;">
-        
         <div class="cat-card-bg" style="background-image: url('${img}');"></div>
-        
         <div class="cat-card-overlay" style="background: ${grad};"></div>
-        
         <div class="cat-card-content">
           <div class="cat-icon-new">
             <img src="${cat.icon}" alt="${cat.nameT}">
@@ -99,20 +94,10 @@ function showCategory(catId) {
   document.getElementById('breadcat').innerText = cat.nameT;
 
   const catEmoji = {
-    medical: "🏥",
-    tech: "💻",
-    business: "💼",
-    law: "⚖️",
-    arts: "🎭",
-    education: "🎓",
-    sports: "🏆",
-    food: "🍳",
-    aviation: "✈️",
-    construction: "🏗️",
-    agriculture: "🌱",
-    logistics: "📦",
-    factory: "🏭",
-    lifestyle: "💅"
+    medical: "🏥", tech: "💻", business: "💼", law: "⚖️",
+    arts: "🎭", education: "🎓", sports: "🏆", food: "🍳",
+    aviation: "✈️", construction: "🏗️", agriculture: "🌱",
+    logistics: "📦", factory: "🏭", lifestyle: "💅"
   };
   const emoji = catEmoji[cat.id] || "🚀";
   document.getElementById('catPageTitle').innerHTML = `${emoji} สายงาน: ${cat.nameT}`;
@@ -134,90 +119,150 @@ function showJob(jobId, catId) {
   document.getElementById('breadjob').innerText = job.nameT;
 
   document.getElementById('detailContent').innerHTML = `
-    <img src="${job.img}" class="detail-hero-img" alt="${job.nameT}">
-    <div class="detail-header" style="background: linear-gradient(135deg, ${cat.iconColor || '#1e293b'}, #0f172a);">
-      <div class="detail-header-top">
-        <div class="detail-icon">${job.icon}</div>
-        <div>
-          <div class="detail-title-th">${job.nameT}</div>
-          <div class="detail-title-en">${job.nameE}</div>
-        </div>
-      </div>
-      <p class="detail-desc">${job.description}</p>
-      <div class="detail-badges">
-        ${job.tags.map(tag => `<span class="badge">${tag}</span>`).join('')}
-      </div>
-    </div>
 
-    <div class="detail-grid">
-      <div class="detail-main">
-        <div class="info-card">
-          <h3>🎓 ข้อมูลการศึกษาและทักษะ</h3>
-          <div class="info-item"><div class="info-icon-dot">📘</div><div><strong>วุฒิการศึกษาที่ต้องการ:</strong> ${job.degree}<br><span style="color:var(--text-muted); font-size:14px;">(${job.education})</span></div></div>
-          <div class="info-item"><div class="info-icon-dot">⏳</div><div><strong>ระยะเวลาเรียน/ฝึกฝนโดยเฉลี่ย:</strong> ${job.years}</div></div>
-          <div class="info-item" style="display: block; border-bottom: none; padding-bottom: 0;">
-            <div style="margin-bottom: 6px;"><strong style="display:flex; align-items:center; gap:8px;"><span class="info-icon-dot">⚡</span>ทักษะสำคัญที่จำเป็น (Hard/Soft Skills):</strong></div>
-            <div class="skill-tags">
-              ${job.skills.map(s => `<span class="skill-tag">${s}</span>`).join('')}
-            </div>
+    <!-- ═══════ HERO BANNER ═══════ -->
+    <div class="detail-hero-banner">
+      <div class="dhb-bg" style="background-image: url('${job.img}');"></div>
+      <div class="dhb-overlay"></div>
+      <div class="dhb-content">
+        <div class="dhb-header">
+          <div class="dhb-icon-wrap">${job.icon}</div>
+          <div>
+            <div class="dhb-title-th">${job.nameT}</div>
+            <div class="dhb-title-en">${job.nameE}</div>
           </div>
         </div>
-
-        <div class="info-card">
-          <h3>⚖️ วิเคราะห์ข้อดี - ข้อจำกัด</h3>
-          <div class="pro-con-grid">
-            <div>
-              <div style="font-weight:600; color:#166534; margin-bottom:10px; display:flex; align-items:center; gap:6px;"><span class="pro-icon">✓</span> ข้อดี (Pros)</div>
-              ${job.pros.map(p => `<div class="pro-item"><span class="pro-icon">•</span>${p}</div>`).join('')}
-            </div>
-            <div>
-              <div style="font-weight:600; color:#9f1239; margin-bottom:10px; display:flex; align-items:center; gap:6px;"><span class="con-icon">✗</span> ข้อจำกัด (Cons)</div>
-              ${job.cons.map(c => `<div class="con-item"><span class="con-icon">•</span>${c}</div>`).join('')}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="detail-sidebar">
-        <div class="salary-card">
-          <h3>💰 โครงสร้างเงินเดือน (โดยประมาณ)</h3>
-          <div class="salary-row">
-            <div class="salary-header">
-              <span class="salary-level">เริ่มต้น (Entry Level)</span>
-              <span class="salary-amount">${job.salary.entry} ฿</span>
-            </div>
-            <div class="salary-bar"><div class="salary-bar-fill" id="bar-entry"></div></div>
-          </div>
-          <div class="salary-row">
-            <div class="salary-header">
-              <span class="salary-level">มีประสบการณ์ (Mid Level)</span>
-              <span class="salary-amount">${job.salary.mid} ฿</span>
-            </div>
-            <div class="salary-bar"><div class="salary-bar-fill" id="bar-mid"></div></div>
-          </div>
-          <div class="salary-row">
-            <div class="salary-header">
-              <span class="salary-level">ระดับสูง/ผู้เชี่ยวชาญ (Senior)</span>
-              <span class="salary-amount">${job.salary.senior} ฿</span>
-            </div>
-            <div class="salary-bar"><div class="salary-bar-fill" id="bar-senior"></div></div>
-          </div>
-        </div>
-
-        <div class="info-card">
-          <h3>📈 โอกาสเติบโตในอนาคต</h3>
-          <p style="font-size:15px; color:var(--text-muted); line-height:1.7;">${job.growth}</p>
+        <p class="dhb-desc">${job.description}</p>
+        <div class="dhb-tags">
+          ${job.tags.map(tag => `<span class="dhb-tag">${tag}</span>`).join('')}
         </div>
       </div>
     </div>
+
+    <!-- ═══════ CONTENT GRID ═══════ -->
+    <div class="detail-grid-v2">
+
+      <!-- ── LEFT COLUMN ── -->
+      <div class="detail-main-v2">
+
+        <!-- Education & Skills Card -->
+        <div class="info-card-v2">
+          <div class="icv2-header">
+            <div class="icv2-header-icon">🎓</div>
+            <div class="icv2-title">ข้อมูลการศึกษาและทักษะ</div>
+          </div>
+          <div class="edu-timeline">
+            <div class="edu-item">
+              <div class="edu-dot">📘</div>
+              <div class="edu-text">
+                <strong>วุฒิการศึกษาที่ต้องการ</strong>
+                <span>${job.degree}<br>
+                  <em style="color:#c084fc; font-size:12px; font-style:normal; font-weight:600;">${job.education}</em>
+                </span>
+              </div>
+            </div>
+            <div class="edu-item">
+              <div class="edu-dot">⏳</div>
+              <div class="edu-text">
+                <strong>ระยะเวลาเรียน / ฝึกฝนโดยเฉลี่ย</strong>
+                <span>${job.years}</span>
+              </div>
+            </div>
+            <div class="edu-item" style="padding-bottom:0;">
+              <div class="edu-dot">⚡</div>
+              <div class="edu-text" style="flex:1;">
+                <strong>ทักษะสำคัญที่จำเป็น (Hard / Soft Skills)</strong>
+                <div class="skills-cloud">
+                  ${job.skills.map(s => `<span class="skill-pill">${s}</span>`).join('')}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pros / Cons Card -->
+        <div class="info-card-v2">
+          <div class="icv2-header">
+            <div class="icv2-header-icon">⚖️</div>
+            <div class="icv2-title">วิเคราะห์ข้อดี — ข้อจำกัด</div>
+          </div>
+          <div class="pro-con-v2">
+            <div>
+              <div class="pc-col-title pros">✓ ข้อดี (Pros)</div>
+              ${job.pros.map(p => `
+                <div class="pc-item pro">
+                  <span class="pc-dot" style="color:#22c55e;">●</span>${p}
+                </div>`).join('')}
+            </div>
+            <div>
+              <div class="pc-col-title cons">✗ ข้อจำกัด (Cons)</div>
+              ${job.cons.map(c => `
+                <div class="pc-item con">
+                  <span class="pc-dot" style="color:#f43f5e;">●</span>${c}
+                </div>`).join('')}
+            </div>
+          </div>
+        </div>
+
+      </div><!-- end detail-main-v2 -->
+
+      <!-- ── RIGHT SIDEBAR ── -->
+      <div class="detail-sidebar-v2">
+
+        <!-- Salary Card V2 -->
+        <div class="salary-card-v2">
+          <div class="scv2-title">💰 โครงสร้างเงินเดือน (โดยประมาณ)</div>
+          <div class="scv2-row">
+            <div class="scv2-header">
+              <span class="scv2-level">เริ่มต้น (Entry Level)</span>
+              <span class="scv2-amount">${job.salary.entry} ฿</span>
+            </div>
+            <div class="scv2-bar-track">
+              <div class="scv2-bar-fill entry" id="bar2-entry"></div>
+            </div>
+          </div>
+          <div class="scv2-row">
+            <div class="scv2-header">
+              <span class="scv2-level">มีประสบการณ์ (Mid Level)</span>
+              <span class="scv2-amount">${job.salary.mid} ฿</span>
+            </div>
+            <div class="scv2-bar-track">
+              <div class="scv2-bar-fill mid" id="bar2-mid"></div>
+            </div>
+          </div>
+          <div class="scv2-row">
+            <div class="scv2-header">
+              <span class="scv2-level">ระดับสูง / ผู้เชี่ยวชาญ</span>
+              <span class="scv2-amount">${job.salary.senior} ฿</span>
+            </div>
+            <div class="scv2-bar-track">
+              <div class="scv2-bar-fill senior" id="bar2-senior"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Growth Card V2 -->
+        <div class="growth-card-v2">
+          <div class="growth-indicator">📈 แนวโน้มการเติบโต</div>
+          <div class="gcv2-title">📝 โอกาสในอนาคต</div>
+          <p class="gcv2-text">${job.growth}</p>
+        </div>
+
+      </div><!-- end detail-sidebar-v2 -->
+
+    </div><!-- end detail-grid-v2 -->
   `;
+
   showPage('page-detail');
 
   setTimeout(() => {
-    document.getElementById('bar-entry').style.width = job.salaryBar.entry + '%';
-    document.getElementById('bar-mid').style.width = job.salaryBar.mid + '%';
-    document.getElementById('bar-senior').style.width = job.salaryBar.senior + '%';
-  }, 100);
+    const e = document.getElementById('bar2-entry');
+    const m = document.getElementById('bar2-mid');
+    const s = document.getElementById('bar2-senior');
+    if (e) e.style.width = job.salaryBar.entry + '%';
+    if (m) m.style.width = job.salaryBar.mid + '%';
+    if (s) s.style.width = job.salaryBar.senior + '%';
+  }, 120);
 }
 
 window.onload = () => {
@@ -226,7 +271,6 @@ window.onload = () => {
 
   const total = DATA.categories.reduce((sum, cat) => sum + cat.jobs.length, 0);
 
-  // ✅ แก้ไข: เพิ่ม null check ทุกตัว ป้องกัน error "Cannot set properties of null"
   const totalJobsEl = document.getElementById('totalJobs');
   if (totalJobsEl) totalJobsEl.textContent = total + '+';
 
