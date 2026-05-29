@@ -154,19 +154,46 @@
 
   </div><!-- end page-home -->
 
-  <!-- ===== CATEGORY PAGE ===== -->
-  <div id="page-cat" class="page">
-    <div class="container">
-      <div class="breadcrumb animate-up">
-        <span onclick="goHome()">🏠 หน้าหลัก</span>
-        <span class="sep">›</span>
-        <span class="current" id="breadcat"></span>
-      </div>
-      <button class="back-btn animate-up" onclick="goHome()">← ย้อนกลับ</button>
-      <div class="section-title animate-up" id="catPageTitle"></div>
-      <div class="job-grid animate-up" id="jobGrid" style="animation-delay:0.1s;"></div>
+<!-- ============================================================
+  วิธีใช้งาน — UPGRADE PATCH INSTRUCTIONS
+  ============================================================
+
+  1. แทนที่ไฟล์  js/render.js  ด้วย  render.js  ไฟล์ใหม่
+  2. เพิ่ม <link> ใน index.html ก่อน </head> :
+
+     <link rel="stylesheet" href="css/style-upgrade.css" />
+
+     (หรือ copy เนื้อหา style-upgrade.css ต่อท้าย style.css ก็ได้)
+
+  3. แก้ไข index.html  ——  หา block ของ  page-cat  แล้วแทนที่ทั้ง block
+     ด้วย HTML ด้านล่างนี้:
+  ============================================================ -->
+
+<!-- ===== CATEGORY PAGE ===== -->
+<div id="page-cat" class="page">
+  <div class="container">
+
+    <!-- breadcrumb -->
+    <div class="breadcrumb animate-up">
+      <span onclick="goHome()">🏠 หน้าหลัก</span>
+      <span class="sep">›</span>
+      <span class="current" id="breadcat"></span>
     </div>
+
+    <!-- back button -->
+    <button class="back-btn animate-up" onclick="goHome()">← ย้อนกลับ</button>
+
+    <!-- ★ NEW: hero banner container (render.js จะ inject HTML เข้ามา) -->
+    <div id="catHero" class="animate-up" style="animation-delay:0.05s;"></div>
+
+    <!-- section title (ซ่อนไว้ — hero ทำหน้าที่แทน) -->
+    <div class="section-title animate-up" id="catPageTitle"></div>
+
+    <!-- job grid -->
+    <div class="job-grid animate-up" id="jobGrid" style="animation-delay:0.1s;"></div>
+
   </div>
+</div>
   
   <!-- ===== DETAIL PAGE ===== -->
   <div id="page-detail" class="page">
