@@ -3700,3 +3700,63 @@ footer::after {
   0%, 80%, 100% { background: rgba(255,255,255,0.25); transform: scale(1); }
   40%            { background: rgba(255,255,255,0.9);  transform: scale(1.3); }
 }
+/* --- เลย์เอาต์ของ Grid (ให้เรียงตัวสวยงาม ไม่ยืด) --- */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 25px;
+  padding: 40px 0;
+}
+
+/* --- การออกแบบการ์ด (Card Layout) --- */
+.feature-card {
+  background-color: #ffffff;
+  padding: 35px 25px;
+  border-radius: 20px;
+  text-align: center;
+  border: 1px solid #fce4ec; /* ขอบสีชมพูอ่อนมาก */
+  box-shadow: 0 8px 25px rgba(216, 27, 96, 0.06); /* เงาสีชมพูบางๆ */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(216, 27, 96, 0.15); /* เงาชัดขึ้นตอนชี้เมาส์ */
+}
+
+/* --- วงกลมพื้นหลังของไอคอน (ให้ดูมีมิติ) --- */
+.feature-icon {
+  width: 85px;         /* ขนาดความกว้างวงกลม */
+  height: 85px;        /* ขนาดความสูงวงกลม */
+  background-color: #fce4ec; /* สีพื้นหลังวงกลม (ชมพูพาสเทล) */
+  border-radius: 50%;
+  margin: 0 auto 25px auto;  /* จัดให้อยู่ตรงกลางการ์ด */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- การจัดการขนาดรูปไอคอนและการเปลี่ยนสี (สำคัญมาก) --- */
+.feature-icon img {
+  width: 42px;         /* บังคับขนาดไอคอนให้เล็กและเท่ากันทุกรูป */
+  height: 42px;
+  object-fit: contain;
+
+  /* เทคนิคเวทมนตร์: เปลี่ยนไฟล์ PNG สีดำ ให้กลายเป็นสีชมพูเข้ม (โทนเดียวกับเมนูเว็บ) */
+  filter: invert(30%) sepia(90%) saturate(2500%) hue-rotate(315deg) brightness(95%) contrast(105%);
+}
+
+/* --- การปรับแต่งตัวอักษร --- */
+.feature-card h3 {
+  color: #c2185b; /* หัวข้อสีชมพูเข้ม */
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.feature-card p {
+  color: #555555;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0;
+}
