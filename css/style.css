@@ -3498,3 +3498,205 @@ footer::after {
   .cat-page-hero { height: 220px; }
   .dss-item { flex: 1 1 100%; }
 }
+/* ==========================================================================
+   CAREER EXPLORER — LOADING SCREEN
+   เพิ่ม <link rel="stylesheet" href="css/loader.css"> ใน <head>
+   เพิ่ม <script src="js/loader.js"></script> ก่อน </body>
+   ========================================================================== */
+
+/* ── Overlay ── */
+#app-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(145deg, #3d0620 0%, #6b1136 30%, #be185d 75%, #e0397a 100%);
+  overflow: hidden;
+  transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#app-loader.loader-hide {
+  opacity: 0;
+  transform: scale(1.04);
+  pointer-events: none;
+}
+
+/* ── Background particles ── */
+.loader-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.lp-dot {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  animation: lp-float linear infinite;
+}
+
+.lp-dot:nth-child(1)  { width: 320px; height: 320px; top: -120px; left: -80px;  animation-duration: 18s; }
+.lp-dot:nth-child(2)  { width: 200px; height: 200px; top: 60%;    right: -60px; animation-duration: 14s; animation-delay: -4s; }
+.lp-dot:nth-child(3)  { width: 140px; height: 140px; bottom: 10%; left: 15%;    animation-duration: 20s; animation-delay: -8s; }
+.lp-dot:nth-child(4)  { width: 80px;  height: 80px;  top: 20%;    right: 20%;   animation-duration: 12s; animation-delay: -2s; background: rgba(249,168,212,0.08); }
+.lp-dot:nth-child(5)  { width: 50px;  height: 50px;  top: 70%;    left: 60%;    animation-duration: 16s; animation-delay: -6s; background: rgba(249,168,212,0.1); }
+
+@keyframes lp-float {
+  0%   { transform: translateY(0) rotate(0deg);   }
+  50%  { transform: translateY(-30px) rotate(4deg); }
+  100% { transform: translateY(0) rotate(0deg);   }
+}
+
+/* ── Noise grain overlay ── */
+.loader-grain {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* ── Center content ── */
+.loader-center {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+/* ── Logo ring ── */
+.loader-logo-ring {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  margin-bottom: 32px;
+}
+
+/* spinning dashed ring */
+.loader-ring-svg {
+  position: absolute;
+  inset: 0;
+  animation: loader-spin 2s linear infinite;
+}
+@keyframes loader-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* logo image inside ring */
+.loader-logo-img {
+  position: absolute;
+  inset: 14px;
+  border-radius: 18px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+.loader-logo-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 8px;
+}
+
+/* pulse glow behind logo */
+.loader-logo-glow {
+  position: absolute;
+  inset: -20px;
+  background: radial-gradient(circle, rgba(249,168,212,0.25) 0%, transparent 65%);
+  border-radius: 50%;
+  animation: loader-glow-pulse 2s ease-in-out infinite;
+}
+@keyframes loader-glow-pulse {
+  0%, 100% { opacity: 0.6; transform: scale(1);    }
+  50%       { opacity: 1;   transform: scale(1.12); }
+}
+
+/* ── Brand text ── */
+.loader-brand {
+  text-align: center;
+  margin-bottom: 40px;
+}
+.loader-brand-name {
+  font-size: 26px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 0.5px;
+  line-height: 1.1;
+  margin-bottom: 5px;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+}
+.loader-brand-sub {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+/* ── Progress bar ── */
+.loader-progress-wrap {
+  width: 220px;
+  margin-bottom: 16px;
+}
+.loader-progress-track {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 50px;
+  overflow: hidden;
+}
+.loader-progress-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 50px;
+  background: linear-gradient(90deg, #f9a8d4, #fff, #f9a8d4);
+  background-size: 200% 100%;
+  animation: loader-shimmer 1.4s linear infinite;
+  transition: width 0.3s ease;
+}
+@keyframes loader-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Status text ── */
+.loader-status {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.5px;
+  height: 18px;
+  transition: opacity 0.3s ease;
+}
+
+/* ── Dots indicator ── */
+.loader-dots {
+  display: flex;
+  gap: 7px;
+  margin-top: 28px;
+}
+.loader-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  animation: loader-dot-pulse 1.4s ease-in-out infinite;
+}
+.loader-dot:nth-child(1) { animation-delay: 0s; }
+.loader-dot:nth-child(2) { animation-delay: 0.2s; }
+.loader-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes loader-dot-pulse {
+  0%, 80%, 100% { background: rgba(255,255,255,0.25); transform: scale(1); }
+  40%            { background: rgba(255,255,255,0.9);  transform: scale(1.3); }
+}
