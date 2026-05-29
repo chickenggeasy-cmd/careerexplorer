@@ -76,7 +76,9 @@ function createJobCard(job, cat) {
 
       <!-- ── Thumbnail ── -->
       <div class="jcn-thumb">
-        <img src="${job.img}" alt="${job.nameT}" loading="lazy">
+        <img src="${job.img}" alt="${job.nameT}" loading="lazy"
+          onload="this.closest('.jcn-thumb').classList.add('img-loaded')"
+          onerror="this.closest('.jcn-thumb').classList.add('img-loaded'); this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'%3E%3Crect width=\'100\' height=\'100\' fill=\'%23fce7f3\'/%3E%3Ctext x=\'50\' y=\'55\' font-size=\'30\' text-anchor=\'middle\' fill=\'%23be185d\'%3E${job.icon}%3C/text%3E%3C/svg%3E'">
         <div class="jcn-thumb-overlay"></div>
 
         <!-- category color bar -->
@@ -230,6 +232,15 @@ function showCategory(catId) {
   });
   document.getElementById('jobGrid').innerHTML = html;
   showPage('page-cat');
+
+  /* ── preload hero bg image → add bg-loaded when ready ── */
+  const heroBg = document.querySelector('.cph-bg');
+  if (heroBg && heroImg) {
+    const preload = new Image();
+    preload.onload  = () => heroBg.classList.add('bg-loaded');
+    preload.onerror = () => heroBg.classList.add('bg-loaded');
+    preload.src = heroImg;
+  }
 }
 
 /* ═══════════════════════════════════════════════════
@@ -454,6 +465,17 @@ function showJob(jobId, catId) {
   `;
 
   showPage('page-detail');
+
+  /* ── preload detail hero bg → add bg-loaded when ready ── */
+  setTimeout(() => {
+    const detailBg = document.querySelector('.dhb-bg');
+    if (detailBg && job.img) {
+      const preload = new Image();
+      preload.onload  = () => detailBg.classList.add('bg-loaded');
+      preload.onerror = () => detailBg.classList.add('bg-loaded');
+      preload.src = job.img;
+    }
+  }, 0);
 
   setTimeout(() => {
     const e = document.getElementById('bar2-entry');
