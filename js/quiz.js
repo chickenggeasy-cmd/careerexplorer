@@ -1,6 +1,12 @@
 /**
  * Career Explorer Pro - Quiz Logic (Premium Ultra-Modern Edition)
  * ระบบแบบทดสอบค้นหาสายงาน พร้อมการตกแต่งเลย์เอาต์ระดับ High-End Space
+ *
+ * ✅ FIXES v2:
+ *   1. Progress bar + step counter ชัดเจน (ข้อที่ N จาก M)
+ *   2. Back button กลับข้อก่อนหน้าได้
+ *   3. Share ผลลัพธ์ได้ (Web Share API + fallback copy-to-clipboard)
+ *   4. ป้องกัน double-submit ด้วย answer history ต่อข้อ
  */
 
 // ════ INJECT PREMIUM MODERN CSS ════
@@ -41,7 +47,6 @@ const injectQuizStyles = () => {
       margin-bottom: 0;
     }
 
-    /* Rotating geometric rings behind everything */
     .quiz-bg-ring-1 {
       position: absolute; pointer-events: none;
       width: 600px; height: 600px;
@@ -67,7 +72,6 @@ const injectQuizStyles = () => {
       animation: rotateSlow 35s linear infinite;
     }
 
-    /* Blob accents */
     .quiz-blob-1 {
       position: absolute; pointer-events: none;
       width: 280px; height: 280px;
@@ -83,7 +87,6 @@ const injectQuizStyles = () => {
       animation: blobMorph 15s ease-in-out infinite reverse;
     }
 
-    /* Dot grid texture */
     .quiz-dot-grid {
       position: absolute; inset: 0; pointer-events: none; z-index: 0;
       background-image: radial-gradient(circle, rgba(233,30,140,.06) 1px, transparent 1px);
@@ -91,9 +94,6 @@ const injectQuizStyles = () => {
       mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 40%, transparent 100%);
     }
 
-    /* ══════════════════════════════════════
-       TOP ACCENT BAR
-    ══════════════════════════════════════ */
     .quiz-top-bar {
       position: relative; z-index: 2;
       background: linear-gradient(90deg, #e91e8c, #c2185b, #9c27b0, #e91e8c);
@@ -114,9 +114,6 @@ const injectQuizStyles = () => {
     }
     .quiz-top-bar-dot { width: 7px; height: 7px; border-radius: 50%; background: #fff; animation: pulseGlow 1.5s infinite; }
 
-    /* ══════════════════════════════════════
-       MAIN SPLIT LAYOUT
-    ══════════════════════════════════════ */
     .quiz-intro-container {
       display: flex; align-items: center; justify-content: space-between;
       gap: 48px; padding: 48px 48px 52px;
@@ -125,9 +122,6 @@ const injectQuizStyles = () => {
     .quiz-text-side { flex: 1.15; }
     .quiz-image-side { flex: 1; position: relative; display: flex; justify-content: center; align-items: center; }
 
-    /* ══════════════════════════════════════
-       TYPOGRAPHY
-    ══════════════════════════════════════ */
     .quiz-eyebrow {
       display: inline-flex; align-items: center; gap: 8px;
       font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
@@ -150,9 +144,6 @@ const injectQuizStyles = () => {
     }
     .quiz-subtitle strong { color: #1e293b; }
 
-    /* ══════════════════════════════════════
-       STATS ROW
-    ══════════════════════════════════════ */
     .quiz-stats-row {
       display: flex; gap: 0; margin-bottom: 28px;
       background: white;
@@ -175,9 +166,6 @@ const injectQuizStyles = () => {
     }
     .quiz-stat-label { font-size: 11px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
 
-    /* ══════════════════════════════════════
-       PILLS
-    ══════════════════════════════════════ */
     .quiz-pills-container { display: flex; gap: 10px; margin-bottom: 36px; flex-wrap: wrap; }
     .quiz-pill {
       background: white;
@@ -190,9 +178,6 @@ const injectQuizStyles = () => {
     }
     .quiz-pill:hover { border-color: #e91e8c; box-shadow: 0 6px 20px rgba(233,30,140,.15); transform: translateY(-2px); }
 
-    /* ══════════════════════════════════════
-       CTA BUTTON
-    ══════════════════════════════════════ */
     .quiz-btn-primary {
       background: linear-gradient(135deg, #e91e8c, #c2185b);
       color: white; border: none; border-radius: 50px;
@@ -221,9 +206,6 @@ const injectQuizStyles = () => {
     }
     .quiz-btn-secondary:hover { border-color: #cbd5e1; background: #f8fafc; transform: translateY(-2px); }
 
-    /* ══════════════════════════════════════
-       TRUST ROW
-    ══════════════════════════════════════ */
     .quiz-trust-row {
       display: flex; align-items: center; gap: 16px; margin-top: 20px;
       padding-top: 20px;
@@ -242,9 +224,6 @@ const injectQuizStyles = () => {
     .quiz-trust-text { font-size: 13px; color: #64748b; font-weight: 500; line-height: 1.5; }
     .quiz-trust-text strong { color: #e91e8c; }
 
-    /* ══════════════════════════════════════
-       IMAGE SIDE
-    ══════════════════════════════════════ */
     .premium-image-container {
       width: 100%; max-width: 420px;
       aspect-ratio: 1/1;
@@ -258,7 +237,6 @@ const injectQuizStyles = () => {
       box-shadow: 0 30px 70px rgba(233,30,140,.12), 0 8px 24px rgba(0,0,0,.08);
     }
 
-    /* Glow ring behind image */
     .image-glow-ring {
       position: absolute;
       inset: -16px;
@@ -268,7 +246,6 @@ const injectQuizStyles = () => {
       animation: blobMorph 10s ease-in-out infinite;
     }
 
-    /* Floating badges */
     .floating-career-badge {
       position: absolute;
       background: rgba(255,255,255,.92);
@@ -287,7 +264,6 @@ const injectQuizStyles = () => {
     .badge-biz  { bottom: 12%; right: -8%; animation: floatA 5s ease-in-out infinite 1s; }
     .badge-med  { top: -4%; right: 10%; animation: floatB 4.5s ease-in-out infinite .5s; }
 
-    /* Mini sparkle dots */
     .sparkle-dot {
       position: absolute; pointer-events: none;
       width: 8px; height: 8px; border-radius: 50%;
@@ -297,7 +273,6 @@ const injectQuizStyles = () => {
     .sparkle-dot-2 { bottom: 30%; left: -4%; animation: sparkle 3s ease-in-out infinite .7s; }
     .sparkle-dot-3 { top: 60%; right: -2%; animation: sparkle 2.8s ease-in-out infinite 1.2s; width:5px; height:5px; background:#c084fc; }
 
-    /* Side feature cards */
     .quiz-feature-card {
       position: absolute;
       background: white;
@@ -315,9 +290,6 @@ const injectQuizStyles = () => {
     .feat-card-1 { left: -18%; top: 38%; }
     .feat-card-2 { right: -14%; bottom: 28%; animation-delay: 1.5s; }
 
-    /* ══════════════════════════════════════
-       BOTTOM CATEGORY STRIP
-    ══════════════════════════════════════ */
     .quiz-cat-strip {
       position: relative; z-index: 2;
       padding: 0 48px 40px;
@@ -342,65 +314,17 @@ const injectQuizStyles = () => {
     .quiz-cat-pill:hover { border-color: #e91e8c; color: #e91e8c; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(233,30,140,.1); }
 
     /* ══════════════════════════════════════
-       QUIZ CARD (during test)
+       QUIZ STEP — PREMIUM REDESIGN
     ══════════════════════════════════════ */
-    .quiz-card {
-      background: white; border-radius: 28px;
-      padding: 40px 32px;
-      box-shadow: 0 20px 50px rgba(0,0,0,.06);
-      border: 1px solid rgba(233,30,140,.06);
-      margin-bottom: 24px;
-    }
-    .quiz-progress-bg { background: #f1f5f9; border-radius: 50px; height: 10px; overflow: hidden; margin-bottom: 32px; }
-    .quiz-progress-bar {
-      height: 100%;
-      background: linear-gradient(90deg, #e91e8c, #f9a8d4);
-      border-radius: 50px;
-      transition: width .5s cubic-bezier(.4,0,.2,1);
-    }
-    .quiz-choice {
-      padding: 16px 22px; border-radius: 18px; cursor: pointer;
-      border: 2px solid #f1f5f9; background: white; color: #475569;
-      font-weight: 500; font-size: 15px; font-family: 'Prompt', sans-serif;
-      display: flex; align-items: center; gap: 14px;
-      transition: all .25s cubic-bezier(.16,1,.3,1); margin-bottom: 11px;
-    }
-    .quiz-choice:hover { border-color: #fbcfe8; background: #fdf2f8; transform: translateX(6px); }
-    .quiz-choice.selected { border-color: #e91e8c; background: #fdf2f8; color: #9d174d; font-weight: 700; transform: scale(1.02); box-shadow: 0 10px 25px rgba(233,30,140,.15); }
-    .quiz-choice-letter {
-      width: 32px; height: 32px; min-width: 32px; border-radius: 50%;
-      background: #f1f5f9; color: #64748b;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 13px; font-weight: 800; transition: all .25s;
-    }
-    .quiz-choice.selected .quiz-choice-letter { background: #e91e8c; color: white; }
-
-    /* ══════════════════════════════════════
-       RESULT CARDS
-    ══════════════════════════════════════ */
-    .result-card {
-      background: white; border-radius: 24px; padding: 22px;
-      margin-bottom: 16px; display: flex; align-items: center; gap: 18px;
-      transition: transform .3s; position: relative; overflow: hidden;
-    }
-    .result-card:hover { transform: translateY(-4px); }
-    .result-card.rank-1 { border: 2px solid #e91e8c; box-shadow: 0 15px 40px rgba(233,30,140,.15); animation: pulseGlow 2s infinite; }
-    .result-card.rank-other { border: 1px solid #e2e8f0; box-shadow: 0 8px 24px rgba(0,0,0,.05); }
-    .result-icon-box { width: 68px; height: 68px; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 34px; }
-
-    /* ══════════════════════════════════════
-       ★★★ QUIZ STEP - PREMIUM REDESIGN ★★★
-    ══════════════════════════════════════ */
-    @keyframes qSlideIn     { from{opacity:0;transform:translateY(24px) scale(.97);} to{opacity:1;transform:translateY(0) scale(1);} }
-    @keyframes qPulseRing   { 0%{box-shadow:0 0 0 0 rgba(233,30,140,.35);} 70%{box-shadow:0 0 0 14px rgba(233,30,140,0);} 100%{box-shadow:0 0 0 0 rgba(233,30,140,0);} }
-    @keyframes qChoiceIn    { from{opacity:0;transform:translateX(-18px);} to{opacity:1;transform:translateX(0);} }
-    @keyframes qEmojiPop    { 0%{transform:scale(0) rotate(-20deg);} 60%{transform:scale(1.18) rotate(4deg);} 100%{transform:scale(1) rotate(0deg);} }
+    @keyframes qSlideIn       { from{opacity:0;transform:translateY(16px) scale(.98);} to{opacity:1;transform:translateY(0) scale(1);} }
+    @keyframes qCardSlideNext { from{opacity:0;transform:translateX(52px) scale(.97);} to{opacity:1;transform:translateX(0) scale(1);} }
+    @keyframes qCardSlidePrev { from{opacity:0;transform:translateX(-52px) scale(.97);} to{opacity:1;transform:translateX(0) scale(1);} }
+    @keyframes qPulseRing     { 0%{box-shadow:0 0 0 0 rgba(233,30,140,.35);} 70%{box-shadow:0 0 0 14px rgba(233,30,140,0);} 100%{box-shadow:0 0 0 0 rgba(233,30,140,0);} }
+    @keyframes qChoiceIn      { from{opacity:0;transform:translateX(-14px);} to{opacity:1;transform:translateX(0);} }
+    @keyframes qEmojiPop      { 0%{transform:scale(0) rotate(-20deg);} 60%{transform:scale(1.18) rotate(4deg);} 100%{transform:scale(1) rotate(0deg);} }
     @keyframes qProgressPulse { 0%,100%{opacity:1;} 50%{opacity:.7;} }
-    @keyframes qStepBounce  { 0%,100%{transform:scale(1);} 50%{transform:scale(1.12);} }
-    @keyframes qBgDrift     { 0%{transform:translate(0,0) rotate(0deg);} 100%{transform:translate(30px,20px) rotate(5deg);} }
-    @keyframes qShimmerSlide { 0%{left:-100%;} 100%{left:200%;} }
+    @keyframes qShimmerSlide  { 0%{left:-100%;} 100%{left:200%;} }
 
-    /* Outer page wrapper - full centered layout */
     .qp-outer {
       min-height: 60vh;
       display: flex; align-items: flex-start; justify-content: center;
@@ -408,7 +332,6 @@ const injectQuizStyles = () => {
       position: relative;
     }
 
-    /* Subtle ambient bg blobs behind everything */
     .qp-outer::before {
       content: '';
       position: fixed; top: 0; left: 0; right: 0; bottom: 0;
@@ -429,6 +352,7 @@ const injectQuizStyles = () => {
       display: flex; align-items: center; justify-content: space-between;
       margin-bottom: 28px; gap: 12px;
     }
+    .qp-header-left { display: flex; align-items: center; gap: 10px; }
     .qp-brand {
       display: flex; align-items: center; gap: 10px;
       font-size: 13px; font-weight: 700; color: #e91e8c;
@@ -441,6 +365,18 @@ const injectQuizStyles = () => {
       background: #e91e8c;
       animation: qPulseRing 1.6s infinite;
     }
+
+    /* ✅ NEW: Back button */
+    .qp-back-btn {
+      background: white; border: 1.5px solid #e2e8f0;
+      border-radius: 50px; padding: 7px 18px;
+      font-size: 12px; font-weight: 700; color: #64748b;
+      cursor: pointer; font-family: 'Prompt', sans-serif;
+      transition: all .2s; display: flex; align-items: center; gap: 6px;
+    }
+    .qp-back-btn:hover { border-color: #e91e8c; color: #e91e8c; background: rgba(233,30,140,.04); }
+    .qp-back-btn:disabled { opacity: .35; cursor: not-allowed; pointer-events: none; }
+
     .qp-quit-btn {
       background: white; border: 1.5px solid #e2e8f0;
       border-radius: 50px; padding: 7px 18px;
@@ -473,7 +409,7 @@ const injectQuizStyles = () => {
       border-radius: 50px; padding: 3px 12px;
     }
 
-    /* Segmented step dots */
+    /* ✅ Segmented step dots */
     .qp-step-dots {
       display: flex; gap: 3px; margin-bottom: 10px; flex-wrap: wrap;
     }
@@ -524,8 +460,13 @@ const injectQuizStyles = () => {
       margin-bottom: 20px;
       position: relative;
     }
+    /* card slide directions — applied via JS */
+    .qp-card.slide-next { animation: qCardSlideNext .38s cubic-bezier(.16,1,.3,1) both; }
+    .qp-card.slide-prev { animation: qCardSlidePrev .38s cubic-bezier(.16,1,.3,1) both; }
+    /* choices re-enter along with card */
+    .qp-card.slide-next .qp-choice { animation: qChoiceIn .35s cubic-bezier(.16,1,.3,1) both; }
+    .qp-card.slide-prev .qp-choice { animation: qCardSlidePrev .35s cubic-bezier(.16,1,.3,1) both; }
 
-    /* Decorative top stripe on card */
     .qp-card-stripe {
       height: 4px;
       background: linear-gradient(90deg, #e91e8c, #c2185b, #9c27b0, #e91e8c);
@@ -533,7 +474,6 @@ const injectQuizStyles = () => {
       animation: shimmer 4s linear infinite;
     }
 
-    /* Corner decoration */
     .qp-card-deco {
       position: absolute; top: 20px; right: 24px;
       display: flex; gap: 6px; opacity: .4;
@@ -544,7 +484,6 @@ const injectQuizStyles = () => {
 
     .qp-card-body { padding: 36px 40px 40px; }
 
-    /* Emoji circle */
     .qp-emoji-wrap {
       display: flex; justify-content: center; margin-bottom: 24px;
     }
@@ -558,14 +497,12 @@ const injectQuizStyles = () => {
       box-shadow: 0 8px 24px rgba(233,30,140,.1);
     }
 
-    /* Question number pill above text */
     .qp-q-number {
       text-align: center; margin-bottom: 14px;
       font-size: 11px; font-weight: 700; letter-spacing: 2px;
       text-transform: uppercase; color: #e91e8c;
     }
 
-    /* Question text */
     .qp-q-text {
       font-size: 22px; font-weight: 800; color: #0f172a;
       text-align: center; line-height: 1.55;
@@ -574,7 +511,6 @@ const injectQuizStyles = () => {
       letter-spacing: -.3px;
     }
 
-    /* Choices list */
     .qp-choices { display: flex; flex-direction: column; gap: 10px; }
 
     .qp-choice {
@@ -595,7 +531,6 @@ const injectQuizStyles = () => {
     .qp-choice:nth-child(3) { animation-delay: .15s; }
     .qp-choice:nth-child(4) { animation-delay: .2s; }
 
-    /* Shimmer on hover */
     .qp-choice::before {
       content: ''; position: absolute; inset: 0;
       background: linear-gradient(90deg, transparent 0%, rgba(233,30,140,.04) 50%, transparent 100%);
@@ -621,7 +556,6 @@ const injectQuizStyles = () => {
       box-shadow: 0 12px 30px rgba(233,30,140,.18), inset 0 0 0 1px rgba(233,30,140,.1);
     }
 
-    /* Letter badge */
     .qp-letter {
       width: 38px; height: 38px; min-width: 38px; border-radius: 12px;
       background: white; border: 1.5px solid #e2e8f0;
@@ -639,10 +573,8 @@ const injectQuizStyles = () => {
       box-shadow: 0 6px 16px rgba(233,30,140,.3);
     }
 
-    /* Choice text */
     .qp-choice-text { flex: 1; line-height: 1.4; }
 
-    /* Check icon on selected */
     .qp-check {
       width: 26px; height: 26px; border-radius: 50%;
       background: #e91e8c; color: white;
@@ -656,8 +588,28 @@ const injectQuizStyles = () => {
     /* ── Bottom action area ── */
     .qp-actions { display: flex; flex-direction: column; gap: 14px; }
 
+    /* ✅ Two-button row: Back + Next */
+    .qp-btn-row {
+      display: flex; gap: 12px;
+    }
+
+    .qp-prev-btn {
+      flex: 0 0 auto;
+      padding: 19px 24px;
+      border-radius: 20px; border: 2px solid #e2e8f0;
+      background: white; color: #64748b;
+      font-size: 16px; font-weight: 700;
+      font-family: 'Prompt', sans-serif;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: all .25s;
+    }
+    .qp-prev-btn:hover:not(:disabled) { border-color: #e91e8c; color: #e91e8c; background: rgba(233,30,140,.04); transform: translateY(-2px); }
+    .qp-prev-btn:disabled { opacity: .3; cursor: not-allowed; }
+
     .qp-next-btn {
-      width: 100%; padding: 19px;
+      flex: 1;
+      padding: 19px;
       border-radius: 20px; border: none;
       font-size: 17px; font-weight: 800;
       font-family: 'Prompt', sans-serif;
@@ -682,42 +634,18 @@ const injectQuizStyles = () => {
       box-shadow: 0 20px 52px rgba(233,30,140,.55), 0 8px 24px rgba(0,0,0,.1);
     }
     .qp-next-btn:not(:disabled):active { transform: translateY(1px) scale(.99); }
-
     .qp-next-btn:disabled {
-      background: #f1f5f9;
-      color: #cbd5e1;
-      cursor: not-allowed;
-      box-shadow: none;
+      background: #f1f5f9; color: #cbd5e1;
+      cursor: not-allowed; box-shadow: none;
     }
 
-    /* Hint text below button */
     .qp-hint {
       text-align: center;
       font-size: 12px; color: #94a3b8; font-weight: 500;
     }
 
-    /* ── Sidebar floating info (visual flair) ── */
-    .qp-sidebar-info {
-      position: fixed; right: 24px; top: 50%;
-      transform: translateY(-50%);
-      display: flex; flex-direction: column; gap: 10px;
-      z-index: 10;
-      pointer-events: none;
-    }
-    .qp-sidebar-chip {
-      background: white; border-radius: 16px;
-      padding: 10px 14px; font-size: 12px; font-weight: 700;
-      color: #475569; box-shadow: 0 8px 24px rgba(0,0,0,.08);
-      border: 1px solid rgba(233,30,140,.08);
-      display: flex; align-items: center; gap: 8px;
-      animation: floatC 5s ease-in-out infinite;
-      white-space: nowrap;
-    }
-    .qp-sidebar-chip:nth-child(2) { animation-delay: 1.2s; }
-    .qp-sidebar-chip:nth-child(3) { animation-delay: 2.4s; }
-
     /* ══════════════════════════════════════
-       ★★★ RESULT STEP — PREMIUM REDESIGN ★★★
+       RESULT STEP — PREMIUM REDESIGN
     ══════════════════════════════════════ */
     @keyframes rFadeUp    { from{opacity:0;transform:translateY(28px);} to{opacity:1;transform:translateY(0);} }
     @keyframes rCardIn    { from{opacity:0;transform:translateX(-20px) scale(.97);} to{opacity:1;transform:translateX(0) scale(1);} }
@@ -728,7 +656,21 @@ const injectQuizStyles = () => {
     @keyframes rStarSpin  { from{transform:rotate(0deg) scale(1);} 50%{transform:rotate(180deg) scale(1.2);} to{transform:rotate(360deg) scale(1);} }
     @keyframes rNumberCount { from{opacity:0;transform:scale(.5);} to{opacity:1;transform:scale(1);} }
 
-    /* Outer wrapper */
+    /* ✅ Share toast */
+    @keyframes toastIn  { from{opacity:0;transform:translateY(16px);} to{opacity:1;transform:translateY(0);} }
+    @keyframes toastOut { from{opacity:1;transform:translateY(0);} to{opacity:0;transform:translateY(16px);} }
+    .quiz-share-toast {
+      position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%);
+      background: #0f172a; color: white;
+      padding: 14px 28px; border-radius: 50px;
+      font-size: 14px; font-weight: 700;
+      font-family: 'Prompt', sans-serif;
+      box-shadow: 0 12px 32px rgba(0,0,0,.2);
+      z-index: 9999; white-space: nowrap;
+      animation: toastIn .35s cubic-bezier(.16,1,.3,1) both;
+    }
+    .quiz-share-toast.hide { animation: toastOut .35s cubic-bezier(.4,0,1,1) both; }
+
     .qr-outer {
       display: flex; align-items: flex-start; justify-content: center;
       padding: 32px 16px 56px;
@@ -739,7 +681,6 @@ const injectQuizStyles = () => {
       animation: rFadeUp .6s cubic-bezier(.16,1,.3,1) both;
     }
 
-    /* ── Hero celebration section ── */
     .qr-hero {
       position: relative; overflow: hidden;
       background: linear-gradient(135deg, #fff0f7 0%, #fdf2ff 50%, #fff0f7 100%);
@@ -751,7 +692,6 @@ const injectQuizStyles = () => {
       box-shadow: 0 4px 6px rgba(0,0,0,.02), 0 24px 60px rgba(233,30,140,.08);
     }
 
-    /* Rotating ring decoration */
     .qr-hero::before {
       content: '';
       position: absolute; top: -100px; right: -100px;
@@ -769,14 +709,12 @@ const injectQuizStyles = () => {
       pointer-events: none;
     }
 
-    /* Confetti dots */
     .qr-confetti { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
     .qr-confetti-dot {
       position: absolute; border-radius: 2px;
       animation: rConfetti 3s ease-in infinite;
     }
 
-    /* Top shimmer bar on hero */
     .qr-hero-bar {
       position: absolute; top: 0; left: 0; right: 0; height: 4px;
       background: linear-gradient(90deg, #e91e8c, #c2185b, #9c27b0, #e91e8c);
@@ -785,7 +723,6 @@ const injectQuizStyles = () => {
       border-radius: 32px 32px 0 0;
     }
 
-    /* Big emoji with ring */
     .qr-emoji-ring {
       width: 100px; height: 100px; border-radius: 50%;
       background: white;
@@ -797,7 +734,6 @@ const injectQuizStyles = () => {
       position: relative; z-index: 1;
     }
 
-    /* Title */
     .qr-title {
       font-size: 32px; font-weight: 900; line-height: 1.2;
       background: linear-gradient(135deg, #e91e8c 0%, #c2185b 60%, #9c27b0 100%);
@@ -811,7 +747,6 @@ const injectQuizStyles = () => {
       position: relative; z-index: 1;
     }
 
-    /* Summary stat pills */
     .qr-summary-pills {
       display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
       position: relative; z-index: 1;
@@ -824,7 +759,6 @@ const injectQuizStyles = () => {
       display: flex; align-items: center; gap: 7px;
     }
 
-    /* ── Result cards ── */
     .qr-cards { display: flex; flex-direction: column; gap: 14px; margin-bottom: 24px; }
 
     .qr-card {
@@ -839,7 +773,6 @@ const injectQuizStyles = () => {
     .qr-card:nth-child(3) { animation-delay: .25s; }
     .qr-card:hover { transform: translateY(-4px); }
 
-    /* Rank-1 card special treatment */
     .qr-card.rank-1 {
       border: 2px solid #e91e8c;
       box-shadow: 0 8px 32px rgba(233,30,140,.14), 0 2px 8px rgba(0,0,0,.04);
@@ -854,19 +787,16 @@ const injectQuizStyles = () => {
       box-shadow: 0 4px 16px rgba(0,0,0,.04);
     }
 
-    /* Accent stripe on left */
     .qr-card-accent {
       position: absolute; left: 0; top: 0; bottom: 0; width: 5px;
       border-radius: 24px 0 0 24px;
     }
 
-    /* Card inner layout */
     .qr-card-inner {
       display: flex; align-items: center; gap: 18px;
       padding: 22px 24px 22px 28px;
     }
 
-    /* Icon box */
     .qr-icon-box {
       width: 72px; height: 72px; min-width: 72px; border-radius: 22px;
       display: flex; align-items: center; justify-content: center;
@@ -874,7 +804,6 @@ const injectQuizStyles = () => {
       box-shadow: 0 6px 20px rgba(0,0,0,.08);
       position: relative;
     }
-    /* Crown overlay for rank 1 */
     .qr-icon-crown {
       position: absolute; top: -12px; right: -8px;
       font-size: 22px;
@@ -882,7 +811,6 @@ const injectQuizStyles = () => {
       filter: drop-shadow(0 2px 4px rgba(0,0,0,.2));
     }
 
-    /* Text block */
     .qr-card-text { flex: 1; min-width: 0; }
     .qr-rank-label {
       font-size: 11px; font-weight: 800; letter-spacing: 1.5px;
@@ -895,7 +823,6 @@ const injectQuizStyles = () => {
       font-family: 'Prompt', sans-serif;
     }
 
-    /* Progress bar */
     .qr-bar-wrap {
       background: #f1f5f9; border-radius: 50px;
       height: 8px; overflow: hidden; position: relative;
@@ -914,7 +841,6 @@ const injectQuizStyles = () => {
       animation: qShimmerSlide 2s ease-in-out infinite;
     }
 
-    /* Right: pct + medal */
     .qr-card-right {
       text-align: center; min-width: 68px;
       display: flex; flex-direction: column; align-items: center; gap: 4px;
@@ -938,7 +864,6 @@ const injectQuizStyles = () => {
       text-transform: uppercase; letter-spacing: .5px;
     }
 
-    /* ── Tip / CTA card ── */
     .qr-tip-card {
       background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 100%);
       border: 1.5px solid rgba(245,158,11,.2);
@@ -955,23 +880,35 @@ const injectQuizStyles = () => {
     .qr-tip-title { font-size: 15px; font-weight: 800; color: #92400e; margin-bottom: 6px; font-family:'Prompt',sans-serif; }
     .qr-tip-text  { font-size: 13px; color: #78350f; line-height: 1.7; font-family:'Prompt',sans-serif; }
 
-    /* ── Action buttons ── */
+    /* ✅ Action buttons — 3 buttons: restart | share | explore */
     .qr-actions {
       display: flex; gap: 12px; flex-wrap: wrap;
       animation: rFadeUp .6s .5s cubic-bezier(.16,1,.3,1) both;
     }
     .qr-btn-restart {
-      flex: 1; min-width: 140px; padding: 17px 20px;
+      flex: 1; min-width: 120px; padding: 17px 16px;
       border-radius: 18px; border: 2px solid #e2e8f0;
       background: white; color: #475569;
-      font-size: 15px; font-weight: 700; cursor: pointer;
+      font-size: 14px; font-weight: 700; cursor: pointer;
       font-family: 'Prompt', sans-serif;
       transition: all .25s; display: flex; align-items: center; justify-content: center; gap: 8px;
     }
     .qr-btn-restart:hover { border-color: #e91e8c; color: #e91e8c; background: rgba(233,30,140,.03); transform: translateY(-2px); }
 
+    /* ✅ NEW: Share button */
+    .qr-btn-share {
+      flex: 1; min-width: 120px; padding: 17px 16px;
+      border-radius: 18px;
+      border: 2px solid rgba(233,30,140,.25);
+      background: rgba(233,30,140,.05); color: #e91e8c;
+      font-size: 14px; font-weight: 700; cursor: pointer;
+      font-family: 'Prompt', sans-serif;
+      transition: all .25s; display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .qr-btn-share:hover { background: rgba(233,30,140,.1); border-color: #e91e8c; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(233,30,140,.15); }
+
     .qr-btn-explore {
-      flex: 2; min-width: 180px; padding: 17px 28px;
+      flex: 2; min-width: 160px; padding: 17px 24px;
       border-radius: 18px; border: none;
       background: linear-gradient(135deg, #e91e8c, #c2185b, #9c27b0);
       background-size: 200% auto;
@@ -1010,7 +947,6 @@ const injectQuizStyles = () => {
       .badge-biz  { right: -2%; }
       .qp-card-body { padding: 28px 24px 32px; }
       .qp-q-text { font-size: 19px; }
-      .qp-sidebar-info { display: none; }
     }
     @media (max-width: 480px) {
       .quiz-title { font-size: 30px; }
@@ -1019,6 +955,8 @@ const injectQuizStyles = () => {
       .qp-q-text { font-size: 17px; }
       .qp-choice { padding: 14px 16px; font-size: 14px; }
       .qp-letter { width: 32px; height: 32px; min-width: 32px; border-radius: 10px; font-size: 12px; }
+      .qr-actions { flex-direction: column; }
+      .qr-btn-explore { flex: none; width: 100%; }
     }
   `;
   document.head.appendChild(style);
@@ -1294,20 +1232,27 @@ const QUIZ_QUESTIONS = [
   },
 ];
 
-let quizState = { step: "intro", current: 0, scores: {}, selected: null };
+// ════ STATE ════
+// answers: array of chosen index per question (null = unanswered)
+let quizState = {
+  step: "intro",
+  current: 0,
+  scores: {},
+  answers: [],   // ✅ stores answer per question so back works
+};
 
+// ════ RENDER ════
 function renderQuiz() {
   injectQuizStyles();
   const app = document.getElementById("quizApp");
   if (!app) return;
   const s = quizState;
 
+  // ── INTRO ──────────────────────────────────────────────
   if (s.step === "intro") {
     app.innerHTML = `
       <div class="quiz-wrapper">
         <div class="quiz-intro-shell">
-
-          <!-- Background decorations -->
           <div class="quiz-bg-ring-1"></div>
           <div class="quiz-bg-ring-2"></div>
           <div class="quiz-bg-ring-3"></div>
@@ -1315,7 +1260,6 @@ function renderQuiz() {
           <div class="quiz-blob-2"></div>
           <div class="quiz-dot-grid"></div>
 
-          <!-- Top shimmer bar -->
           <div class="quiz-top-bar">
             <div class="quiz-top-bar-badge">
               <div class="quiz-top-bar-dot"></div>
@@ -1326,27 +1270,18 @@ function renderQuiz() {
             <div class="quiz-top-bar-badge">🔒 ไม่เก็บข้อมูลส่วนตัว</div>
           </div>
 
-          <!-- Main split layout -->
           <div class="quiz-intro-container">
-
-            <!-- LEFT: Text -->
             <div class="quiz-text-side">
-              <div class="quiz-eyebrow">
-                🎯 Career Matching System
-              </div>
-
+              <div class="quiz-eyebrow">🎯 Career Matching System</div>
               <h2 class="quiz-title">
                 <span>ค้นหาสายงาน</span>
                 <span>ที่ใช่สำหรับคุณ</span>
               </h2>
-
               <p class="quiz-subtitle">
                 ทำแบบทดสอบวิเคราะห์เชิงลึก <strong>${QUIZ_QUESTIONS.length} ข้อ</strong>
                 เพื่อทำความเข้าใจทักษะและทัศนคติ แล้วค้นพบ
                 <strong>3 อันดับสายงาน</strong> ที่ตอบโจทย์ตัวตนของคุณมากที่สุด
               </p>
-
-              <!-- Stats row -->
               <div class="quiz-stats-row">
                 <div class="quiz-stat-item">
                   <span class="quiz-stat-num">14</span>
@@ -1365,21 +1300,15 @@ function renderQuiz() {
                   <span class="quiz-stat-label">ผลลัพธ์</span>
                 </div>
               </div>
-
-              <!-- Pills -->
               <div class="quiz-pills-container">
                 <div class="quiz-pill">⏱️ ใช้เวลา 5 นาที</div>
                 <div class="quiz-pill">📋 ${QUIZ_QUESTIONS.length} คำถามครบถ้วน</div>
                 <div class="quiz-pill">✨ ประมวลผลแม่นยำ</div>
                 <div class="quiz-pill">🔄 ทำใหม่ได้ไม่จำกัด</div>
               </div>
-
-              <!-- CTA -->
               <button class="quiz-btn-primary" onclick="startQuiz()">
                 เริ่มค้นหาตัวเองคลิกเลย 🚀
               </button>
-
-              <!-- Trust row -->
               <div class="quiz-trust-row">
                 <div class="quiz-trust-avatars">
                   <div class="quiz-trust-avatar">ก</div>
@@ -1394,44 +1323,28 @@ function renderQuiz() {
               </div>
             </div>
 
-            <!-- RIGHT: Image -->
             <div class="quiz-image-side">
-              <!-- Floating badges -->
               <div class="floating-career-badge badge-tech">💻 สายไอที & Tech</div>
               <div class="floating-career-badge badge-biz">💼 ธุรกิจ & การจัดการ</div>
               <div class="floating-career-badge badge-med">🏥 การแพทย์ & สุขภาพ</div>
-
-              <!-- Feature cards -->
               <div class="quiz-feature-card feat-card-1">
                 <div class="quiz-feature-icon">🎯</div>
-                <div>
-                  <div>แม่นยำสูง</div>
-                  <div class="quiz-feature-sub">AI Analysis</div>
-                </div>
+                <div><div>แม่นยำสูง</div><div class="quiz-feature-sub">AI Analysis</div></div>
               </div>
               <div class="quiz-feature-card feat-card-2">
                 <div class="quiz-feature-icon">⚡</div>
-                <div>
-                  <div>ผลทันที</div>
-                  <div class="quiz-feature-sub">Real-time</div>
-                </div>
+                <div><div>ผลทันที</div><div class="quiz-feature-sub">Real-time</div></div>
               </div>
-
-              <!-- Sparkles -->
               <div class="sparkle-dot sparkle-dot-1"></div>
               <div class="sparkle-dot sparkle-dot-2"></div>
               <div class="sparkle-dot sparkle-dot-3"></div>
-
               <div class="premium-image-container">
                 <div class="image-glow-ring"></div>
-                <img src="img/photo/58488151515.png"
-                     class="actual-hero-image"
-                     alt="Career Explorer Hero">
+                <img src="img/photo/58488151515.png" class="actual-hero-image" alt="Career Explorer Hero">
               </div>
             </div>
           </div>
 
-          <!-- Bottom: Category strip -->
           <div class="quiz-cat-strip">
             <div class="quiz-cat-strip-title">ครอบคลุม 14 สายงานหลัก</div>
             <div class="quiz-cat-pills">
@@ -1440,58 +1353,55 @@ function renderQuiz() {
               ).join('')}
             </div>
           </div>
-
         </div>
       </div>`;
   }
 
-  // ════════════════════════════════════════════════════════
-  // ★★★ QUIZ STEP — PREMIUM ULTRA-MODERN REDESIGN ★★★
-  // ════════════════════════════════════════════════════════
+  // ── QUIZ STEP ──────────────────────────────────────────
   else if (s.step === "quiz") {
-    const q   = QUIZ_QUESTIONS[s.current];
-    const pct = Math.round((s.current / QUIZ_QUESTIONS.length) * 100);
+    const q      = QUIZ_QUESTIONS[s.current];
+    const pct    = Math.round((s.current / QUIZ_QUESTIONS.length) * 100);
     const isLast = s.current + 1 === QUIZ_QUESTIONS.length;
+    // ✅ current answer comes from history, not a transient state
+    const currentAnswer = s.answers[s.current] ?? null;
 
-    // Build segmented dots (show max 31, collapse if more)
-    const totalDots = QUIZ_QUESTIONS.length;
-    const dotsHTML = Array.from({ length: totalDots }, (_, i) => {
+    // Segmented dots
+    const dotsHTML = Array.from({ length: QUIZ_QUESTIONS.length }, (_, i) => {
       let cls = 'qp-dot';
-      if (i < s.current)       cls += ' done';
+      if (i < s.current)        cls += ' done';
       else if (i === s.current) cls += ' active';
       return `<div class="${cls}"></div>`;
     }).join('');
 
-    // Choices HTML
+    // Choices
     const choicesHTML = q.choices.map((c, i) => {
       const letters = ['A','B','C','D'];
-      const isSelected = s.selected === i;
+      const isSel   = currentAnswer === i;
       return `
-        <div class="qp-choice ${isSelected ? 'selected' : ''}" onclick="selectQuizAnswer(${i})">
+        <div class="qp-choice ${isSel ? 'selected' : ''}" onclick="selectQuizAnswer(${i})">
           <div class="qp-letter">${letters[i]}</div>
           <div class="qp-choice-text">${c.text}</div>
-          ${isSelected ? `<div class="qp-check">✓</div>` : ''}
+          ${isSel ? `<div class="qp-check">✓</div>` : ''}
         </div>`;
     }).join('');
 
     app.innerHTML = `
       <div class="quiz-wrapper">
         <div class="qp-outer">
-
           <div class="qp-container">
 
-            <!-- ── Mini top header ── -->
+            <!-- Header -->
             <div class="qp-header">
-              <div class="qp-brand">
-                <div class="qp-brand-dot"></div>
-                Career Matching AI
+              <div class="qp-header-left">
+                <div class="qp-brand">
+                  <div class="qp-brand-dot"></div>
+                  Career Matching AI
+                </div>
               </div>
-              <button class="qp-quit-btn" onclick="restartQuiz()">
-                ← กลับหน้าหลัก
-              </button>
+              <button class="qp-quit-btn" onclick="restartQuiz()">✕ ออกจากแบบทดสอบ</button>
             </div>
 
-            <!-- ── Progress section ── -->
+            <!-- ✅ Progress: step dots + bar + labels -->
             <div class="qp-progress-section">
               <div class="qp-progress-meta">
                 <div class="qp-step-label">
@@ -1500,63 +1410,57 @@ function renderQuiz() {
                 </div>
                 <div class="qp-pct-label">${pct}% เสร็จแล้ว</div>
               </div>
-
-              <!-- Segmented dots -->
               <div class="qp-step-dots">${dotsHTML}</div>
-
-              <!-- Thick animated bar -->
               <div class="qp-bar-track">
                 <div class="qp-bar-fill" style="width:${pct}%;"></div>
               </div>
             </div>
 
-            <!-- ── Question card ── -->
+            <!-- Question card -->
             <div class="qp-card">
               <div class="qp-card-stripe"></div>
-
-              <!-- Corner deco dots -->
               <div class="qp-card-deco">
                 <span style="background:#fca5a5;"></span>
                 <span style="background:#fcd34d;"></span>
                 <span style="background:#6ee7b7;"></span>
               </div>
-
               <div class="qp-card-body">
-
-                <!-- Emoji -->
                 <div class="qp-emoji-wrap">
                   <div class="qp-emoji-circle">${q.emoji}</div>
                 </div>
-
-                <!-- Q number eyebrow -->
-                <div class="qp-q-number">ข้อที่ ${s.current + 1}</div>
-
-                <!-- Question text -->
+                <div class="qp-q-number">ข้อที่ ${s.current + 1} จาก ${QUIZ_QUESTIONS.length}</div>
                 <div class="qp-q-text">${q.q}</div>
-
-                <!-- Choices -->
-                <div class="qp-choices">
-                  ${choicesHTML}
-                </div>
-
+                <div class="qp-choices">${choicesHTML}</div>
               </div>
             </div>
 
-            <!-- ── Bottom actions ── -->
+            <!-- Actions: Back + Next -->
             <div class="qp-actions">
-              <button
-                class="qp-next-btn"
-                onclick="nextQuizQuestion()"
-                ${s.selected === null ? 'disabled' : ''}
-              >
-                ${isLast
-                  ? '✨ ดูผลลัพธ์เลย!'
-                  : `ข้อต่อไป &nbsp;→`}
-              </button>
+              <div class="qp-btn-row">
+                <!-- ✅ Back button -->
+                <button
+                  class="qp-prev-btn"
+                  onclick="prevQuizQuestion()"
+                  ${s.current === 0 ? 'disabled' : ''}
+                  title="กลับข้อก่อนหน้า"
+                >
+                  ← ก่อนหน้า
+                </button>
+
+                <!-- Next / Finish -->
+                <button
+                  class="qp-next-btn"
+                  onclick="nextQuizQuestion()"
+                  ${currentAnswer === null ? 'disabled' : ''}
+                >
+                  ${isLast ? '✨ ดูผลลัพธ์!' : 'ข้อต่อไป →'}
+                </button>
+              </div>
+
               <div class="qp-hint">
-                ${s.selected === null
+                ${currentAnswer === null
                   ? '👆 เลือกคำตอบที่ตรงกับตัวคุณที่สุด'
-                  : '✅ เลือกแล้ว! กดปุ่มด้านบนเพื่อไปต่อ'}
+                  : `✅ เลือกแล้ว! ${isLast ? 'กดดูผลลัพธ์ได้เลย' : 'กดข้อต่อไปหรือย้อนกลับได้'}`}
               </div>
             </div>
 
@@ -1565,20 +1469,26 @@ function renderQuiz() {
       </div>`;
   }
 
-  // ════════════════════════════════════════════════════════
-  // ★★★ RESULT STEP — PREMIUM ULTRA-MODERN REDESIGN ★★★
-  // ════════════════════════════════════════════════════════
+  // ── RESULT STEP ─────────────────────────────────────────
   else if (s.step === "result") {
-    const total  = Object.values(s.scores).reduce((a,b) => a+b, 0);
-    const top3   = Object.entries(s.scores).sort((a,b) => b[1]-a[1]).slice(0, 3);
-    const medals = ["🥇","🥈","🥉"];
-    const rankLabels = ["🌟 แมทช์สุดๆ!", "🥈 อันดับ 2", "🥉 อันดับ 3"];
-    const rankColors = ["#e91e8c", "#64748b", "#94a3b8"];
+    const total = Object.values(s.scores).reduce((a, b) => a + b, 0);
+    const top3  = Object.entries(s.scores).sort((a, b) => b[1] - a[1]).slice(0, 3);
+    const medals      = ["🥇","🥈","🥉"];
+    const rankLabels  = ["🌟 แมทช์สุดๆ!", "🥈 อันดับ 2", "🥉 อันดับ 3"];
+    const rankColors  = ["#e91e8c","#64748b","#94a3b8"];
     const rankClasses = ["rank-1","rank-2","rank-3"];
 
-    // Random confetti dots
+    // ✅ Build share text — store in state so shareQuizResult() can read it safely
+    const shareLines = top3.map(([id, sc], i) => {
+      const cat = QUIZ_CATEGORIES[id];
+      const pct = total > 0 ? Math.round((sc / total) * 100) : 0;
+      return `${medals[i]} ${cat.name} (${pct}%)`;
+    }).join('\n');
+    s.shareText = `🎯 ผลแบบทดสอบสายอาชีพ Career Explorer Pro\n\n${shareLines}\n\nค้นพบสายงานของคุณได้ที่ Career Explorer Pro!`;
+
+    // Confetti
     const confettiColors = ["#e91e8c","#f472b6","#c084fc","#fbbf24","#34d399","#60a5fa"];
-    const confettiHTML = Array.from({length: 16}, (_, i) => {
+    const confettiHTML = Array.from({ length: 16 }, (_, i) => {
       const color = confettiColors[i % confettiColors.length];
       const size  = 6 + Math.random() * 8;
       const left  = 5 + (i / 16) * 90;
@@ -1593,7 +1503,6 @@ function renderQuiz() {
       "></div>`;
     }).join('');
 
-    // Cards HTML
     const cardsHTML = top3.map(([id, sc], i) => {
       const cat = QUIZ_CATEGORIES[id];
       if (!cat) return "";
@@ -1602,35 +1511,22 @@ function renderQuiz() {
         <div class="qr-card ${rankClasses[i]}">
           <div class="qr-card-accent" style="background:linear-gradient(180deg,${cat.color},${cat.color}88);"></div>
           <div class="qr-card-inner">
-
-            <!-- Icon -->
             <div class="qr-icon-box" style="background:${cat.light};">
               <span style="position:relative;z-index:1;">${cat.icon}</span>
               ${i === 0 ? `<div class="qr-icon-crown">👑</div>` : ''}
             </div>
-
-            <!-- Text -->
             <div class="qr-card-text">
-              <div class="qr-rank-label" style="color:${rankColors[i]};">
-                ${rankLabels[i]}
-              </div>
+              <div class="qr-rank-label" style="color:${rankColors[i]};">${rankLabels[i]}</div>
               <div class="qr-cat-name">${cat.name}</div>
               <div class="qr-bar-wrap">
-                <div class="qr-bar-fill" style="
-                  width:${pct}%;
-                  --bar-w:${pct}%;
-                  background:linear-gradient(90deg, ${cat.color}, ${cat.color}99);
-                "></div>
+                <div class="qr-bar-fill" style="width:${pct}%; --bar-w:${pct}%; background:linear-gradient(90deg,${cat.color},${cat.color}99);"></div>
               </div>
             </div>
-
-            <!-- Right: medal + pct -->
             <div class="qr-card-right">
               <div class="qr-medal qr-medal-${i+1}">${medals[i]}</div>
               <div class="qr-pct" style="color:${cat.color};">${pct}%</div>
               <div class="qr-pct-label">แมทช์</div>
             </div>
-
           </div>
         </div>`;
     }).join('');
@@ -1640,19 +1536,15 @@ function renderQuiz() {
         <div class="qr-outer">
           <div class="qr-container">
 
-            <!-- ── Hero celebration ── -->
             <div class="qr-hero">
               <div class="qr-hero-bar"></div>
               <div class="qr-confetti">${confettiHTML}</div>
-
               <div class="qr-emoji-ring">🎉</div>
-
               <div class="qr-title">ผลลัพธ์สายอาชีพของคุณ!</div>
               <div class="qr-subtitle">
                 AI วิเคราะห์แล้ว — นี่คือ <strong style="color:#e91e8c;">3 สายงาน</strong>
                 ที่ตรงกับตัวตนของคุณมากที่สุด
               </div>
-
               <div class="qr-summary-pills">
                 <div class="qr-summary-pill">📋 ตอบครบ ${QUIZ_QUESTIONS.length} ข้อ</div>
                 <div class="qr-summary-pill">🏆 ครอบคลุม ${Object.keys(QUIZ_CATEGORIES).length} สายงาน</div>
@@ -1660,12 +1552,8 @@ function renderQuiz() {
               </div>
             </div>
 
-            <!-- ── Result cards ── -->
-            <div class="qr-cards">
-              ${cardsHTML}
-            </div>
+            <div class="qr-cards">${cardsHTML}</div>
 
-            <!-- ── Tip card ── -->
             <div class="qr-tip-card">
               <div class="qr-tip-icon">💡</div>
               <div>
@@ -1677,13 +1565,12 @@ function renderQuiz() {
               </div>
             </div>
 
-            <!-- ── Action buttons ── -->
+            <!-- ✅ 3 action buttons -->
             <div class="qr-actions">
-              <button class="qr-btn-restart" onclick="restartQuiz()">
-                🔄 ทำแบบทดสอบใหม่
-              </button>
+              <button class="qr-btn-restart" onclick="restartQuiz()">🔄 ทำใหม่</button>
+              <button class="qr-btn-share"   onclick="shareQuizResult()">📤 แชร์ผล</button>
               <button class="qr-btn-explore" onclick="typeof goHome === 'function' ? goHome() : window.location.href='/'">
-                🔍 สำรวจอาชีพเลย →
+                🔍 สำรวจอาชีพ →
               </button>
             </div>
 
@@ -1693,45 +1580,136 @@ function renderQuiz() {
   }
 }
 
+// ════ ACTIONS ════
+
 function startQuiz() {
-  quizState = { step: "quiz", current: 0, scores: {}, selected: null };
+  quizState = { step: "quiz", current: 0, scores: {}, answers: [] };
   renderQuiz();
 }
 
+/** ✅ Store answer in answers[] so back button can restore it */
 function selectQuizAnswer(i) {
-  quizState.selected = i;
+  quizState.answers[quizState.current] = i;
   renderQuiz();
 }
 
+/** ✅ Back: go to previous question; restore its saved answer */
+function prevQuizQuestion() {
+  if (quizState.current === 0) return;
+  quizState.current--;
+  quizState.direction = 'prev';
+  renderQuiz();
+  _scrollToProgress();
+}
+
+/** Next: tally score then advance */
 function nextQuizQuestion() {
   const s = quizState;
-  if (s.selected === null) return;
-  const choice = QUIZ_QUESTIONS[s.current].choices[s.selected];
-  Object.entries(choice.scores).forEach(([cat, pts]) => {
-    s.scores[cat] = (s.scores[cat] || 0) + pts;
-  });
+  const currentAnswer = s.answers[s.current] ?? null;
+  if (currentAnswer === null) return;
+
   if (s.current + 1 >= QUIZ_QUESTIONS.length) {
-    s.step = "result";
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    finishQuiz();
   } else {
     s.current++;
-    s.selected = null;
+    s.direction = 'next';
+    renderQuiz();
+    _scrollToProgress();
   }
+}
+
+/** Scroll just enough so the progress bar is visible — no jarring full-page jump */
+function _scrollToProgress() {
+  requestAnimationFrame(() => {
+    const el = document.querySelector('.qp-progress-section') || document.querySelector('.qp-container');
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    // Only scroll if the progress section is above the viewport top
+    if (rect.top < 0) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+}
+
+/** ✅ Recompute scores from scratch from answers[] — safe after back/forward */
+function finishQuiz() {
+  const s = quizState;
+  const scores = {};
+  QUIZ_QUESTIONS.forEach((q, qi) => {
+    const ans = s.answers[qi];
+    if (ans == null) return;
+    const choice = q.choices[ans];
+    Object.entries(choice.scores).forEach(([cat, pts]) => {
+      scores[cat] = (scores[cat] || 0) + pts;
+    });
+  });
+  s.scores = scores;
+  s.step   = "result";
+  window.scrollTo({ top: 0, behavior: 'smooth' });
   renderQuiz();
 }
 
 function restartQuiz() {
-  quizState = { step: "intro", current: 0, scores: {}, selected: null };
+  quizState = { step: "intro", current: 0, scores: {}, answers: [] };
   renderQuiz();
 }
 
-// Router Event Interceptor
+/** ✅ Share result: Web Share API with clipboard fallback */
+function shareQuizResult() {
+  const text = quizState.shareText || 'ลองทำแบบทดสอบสายอาชีพที่ Career Explorer Pro ดูนะ!';
+  if (navigator.share) {
+    navigator.share({ title: 'ผลแบบทดสอบสายอาชีพ', text })
+      .catch(() => {}); // user cancelled — ไม่ต้อง handle
+  } else {
+    // Fallback: copy to clipboard (navigator.clipboard หรือ execCommand)
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text)
+        .then(() => showShareToast('✅ คัดลอกผลลัพธ์แล้ว! วางในแชทได้เลย 🎉'))
+        .catch(() => copyViaExecCommand(text));
+    } else {
+      copyViaExecCommand(text);
+    }
+  }
+}
+
+function copyViaExecCommand(text) {
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.style.cssText = 'position:fixed;top:0;left:0;opacity:0;pointer-events:none;';
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+  try {
+    document.execCommand('copy');
+    showShareToast('✅ คัดลอกผลลัพธ์แล้ว! วางในแชทได้เลย 🎉');
+  } catch {
+    showShareToast('⚠️ ไม่สามารถคัดลอกได้ กรุณาลองใหม่');
+  }
+  document.body.removeChild(textarea);
+}
+
+function showShareToast(msg) {
+  const old = document.querySelector('.quiz-share-toast');
+  if (old) old.remove();
+
+  const toast = document.createElement('div');
+  toast.className = 'quiz-share-toast';
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+
+  setTimeout(() => {
+    toast.classList.add('hide');
+    setTimeout(() => toast.remove(), 400);
+  }, 2800);
+}
+
+// ════ ROUTER EVENT INTERCEPTOR ════
 document.addEventListener('DOMContentLoaded', () => {
   const origRouter = window.showPage;
   window.showPage = function(pageId, addToHistory = true) {
     if (origRouter) origRouter(pageId, addToHistory);
     if (pageId === 'page-quiz') {
-      quizState = { step: "intro", current: 0, scores: {}, selected: null };
+      quizState = { step: "intro", current: 0, scores: {}, answers: [] };
       setTimeout(renderQuiz, 100);
     }
   };
