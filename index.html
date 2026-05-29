@@ -10,15 +10,15 @@
 <body>
 
   <nav>
-    <div class="nav-logo" onclick="goHome()">
-      <img src="https://www.otep.go.th/assets/images/otep_logo.png" alt="SUKSAPANPANIT Logo" style="height:48px; width:48px; object-fit:contain; border-radius:12px;" />
+    <div class="nav-logo" onclick="goHome()" role="button" tabindex="0" aria-label="กลับสู่หน้าหลัก" onkeydown="if(event.key==='Enter'||event.key===' ') goHome();">
+      <img src="https://www.otep.go.th/assets/images/otep_logo.png" alt="โลโก้ศึกษาภัณฑ์พาณิชย์" style="height:48px; width:48px; object-fit:contain; border-radius:12px;" />
       <div style="display:flex; flex-direction:column; line-height:1;">
         <span style="font-size:20px; font-weight:800; color:white; letter-spacing:0.5px;">SUKSAPANPANIT</span>
         <span style="font-size:10px; color:rgba(255,255,255,0.65); margin-top:4px; letter-spacing:2px; font-weight:500; text-transform:uppercase;">Career Explorer</span>
       </div>
     </div>
 
-    <button class="hamburger-btn" onclick="toggleMobileMenu()">
+    <button class="hamburger-btn" onclick="toggleMobileMenu()" aria-label="เปิดเมนูนำทาง">
       <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
         <line x1="3" y1="12" x2="21" y2="12"></line>
         <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -34,15 +34,13 @@
       </div>
       <div class="nav-search">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-        <input type="text" id="searchInput" placeholder="ค้นหาอาชีพ ทักษะ หรือสายงาน..." oninput="handleSearch(this.value)" />
+        <input type="text" id="searchInput" placeholder="ค้นหาอาชีพ ทักษะ หรือสายงาน..." oninput="handleSearch(this.value)" aria-label="ค้นหาอาชีพ ทักษะ หรือสายงาน" />
       </div>
     </div>
   </nav>
 
-  <!-- ===== HOME PAGE ===== -->
   <div id="page-home" class="page active">
 
-    <!-- Hero Section -->
     <section class="hero-v2">
       <div class="hero-bg-pattern"></div>
       <div class="hero-glow hero-glow-1"></div>
@@ -87,7 +85,6 @@
     </section>
     
 
-    <!-- Marquee Ticker -->
     <div class="ticker-wrapper">
       <div class="ticker-inner">
         <div class="ticker-track" id="tickerTrack">
@@ -115,7 +112,6 @@
       </div>
     </div>
 
-    <!-- Category Section -->
     <div class="container" id="cat-section">
       <div class="section-header animate-up">
         <div class="section-tag">สายงาน</div>
@@ -125,14 +121,13 @@
       <div class="cat-grid animate-up" id="catGrid" style="animation-delay:0.2s;"></div>
     </div>
 
-    <!-- Feature Highlight Section -->
     <section class="feature-section">
   <div class="container">
     <div class="feature-grid">
       
       <div class="feature-card animate-up">
         <div class="feature-icon">
-          <img src="img/icons/money-bag.png" alt="Salary icon">
+          <img src="img/icons/money-bag.png" alt="ไอคอนข้อมูลเงินเดือน">
         </div>
         <h3>ข้อมูลเงินเดือน</h3>
         <p>เปรียบเทียบเงินเดือนตั้งแต่ระดับเริ่มต้นถึงระดับผู้เชี่ยวชาญ พร้อมแผนภูมิที่เข้าใจง่าย</p>
@@ -140,7 +135,7 @@
 
       <div class="feature-card animate-up" style="animation-delay:0.1s;">
         <div class="feature-icon">
-          <img src="img/icons/education.png" alt="Education icon">
+          <img src="img/icons/education.png" alt="ไอคอนเส้นทางการศึกษา">
         </div>
         <h3>เส้นทางการศึกษา</h3>
         <p>รู้ว่าต้องเรียนอะไร ที่ไหน นานแค่ไหน เพื่อเข้าสู่อาชีพที่คุณฝัน</p>
@@ -148,7 +143,7 @@
 
       <div class="feature-card animate-up" style="animation-delay:0.2s;">
         <div class="feature-icon">
-          <img src="img/icons/bar-chart.png" alt="Growth icon">
+          <img src="img/icons/bar-chart.png" alt="ไอคอนโอกาสเติบโตในสายงาน">
         </div>
         <h3>โอกาสเติบโต</h3>
         <p>วิเคราะห์แนวโน้มตลาดแรงงานและทิศทางการเติบโตในระยะยาวของแต่ละสายงาน</p>
@@ -156,7 +151,7 @@
 
       <div class="feature-card animate-up" style="animation-delay:0.3s;">
         <div class="feature-icon">
-          <img src="img/icons/mindset.png" alt="Quiz icon">
+          <img src="img/icons/mindset.png" alt="ไอคอนแบบทดสอบอาชีพ">
         </div>
         <h3>แบบทดสอบอาชีพ</h3>
         <p>ทำแบบทดสอบค้นหาอาชีพที่เหมาะกับบุคลิกและความสนใจของคุณโดยเฉพาะ</p>
@@ -166,35 +161,26 @@
   </div>
 </section>
 
-  </div><!-- end page-home -->
-
-  <!-- ===== CATEGORY PAGE ===== -->
-<div id="page-cat" class="page">
+  </div><div id="page-cat" class="page">
   <div class="container">
 
-    <!-- breadcrumb -->
     <div class="breadcrumb animate-up">
       <span onclick="goHome()">🏠 หน้าหลัก</span>
       <span class="sep">›</span>
       <span class="current" id="breadcat"></span>
     </div>
 
-    <!-- back button -->
     <button class="back-btn animate-up" onclick="goHome()">← ย้อนกลับ</button>
 
-    <!-- ★ NEW: hero banner container (render.js จะ inject HTML เข้ามา) -->
     <div id="catHero" class="animate-up" style="animation-delay:0.05s;"></div>
 
-    <!-- section title (ซ่อนไว้ — hero ทำหน้าที่แทน) -->
     <div class="section-title animate-up" id="catPageTitle"></div>
 
-    <!-- job grid -->
     <div class="job-grid animate-up" id="jobGrid" style="animation-delay:0.1s;"></div>
 
   </div>
 </div>
   
-  <!-- ===== DETAIL PAGE ===== -->
   <div id="page-detail" class="page">
     <div class="container">
       <div class="breadcrumb animate-up">
@@ -211,7 +197,6 @@
     </div>
   </div>
   
-  <!-- ===== SEARCH PAGE ===== -->
   <div id="page-search" class="page">
     <div class="container">
       <div class="breadcrumb">
@@ -224,7 +209,6 @@
     </div>
   </div>
 
-  <!-- ===== QUIZ PAGE ===== -->
   <div id="page-quiz" class="page">
     <div class="container">
       <div class="breadcrumb animate-up">
@@ -237,7 +221,6 @@
     </div>
   </div>
 
-  <!-- ===== ABOUT PAGE ===== -->
   <div id="page-about" class="page">
     <div class="about-hero-full">
       <div class="about-hero-bg"></div>
@@ -248,7 +231,7 @@
       </div>
       <div class="about-hero-inner">
         <div class="about-logo-wrap animate-up">
-          <img src="https://upload.wikimedia.org/wikipedia/th/thumb/6/66/%E0%B8%95%E0%B8%A3%E0%B8%B2%E0%B8%AD%E0%B8%87%E0%B8%84%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B8%84%E0%B9%89%E0%B8%B2%E0%B8%82%E0%B8%AD%E0%B8%87%E0%B8%AA%E0%B8%81%E0%B8%AA%E0%B8%84.svg/330px-%E0%B8%95%E0%B8%A3%E0%B8%B2%E0%B8%AD%E0%B8%87%E0%B8%84%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B8%84%E0%B9%89%E0%B8%B2%E0%B8%82%E0%B8%AD%E0%B8%87%E0%B8%AA%E0%B8%81%E0%B8%AA%E0%B8%84.svg.png" alt="logo">
+          <img src="https://upload.wikimedia.org/wikipedia/th/thumb/6/66/%E0%B8%95%E0%B8%A3%E0%B8%B2%E0%B8%AD%E0%B8%87%E0%B8%84%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B8%84%E0%B9%89%E0%B8%B2%E0%B8%82%E0%B8%AD%E0%B8%87%E0%B8%AA%E0%B8%81%E0%B8%AA%E0%B8%84.svg/330px-%E0%B8%95%E0%B8%A3%E0%B8%B2%E0%B8%AD%E0%B8%87%E0%B8%84%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B8%84%E0%B9%89%E0%B8%B2%E0%B8%82%E0%B8%AD%E0%B8%87%E0%B8%AA%E0%B8%81%E0%B8%AA%E0%B8%84.svg.png" alt="ตราสัญลักษณ์องค์การค้าของ สกสค.">
         </div>
         <div class="about-hero-tag animate-up" style="animation-delay:0.1s;">ก่อตั้ง พ.ศ. 2495 • มากกว่า 70 ปี</div>
         <h1 class="about-hero-title animate-up" style="animation-delay:0.2s;">องค์การค้าของ สกสค.</h1>
@@ -279,7 +262,6 @@
         <span class="current">เกี่ยวกับเรา</span>
       </div>
 
-      <!-- Stats Section -->
       <div class="about-stats-row animate-up">
         <div class="about-stat-card">
           <div class="about-stat-num">70+</div>
@@ -299,11 +281,10 @@
         </div>
       </div>
 
-      <!-- Mission Section -->
       <div class="about-two-col animate-up">
         <div class="about-img-col">
           <div class="about-img-wrap">
-            <img src="https://www.suksapan.or.th/assets/uploads/media-uploader/ladphao1729751846.jpg" alt="Education Store">
+            <img src="https://www.suksapan.or.th/assets/uploads/media-uploader/ladphao1729751846.jpg" alt="หน้าร้านศึกษาภัณฑ์พาณิชย์ สาขาลาดพร้าว">
             <div class="img-badge">ก่อตั้ง 2495</div>
           </div>
         </div>
@@ -337,7 +318,6 @@
         </div>
       </div>
 
-      <!-- Products Section -->
       <div class="about-products-section animate-up">
         <div class="section-header" style="text-align:center; margin-bottom: 48px;">
           <div class="section-tag">สิ่งที่เรามอบให้</div>
@@ -380,7 +360,6 @@
         </div>
       </div>
 
-      <!-- Career Explorer Section -->
       <div class="about-career-section animate-up">
         <div class="career-left">
           <div class="section-tag">Career Explorer Pro</div>
@@ -438,7 +417,6 @@
         </div>
       </div>
 
-      <!-- Quote Section -->
       <div class="about-quote-section animate-up">
         <div class="quote-icon">"</div>
         <blockquote>เราอยากให้คุณเจออาชีพที่ใช่ และก้าวไปสู่เป้าหมายอย่างมั่นใจ</blockquote>
@@ -446,7 +424,6 @@
         <div class="quote-fact">💡 ศึกษาภัณฑ์พาณิชย์ มีสินค้ามากกว่า 10,000 รายการ เพื่อสนับสนุนทุกเส้นทางอาชีพ!</div>
       </div>
 
-      <!-- Related Organizations -->
       <section class="related-orgs-section animate-up">
         <div class="section-header" style="text-align:center; margin-bottom:32px;">
           <div class="section-tag">เครือข่าย</div>
@@ -479,7 +456,6 @@
         </div>
       </section>
 
-      <!-- Team Section -->
       <div class="team-section animate-up">
         <div class="section-header" style="text-align:center; margin-bottom:40px;">
           <div class="section-tag">ผู้พัฒนา</div>
@@ -501,7 +477,7 @@
           </div>
           <div class="team-card">
             <div class="team-card-bg"></div>
-            <img src="https://www.suksapan.or.th/assets/uploads/media-uploader/bowt91728008761.png" alt="สกสค." style="background:#fff; padding:8px; object-fit:contain;">
+            <img src="https://www.suksapan.or.th/assets/uploads/media-uploader/bowt91728008761.png" alt="ตราองค์การค้าของ สกสค." style="background:#fff; padding:8px; object-fit:contain;">
             <div class="team-info">
               <div class="team-name">องค์การค้าของ สกสค.</div>
               <div class="team-role">หน่วยงานสนับสนุน</div>
@@ -518,14 +494,11 @@
         <button class="btn-outline-pink" onclick="goHome()">← กลับสู่หน้าหลัก</button>
       </div>
     </div>
-  </div><!-- end page-about -->
-
-  <!-- ===== FOOTER ===== -->
-  <footer>
+  </div><footer>
     <div class="footer-inner">
       <div class="ft-brand">
         <div class="ft-brand-head">
-          <img src="https://www.suksapan.or.th/assets/uploads/media-uploader/bowt91728008761.png" alt="logo" />
+          <img src="https://www.suksapan.or.th/assets/uploads/media-uploader/bowt91728008761.png" alt="โลโก้องค์การค้าของ สกสค." />
           <div class="ft-brand-name">
             <div class="line1">Career</div>
             <div class="line2">Explorer Pro</div>
@@ -534,11 +507,11 @@
         <p class="ft-brand-desc">สร้างด้วย 🌸 เพื่อนักเรียนไทย<br />องค์การค้าของ สกสค. มีภารกิจในการผลิตและพัฒนาสื่อการเรียนการสอนที่ทันสมัย</p>
         <div class="ft-social-btns">
           <a href="https://web.facebook.com/suksapanpanitcenter" target="_blank" class="ft-social-btn">
-            <img src="https://static.xx.fbcdn.net/rsrc.php/y-/r/yhD4cqC_Wzs.webp" alt="fb" />
+            <img src="https://static.xx.fbcdn.net/rsrc.php/y-/r/yhD4cqC_Wzs.webp" alt="" role="presentation" />
             Facebook สกสค.
           </a>
           <a href="https://suksapanmall.com/#/" target="_blank" class="ft-social-btn">
-            <img src="https://www.suksapanpanit.com/assets/uploads/media-uploader/logo-ssp-6006001755761321.png" alt="mall" />
+            <img src="https://www.suksapanpanit.com/assets/uploads/media-uploader/logo-ssp-6006001755761321.png" alt="" role="presentation" />
             Suksapan Mall
           </a>
         </div>
@@ -570,7 +543,7 @@
           </div>
         </div>
         <div class="ft-map">
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.2764952044813!2d100.59609657508933!3d13.760233086641885!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e29e843f55e09d%3A0x6334f5905187e1f!2z4Liq4LiW4Liy4Lia4Liy4LiH4Liq4Liy4LiZ4Liq4Liy4Li44Lij4Li14LiZ4Liy4LiH4Liq4Li04LiX4Lii4Liy4Lio4Li44LiB4Lip4Liy!5e0!3m2!1sth!2sth!4v1716777000000!5m2!1sth!2sth" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.2764952044813!2d100.59609657508933!3d13.760233086641885!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e29e843f55e09d%3A0x6334f5905187e1f!2z4Liq4LiW4Liy4Lia4Liy4LiH4Liq4Liy4LiZ4Liq4Liy4Li44Lij4Li14LiZ4Liy4LiH4Liq4Li04LiX4Lii4Liy4Lio4Li44LiB4Lip4Liy!5e0!3m2!1sth!2sth!4v1716777000000!5m2!1sth!2sth" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy" title="แผนที่กูเกิลแมปแสดงที่ตั้งองค์การค้าของ สกสค."></iframe>
           <a href="https://maps.app.goo.gl/4yTzcFRytRqG7XG29" target="_blank" class="ft-map-pill">🗺️ เปิดใน Maps</a>
         </div>
       </div>
@@ -579,17 +552,17 @@
         <div class="ft-col-title"><div class="ft-col-title-icon">📱</div>ดาวน์โหลดแอป</div>
         <div class="ft-store-btns">
           <a href="https://play.google.com/store/apps/details?id=td.webuild.ssp" target="_blank" class="ft-store-link">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" />
+            <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="" role="presentation" />
             <div class="ft-store-text"><small>GET IT ON</small><strong>Google Play</strong></div>
           </a>
           <a href="https://apps.apple.com/us/app/suksapan-mall/id1587123179" target="_blank" class="ft-store-link">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="App Store" />
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="" role="presentation" />
             <div class="ft-store-text"><small>DOWNLOAD ON THE</small><strong>App Store</strong></div>
           </a>
         </div>
         <div class="ft-qr-wrap">
           <div class="ft-qr-img">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://suksapanmall.com" alt="QR Code" />
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://suksapanmall.com" alt="คิวอาร์โค้ดสำหรับลิงก์ดาวน์โหลดแอป Suksapan Mall" />
           </div>
           <div class="ft-qr-info">
             <small>สแกน QR Code</small>
