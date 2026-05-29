@@ -2,7 +2,9 @@ let currentCategory = null;
 
 function showPage(pageId, addToHistory = true) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById(pageId).classList.add('active');
+  
+  // ใช้ ?. เผื่อกรณีใส่ชื่อ pageId ผิด หรือหาหน้าไม่เจอ จะได้ไม่ Error
+  document.getElementById(pageId)?.classList.add('active');
 
   if (addToHistory) {
     history.pushState({ page: pageId }, "", "#" + pageId);
@@ -13,7 +15,10 @@ function showPage(pageId, addToHistory = true) {
 
 function goHome() {
   currentCategory = null;
-  document.getElementById('searchInput').value = '';
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) {
+    searchInput.value = '';
+  }
   showPage('page-home');
 }
 
@@ -24,11 +29,7 @@ function goBack() {
     goHome();
   }
 }
-window.onpopstate = function (event) {
-  if (event.state && event.state.page) {
-    showPage(event.state.page, false);
-  }
-};
+
 // ฟังก์ชันสำหรับเปิด/ปิด Hamburger Menu ในโหมดมือถือ
 function toggleMobileMenu() {
   const navMenu = document.getElementById('navMenu');
@@ -36,6 +37,8 @@ function toggleMobileMenu() {
     navMenu.classList.toggle('active');
   }
 }
+
+// ใช้งาน window.onpopstate แค่ตัวเดียว (เอาเวอร์ชันที่มี else มาใช้เพราะครอบคลุมกว่า)
 window.onpopstate = function (event) {
   if (event.state && event.state.page) {
     showPage(event.state.page, false);
