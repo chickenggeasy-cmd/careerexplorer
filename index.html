@@ -28,9 +28,21 @@
 
     <div class="nav-menu" id="navMenu">
       <div class="nav-main-links">
-        <a href="javascript:void(0)" class="nav-link" onclick="goHome(); toggleMobileMenu();">หน้าหลัก</a>
-        <a href="javascript:void(0)" class="nav-link" onclick="showPage('page-about'); toggleMobileMenu();">เกี่ยวกับเรา</a>
-        <a href="javascript:void(0)" class="nav-link" onclick="showPage('page-quiz'); toggleMobileMenu();">ทดสอบสายงาน</a>
+        <a href="javascript:void(0)" class="nav-link" onclick="goHome(); closeMobileMenu();">หน้าหลัก</a>
+
+        <!-- ── Dropdown เกี่ยวกับเรา ── -->
+        <div class="nav-dropdown">
+          <a href="javascript:void(0)" class="nav-link nav-dropdown-toggle">
+            เกี่ยวกับเรา
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </a>
+          <div class="nav-dropdown-menu">
+            <a href="javascript:void(0)" onclick="showPage('page-about-org'); closeMobileMenu();">🏢 เกี่ยวกับองค์กร</a>
+            <a href="javascript:void(0)" onclick="showPage('page-about-app'); closeMobileMenu();">🚀 เกี่ยวกับแอป</a>
+          </div>
+        </div>
+
+        <a href="javascript:void(0)" class="nav-link" onclick="showPage('page-quiz'); closeMobileMenu();">ทดสอบสายงาน</a>
       </div>
       <div class="nav-search">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
@@ -39,6 +51,7 @@
     </div>
   </nav>
 
+  <!-- ==================== PAGE-HOME ==================== -->
   <div id="page-home" class="page active">
 
     <section class="hero-v2">
@@ -78,12 +91,12 @@
         </div>
         <div class="stat-divider"></div>
         <div class="hero-stat-item">
-          <div class="stat-num">100%</div>
+          <div class="stat-num">ปี 2568</div>
           <div class="stat-label">ข้อมูลอัปเดต</div>
         </div>
       </div>
     </section>
-    
+
     <div class="container" id="cat-section">
       <div class="section-header animate-up">
         <div class="section-tag">สายงาน</div>
@@ -94,65 +107,50 @@
     </div>
 
     <section class="feature-section">
-  <div class="container">
-    <div class="feature-grid">
-      
-      <div class="feature-card animate-up">
-        <div class="feature-icon">
-          <img src="img/icons/money-bag.png" alt="ไอคอนข้อมูลเงินเดือน">
+      <div class="container">
+        <div class="feature-grid">
+          <div class="feature-card animate-up">
+            <div class="feature-icon"><img src="img/icons/money-bag.png" alt="ไอคอนข้อมูลเงินเดือน"></div>
+            <h3>ข้อมูลเงินเดือน</h3>
+            <p>เปรียบเทียบเงินเดือนตั้งแต่ระดับเริ่มต้นถึงระดับผู้เชี่ยวชาญ พร้อมแผนภูมิที่เข้าใจง่าย</p>
+          </div>
+          <div class="feature-card animate-up" style="animation-delay:0.1s;">
+            <div class="feature-icon"><img src="img/icons/education.png" alt="ไอคอนเส้นทางการศึกษา"></div>
+            <h3>เส้นทางการศึกษา</h3>
+            <p>รู้ว่าต้องเรียนอะไร ที่ไหน นานแค่ไหน เพื่อเข้าสู่อาชีพที่คุณฝัน</p>
+          </div>
+          <div class="feature-card animate-up" style="animation-delay:0.2s;">
+            <div class="feature-icon"><img src="img/icons/bar-chart.png" alt="ไอคอนโอกาสเติบโตในสายงาน"></div>
+            <h3>โอกาสเติบโต</h3>
+            <p>วิเคราะห์แนวโน้มตลาดแรงงานและทิศทางการเติบโตในระยะยาวของแต่ละสายงาน</p>
+          </div>
+          <div class="feature-card animate-up" style="animation-delay:0.3s;">
+            <div class="feature-icon"><img src="img/icons/mindset.png" alt="ไอคอนแบบทดสอบอาชีพ"></div>
+            <h3>แบบทดสอบอาชีพ</h3>
+            <p>ทำแบบทดสอบค้นหาอาชีพที่เหมาะกับบุคลิกและความสนใจของคุณโดยเฉพาะ</p>
+          </div>
         </div>
-        <h3>ข้อมูลเงินเดือน</h3>
-        <p>เปรียบเทียบเงินเดือนตั้งแต่ระดับเริ่มต้นถึงระดับผู้เชี่ยวชาญ พร้อมแผนภูมิที่เข้าใจง่าย</p>
       </div>
-
-      <div class="feature-card animate-up" style="animation-delay:0.1s;">
-        <div class="feature-icon">
-          <img src="img/icons/education.png" alt="ไอคอนเส้นทางการศึกษา">
-        </div>
-        <h3>เส้นทางการศึกษา</h3>
-        <p>รู้ว่าต้องเรียนอะไร ที่ไหน นานแค่ไหน เพื่อเข้าสู่อาชีพที่คุณฝัน</p>
-      </div>
-
-      <div class="feature-card animate-up" style="animation-delay:0.2s;">
-        <div class="feature-icon">
-          <img src="img/icons/bar-chart.png" alt="ไอคอนโอกาสเติบโตในสายงาน">
-        </div>
-        <h3>โอกาสเติบโต</h3>
-        <p>วิเคราะห์แนวโน้มตลาดแรงงานและทิศทางการเติบโตในระยะยาวของแต่ละสายงาน</p>
-      </div>
-
-      <div class="feature-card animate-up" style="animation-delay:0.3s;">
-        <div class="feature-icon">
-          <img src="img/icons/mindset.png" alt="ไอคอนแบบทดสอบอาชีพ">
-        </div>
-        <h3>แบบทดสอบอาชีพ</h3>
-        <p>ทำแบบทดสอบค้นหาอาชีพที่เหมาะกับบุคลิกและความสนใจของคุณโดยเฉพาะ</p>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-  </div><div id="page-cat" class="page">
-  <div class="container">
-
-    <div class="breadcrumb animate-up">
-      <span onclick="goHome()">🏠 หน้าหลัก</span>
-      <span class="sep">›</span>
-      <span class="current" id="breadcat"></span>
-    </div>
-
-    <button class="back-btn animate-up" onclick="goHome()">← ย้อนกลับ</button>
-
-    <div id="catHero" class="animate-up" style="animation-delay:0.05s;"></div>
-
-    <div class="section-title animate-up" id="catPageTitle"></div>
-
-    <div class="job-grid animate-up" id="jobGrid" style="animation-delay:0.1s;"></div>
+    </section>
 
   </div>
-</div>
-  
+
+  <!-- ==================== PAGE-CAT ==================== -->
+  <div id="page-cat" class="page">
+    <div class="container">
+      <div class="breadcrumb animate-up">
+        <span onclick="goHome()">🏠 หน้าหลัก</span>
+        <span class="sep">›</span>
+        <span class="current" id="breadcat"></span>
+      </div>
+      <button class="back-btn animate-up" onclick="goHome()">← ย้อนกลับ</button>
+      <div id="catHero" class="animate-up" style="animation-delay:0.05s;"></div>
+      <div class="section-title animate-up" id="catPageTitle"></div>
+      <div class="job-grid animate-up" id="jobGrid" style="animation-delay:0.1s;"></div>
+    </div>
+  </div>
+
+  <!-- ==================== PAGE-DETAIL ==================== -->
   <div id="page-detail" class="page">
     <div class="container">
       <div class="breadcrumb animate-up">
@@ -168,7 +166,8 @@
       <div id="detailContent" class="animate-up" style="animation-delay:0.1s;"></div>
     </div>
   </div>
-  
+
+  <!-- ==================== PAGE-SEARCH ==================== -->
   <div id="page-search" class="page">
     <div class="container">
       <div class="breadcrumb">
@@ -181,6 +180,7 @@
     </div>
   </div>
 
+  <!-- ==================== PAGE-QUIZ ==================== -->
   <div id="page-quiz" class="page">
     <div class="container">
       <div class="breadcrumb animate-up">
@@ -193,7 +193,8 @@
     </div>
   </div>
 
-  <div id="page-about" class="page">
+  <!-- ==================== PAGE-ABOUT-ORG ==================== -->
+  <div id="page-about-org" class="page">
     <div class="about-hero-full">
       <div class="about-hero-bg"></div>
       <div class="about-hero-shapes">
@@ -220,37 +221,23 @@
         </div>
       </div>
       <div class="about-scroll-hint">
-        <div class="scroll-mouse">
-          <div class="scroll-wheel"></div>
-        </div>
+        <div class="scroll-mouse"><div class="scroll-wheel"></div></div>
         <span>เลื่อนดู</span>
       </div>
     </div>
 
     <div class="container">
-      <div class="breadcrumb animate-up" style="margin-top: 20px;">
+      <div class="breadcrumb animate-up" style="margin-top:20px;">
         <span onclick="goHome()">🏠 หน้าหลัก</span>
         <span class="sep">›</span>
-        <span class="current">เกี่ยวกับเรา</span>
+        <span class="current">เกี่ยวกับองค์กร</span>
       </div>
 
       <div class="about-stats-row animate-up">
-        <div class="about-stat-card">
-          <div class="about-stat-num">70+</div>
-          <div class="about-stat-label">ปีแห่งประสบการณ์</div>
-        </div>
-        <div class="about-stat-card">
-          <div class="about-stat-num">10,000+</div>
-          <div class="about-stat-label">รายการสินค้า</div>
-        </div>
-        <div class="about-stat-card">
-          <div class="about-stat-num">400+</div>
-          <div class="about-stat-label">อาชีพในระบบ</div>
-        </div>
-        <div class="about-stat-card">
-          <div class="about-stat-num">14</div>
-          <div class="about-stat-label">สายงานหลัก</div>
-        </div>
+        <div class="about-stat-card"><div class="about-stat-num">70+</div><div class="about-stat-label">ปีแห่งประสบการณ์</div></div>
+        <div class="about-stat-card"><div class="about-stat-num">10,000+</div><div class="about-stat-label">รายการสินค้า</div></div>
+        <div class="about-stat-card"><div class="about-stat-num">400+</div><div class="about-stat-label">อาชีพในระบบ</div></div>
+        <div class="about-stat-card"><div class="about-stat-num">14</div><div class="about-stat-label">สายงานหลัก</div></div>
       </div>
 
       <div class="about-two-col animate-up">
@@ -267,133 +254,52 @@
           <div class="mission-list">
             <div class="mission-item">
               <div class="mission-dot"></div>
-              <div>
-                <strong>ผลิตและพัฒนาสื่อการเรียนการสอน</strong>
-                <p>ที่ทันสมัย ส่งเสริมการเรียนรู้แห่งศตวรรษที่ 21</p>
-              </div>
+              <div><strong>ผลิตและพัฒนาสื่อการเรียนการสอน</strong><p>ที่ทันสมัย ส่งเสริมการเรียนรู้แห่งศตวรรษที่ 21</p></div>
             </div>
             <div class="mission-item">
               <div class="mission-dot"></div>
-              <div>
-                <strong>สนับสนุนการศึกษาของชาติ</strong>
-                <p>และดูแลสวัสดิการครูและบุคลากรการศึกษาอย่างยั่งยืน</p>
-              </div>
+              <div><strong>สนับสนุนการศึกษาของชาติ</strong><p>และดูแลสวัสดิการครูและบุคลากรการศึกษาอย่างยั่งยืน</p></div>
             </div>
             <div class="mission-item">
               <div class="mission-dot"></div>
-              <div>
-                <strong>ลดความเหลื่อมล้ำทางการศึกษา</strong>
-                <p>ผ่านการพัฒนาแพลตฟอร์มดิจิทัลสำหรับนักเรียนไทยทั่วประเทศ</p>
-              </div>
+              <div><strong>ลดความเหลื่อมล้ำทางการศึกษา</strong><p>ผ่านการพัฒนาแพลตฟอร์มดิจิทัลสำหรับนักเรียนไทยทั่วประเทศ</p></div>
             </div>
           </div>
         </div>
       </div>
 
       <div class="about-products-section animate-up">
-        <div class="section-header" style="text-align:center; margin-bottom: 48px;">
+        <div class="section-header" style="text-align:center; margin-bottom:48px;">
           <div class="section-tag">สิ่งที่เรามอบให้</div>
           <h2 class="section-title-v2">ผลิตภัณฑ์และบริการ</h2>
           <p class="section-desc">ศูนย์รวมเครื่องมือและสื่อการเรียนรู้ที่ครบครันที่สุดสำหรับการศึกษาไทย</p>
         </div>
         <div class="products-grid-v2">
           <div class="product-card-v2">
-            <div class="product-icon-wrap">
-              <img src="img/icons/book.png" alt="หนังสือ" class="product-icon-img">
-            </div>
+            <div class="product-icon-wrap"><img src="img/icons/book.png" alt="หนังสือ" class="product-icon-img"></div>
             <h4>แบบเรียนและหนังสือ</h4>
             <p>จัดพิมพ์หนังสือเรียนและคู่มือครูที่ได้มาตรฐาน ครอบคลุมทุกระดับชั้น</p>
             <div class="product-card-footer">มากกว่า 1,000 รายการ</div>
           </div>
           <div class="product-card-v2">
-            <div class="product-icon-wrap">
-              <img src="img/icons/folding-clothes.png" alt="เครื่องแบบ" class="product-icon-img">
-            </div>
+            <div class="product-icon-wrap"><img src="img/icons/folding-clothes.png" alt="เครื่องแบบ" class="product-icon-img"></div>
             <h4>เครื่องแบบนักเรียน</h4>
             <p>ชุดนักเรียน ชุดลูกเสือ-เนตรนารี และอุปกรณ์ประกอบเครื่องแบบที่ถูกต้องตามระเบียบ</p>
             <div class="product-card-footer">ถูกต้องตามระเบียบ</div>
           </div>
           <div class="product-card-v2">
-            <div class="product-icon-wrap">
-              <img src="img/icons/microscope.png" alt="วิทยาศาสตร์" class="product-icon-img">
-            </div>
+            <div class="product-icon-wrap"><img src="img/icons/microscope.png" alt="วิทยาศาสตร์" class="product-icon-img"></div>
             <h4>อุปกรณ์วิทยาศาสตร์</h4>
             <p>เครื่องมือทดลองและสารเคมีสำหรับห้องปฏิบัติการวิทยาศาสตร์ในโรงเรียน</p>
             <div class="product-card-footer">มาตรฐานสากล</div>
           </div>
           <div class="product-card-v2">
-            <div class="product-icon-wrap">
-              <img src="img/icons/toys.png" alt="สื่อปฐมวัย" class="product-icon-img">
-            </div>
+            <div class="product-icon-wrap"><img src="img/icons/toys.png" alt="สื่อปฐมวัย" class="product-icon-img"></div>
             <h4>สื่อการสอนปฐมวัย</h4>
             <p>ของเล่นเสริมพัฒนาการ สื่อทำมือ และเครื่องเขียนเพื่อส่งเสริมจินตนาการเด็ก</p>
             <div class="product-card-footer">เสริมพัฒนาการ</div>
           </div>
         </div>
-      </div>
-
-      <div class="about-career-section animate-up">
-        <div class="career-left">
-          <div class="section-tag">Career Explorer Pro</div>
-          <h2 class="about-section-title">แพลตฟอร์มค้นหาอาชีพที่ใช่</h2>
-          <p class="about-body-text">พัฒนาขึ้นเพื่อช่วยให้นักเรียน นักศึกษา และผู้ที่กำลังมองหาเส้นทางอาชีพ สามารถสำรวจข้อมูลอาชีพได้อย่างครบถ้วน เพื่อลดความเหลื่อมล้ำในการเข้าถึงข้อมูล</p>
-          <div class="career-features-list">
-            <div class="career-feat">
-              <div class="feat-check">✓</div>
-              <span>ครอบคลุม <strong>14 สายงานหลัก</strong> และ <strong>400+ อาชีพ</strong></span>
-            </div>
-            <div class="career-feat">
-              <div class="feat-check">✓</div>
-              <span>ข้อมูลเงินเดือน 3 ระดับพร้อมแผนภูมิ</span>
-            </div>
-            <div class="career-feat">
-              <div class="feat-check">✓</div>
-              <span>แบบทดสอบค้นหาอาชีพที่เหมาะกับคุณ</span>
-            </div>
-            <div class="career-feat">
-              <div class="feat-check">✓</div>
-              <span>วิเคราะห์ข้อดี-ข้อจำกัดของแต่ละอาชีพ</span>
-            </div>
-          </div>
-        </div>
-        <div class="career-right">
-          <div class="dashboard-mockup">
-            <div class="dash-header">
-              <div class="dash-dots">
-                <span></span><span></span><span></span>
-              </div>
-              <div class="dash-title">Career Explorer Pro</div>
-            </div>
-            <div class="dash-body">
-              <div class="dash-stat-row">
-                <div class="dash-stat"><div class="ds-num" style="color:#be185d;">14</div><div class="ds-lbl">สายงาน</div></div>
-                <div class="dash-stat"><div class="ds-num" style="color:#be185d;">400+</div><div class="ds-lbl">อาชีพ</div></div>
-                <div class="dash-stat"><div class="ds-num" style="color:#be185d;">100%</div><div class="ds-lbl">ฟรี</div></div>
-              </div>
-              <div class="dash-bar-section">
-                <div class="dash-bar-label">Entry Level</div>
-                <div class="dash-bar-track"><div class="dash-bar-fill" style="width:40%;"></div></div>
-                <div class="dash-bar-label">Mid Level</div>
-                <div class="dash-bar-track"><div class="dash-bar-fill" style="width:65%;"></div></div>
-                <div class="dash-bar-label">Senior Level</div>
-                <div class="dash-bar-track"><div class="dash-bar-fill" style="width:90%;"></div></div>
-              </div>
-              <div class="dash-tags">
-                <span>📊 เงินเดือน</span>
-                <span>🎓 การศึกษา</span>
-                <span>⚡ ทักษะ</span>
-                <span>📈 การเติบโต</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="about-quote-section animate-up">
-        <div class="quote-icon">"</div>
-        <blockquote>เราอยากให้คุณเจออาชีพที่ใช่ และก้าวไปสู่เป้าหมายอย่างมั่นใจ</blockquote>
-        <p class="quote-sub">— ทีมงาน Career Explorer Pro, องค์การค้าของ สกสค.</p>
-        <div class="quote-fact">💡 ศึกษาภัณฑ์พาณิชย์ มีสินค้ามากกว่า 10,000 รายการ เพื่อสนับสนุนทุกเส้นทางอาชีพ!</div>
       </div>
 
       <section class="related-orgs-section animate-up">
@@ -403,30 +309,77 @@
         </div>
         <div class="logo-slider-container">
           <div class="logo-track" id="logoTrack">
-            <a href="https://www.vec.go.th" target="_blank" class="logo-slide" title="สำนักงานคณะกรรมการการอาชีวศึกษา (สอศ.)">
-              <img src="https://www.suksapanpanit.com/assets/uploads/media-uploader/logo-ovec1712218961.png" alt="สอศ.">
-            </a>
-            <a href="https://www.mhesi.go.th" target="_blank" class="logo-slide" title="กระทรวงการอุดมศึกษา (อว.)">
-              <img src="https://www.suksapanpanit.com/assets/uploads/media-uploader/logo-mhesi1712219017.png" alt="อว.">
-            </a>
-            <a href="https://www.nacc.go.th/we/" target="_blank" class="logo-slide" title="สสวท.">
-              <img src="https://www.suksapanpanit.com/assets/uploads/media-uploader/logo-nacc1712219051.png" alt="สสวท.">
-            </a>
-            <a href="https://ecd.onec.go.th" target="_blank" class="logo-slide" title="ปฐมวัยไทยแลนด์">
-              <img src="https://www.suksapanpanit.com/assets/uploads/media-uploader/logo-ecd1712220459.png" alt="ปฐมวัยไทยแลนด์">
-            </a>
-            <a href="https://dole.go.th" target="_blank" class="logo-slide" title="กรมส่งเสริมการเรียนรู้ (สกร.)">
-              <img src="https://www.suksapanpanit.com/assets/uploads/media-uploader/logo-moe1712280913.png" alt="สกร.">
-            </a>
-            <a href="https://www.obec.go.th" target="_blank" class="logo-slide" title="สพฐ.">
-              <img src="https://www.suksapanpanit.com/assets/uploads/media-uploader/logo-obec1712216770.png" alt="สพฐ.">
-            </a>
-            <a href="http://www.onec.go.th" target="_blank" class="logo-slide" title="สกศ.">
-              <img src="https://www.suksapanpanit.com/assets/uploads/media-uploader/logo-onec1712216841.png" alt="สกศ.">
-            </a>
+            <a href="https://www.vec.go.th" target="_blank" class="logo-slide" title="สอศ."><img src="https://www.suksapanpanit.com/assets/uploads/media-uploader/logo-ovec1712218961.png" alt="สอศ."></a>
+            <a href="https://www.mhesi.go.th" target="_blank" class="logo-slide" title="อว."><img src="https://www.suksapanpanit.com/assets/uploads/media-uploader/logo-mhesi1712219017.png" alt="อว."></a>
+            <a href="https://www.ipst.ac.th" target="_blank" class="logo-slide" title="สสวท."><img src="https://www.suksapanpanit.com/assets/uploads/media-uploader/logo-nacc1712219051.png" alt="สสวท."></a>
+            <a href="https://ecd.onec.go.th" target="_blank" class="logo-slide" title="ปฐมวัยไทยแลนด์"><img src="https://www.suksapanpanit.com/assets/uploads/media-uploader/logo-ecd1712220459.png" alt="ปฐมวัยไทยแลนด์"></a>
+            <a href="https://dole.go.th" target="_blank" class="logo-slide" title="สกร."><img src="https://www.suksapanpanit.com/assets/uploads/media-uploader/logo-moe1712280913.png" alt="สกร."></a>
+            <a href="https://www.obec.go.th" target="_blank" class="logo-slide" title="สพฐ."><img src="https://www.suksapanpanit.com/assets/uploads/media-uploader/logo-obec1712216770.png" alt="สพฐ."></a>
+            <a href="http://www.onec.go.th" target="_blank" class="logo-slide" title="สกศ."><img src="https://www.suksapanpanit.com/assets/uploads/media-uploader/logo-onec1712216841.png" alt="สกศ."></a>
           </div>
         </div>
       </section>
+
+      <div style="text-align:center; margin:20px 0 60px;" class="animate-up">
+        <button class="btn-outline-pink" onclick="goHome()">← กลับสู่หน้าหลัก</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PAGE-ABOUT-APP ==================== -->
+  <div id="page-about-app" class="page">
+    <div class="container" style="padding-top:100px;">
+      <div class="breadcrumb animate-up">
+        <span onclick="goHome()">🏠 หน้าหลัก</span>
+        <span class="sep">›</span>
+        <span class="current">เกี่ยวกับแอป</span>
+      </div>
+
+      <div class="section-header animate-up" style="text-align:center; margin:40px 0 48px;">
+        <div class="section-tag">Career Explorer Pro</div>
+        <h1 class="section-title-v2">แพลตฟอร์มค้นหาอาชีพที่ใช่</h1>
+        <p class="section-desc">พัฒนาขึ้นเพื่อช่วยให้นักเรียน นักศึกษา และผู้ที่กำลังมองหาเส้นทางอาชีพ<br>สามารถสำรวจข้อมูลอาชีพได้อย่างครบถ้วน เพื่อลดความเหลื่อมล้ำในการเข้าถึงข้อมูล</p>
+      </div>
+
+      <div class="about-stats-row animate-up">
+        <div class="about-stat-card"><div class="about-stat-num">14</div><div class="about-stat-label">สายงานหลัก</div></div>
+        <div class="about-stat-card"><div class="about-stat-num">400+</div><div class="about-stat-label">อาชีพในระบบ</div></div>
+        <div class="about-stat-card"><div class="about-stat-num">30</div><div class="about-stat-label">คำถามในแบบทดสอบ</div></div>
+        <div class="about-stat-card"><div class="about-stat-num">100%</div><div class="about-stat-label">ฟรี ไม่มีค่าใช้จ่าย</div></div>
+      </div>
+
+      <div class="about-products-section animate-up">
+        <div class="section-header" style="text-align:center; margin-bottom:48px;">
+          <div class="section-tag">ฟีเจอร์</div>
+          <h2 class="section-title-v2">สิ่งที่แอปทำได้</h2>
+        </div>
+        <div class="products-grid-v2">
+          <div class="product-card-v2">
+            <div class="product-icon-wrap"><img src="img/icons/money-bag.png" alt="เงินเดือน" class="product-icon-img"></div>
+            <h4>ข้อมูลเงินเดือน</h4>
+            <p>เปรียบเทียบเงินเดือน Entry / Mid / Senior พร้อมแผนภูมิที่อ่านง่าย</p>
+            <div class="product-card-footer">3 ระดับทุกอาชีพ</div>
+          </div>
+          <div class="product-card-v2">
+            <div class="product-icon-wrap"><img src="img/icons/education.png" alt="การศึกษา" class="product-icon-img"></div>
+            <h4>เส้นทางการศึกษา</h4>
+            <p>รู้ว่าต้องเรียนอะไร ที่ไหน นานแค่ไหน เพื่อเข้าสู่อาชีพที่คุณฝัน</p>
+            <div class="product-card-footer">วุฒิ + ระยะเวลา</div>
+          </div>
+          <div class="product-card-v2">
+            <div class="product-icon-wrap"><img src="img/icons/bar-chart.png" alt="การเติบโต" class="product-icon-img"></div>
+            <h4>โอกาสเติบโต</h4>
+            <p>วิเคราะห์แนวโน้มตลาดแรงงานและทิศทางการเติบโตในระยะยาวของแต่ละสายงาน</p>
+            <div class="product-card-footer">ข้อมูลตลาดแรงงาน</div>
+          </div>
+          <div class="product-card-v2">
+            <div class="product-icon-wrap"><img src="img/icons/mindset.png" alt="แบบทดสอบ" class="product-icon-img"></div>
+            <h4>แบบทดสอบอาชีพ</h4>
+            <p>30 คำถามวิเคราะห์บุคลิกและความสนใจ แล้วแนะนำ Top 3 อาชีพที่เหมาะกับคุณ</p>
+            <div class="product-card-footer">30 ข้อ / Top 3 ผลลัพธ์</div>
+          </div>
+        </div>
+      </div>
 
       <div class="team-section animate-up">
         <div class="section-header" style="text-align:center; margin-bottom:40px;">
@@ -462,11 +415,14 @@
         </div>
       </div>
 
-      <div style="text-align:center; margin: 20px 0 60px;" class="animate-up">
+      <div style="text-align:center; margin:20px 0 60px;" class="animate-up">
         <button class="btn-outline-pink" onclick="goHome()">← กลับสู่หน้าหลัก</button>
       </div>
     </div>
-  </div><footer>
+  </div>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer>
     <div class="footer-inner">
       <div class="ft-brand">
         <div class="ft-brand-head">
@@ -543,7 +499,7 @@
         </div>
       </div>
     </div>
-    <div class="footer-bar">© 2026 All right reserved by SUKSAPANPANIT</div>
+    <div class="footer-bar">© 2026 All rights reserved by SUKSAPANPANIT</div>
   </footer>
 
   <script src="js/data.js"></script>
@@ -552,15 +508,20 @@
   <script src="js/search.js"></script>
   <script src="js/quiz.js"></script>
   <script src="js/loader.js"></script>
-  
+
   <script>
     function toggleMobileMenu() {
       const navMenu = document.getElementById('navMenu');
       if (navMenu) navMenu.classList.toggle('active');
     }
-    
+
+    function closeMobileMenu() {
+      const navMenu = document.getElementById('navMenu');
+      if (navMenu) navMenu.classList.remove('active');
+    }
+
     let lastScrollY = window.scrollY;
-    const nav = document.querySelector('nav'); 
+    const nav = document.querySelector('nav');
     window.addEventListener('scroll', () => {
       const currentScrollY = window.scrollY;
       if (currentScrollY > lastScrollY && currentScrollY > 70) nav.classList.add('nav-hidden');
@@ -568,14 +529,10 @@
       lastScrollY = currentScrollY;
     });
 
-    // Ticker
     document.addEventListener('DOMContentLoaded', () => {
       const ticker = document.getElementById('tickerTrack');
-      if (ticker) {
-        ticker.innerHTML += ticker.innerHTML;
-      }
+      if (ticker) ticker.innerHTML += ticker.innerHTML;
 
-      // Logo Slider
       const track = document.getElementById('logoTrack');
       if (!track) return;
       track.innerHTML += track.innerHTML;
