@@ -428,6 +428,7 @@ function showJob(jobId, catId) {
 /* ═══════════════════════════════════════════════════
    WINDOW.ONLOAD
 ═══════════════════════════════════════════════════ */
+// ── ใหม่ (แทนที่ทั้งก้อน) ──
 window.onload = () => {
   renderCategories();
   if (typeof startSlider === 'function') startSlider();
@@ -443,5 +444,5 @@ window.onload = () => {
   const aboutTotalJobsEl = document.getElementById('aboutTotalJobs');
   if (aboutTotalJobsEl) aboutTotalJobsEl.textContent = total + '+';
 
-  history.replaceState({ page: 'page-home' }, "", "#page-home");
+  // ไม่ replaceState ที่นี่อีกแล้ว — ให้ router.js จัดการ
 };
