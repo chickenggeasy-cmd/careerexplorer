@@ -47,3 +47,9 @@ window.onpopstate = function (event) {
     showPage('page-home', false);
   }
 };
+// เพิ่มท้ายสุดของ router.js
+
+window.addEventListener('load', function () {
+  const hash = window.location.hash.replace('#', '');
+  showPage(hash || 'page-home', false);
+});
