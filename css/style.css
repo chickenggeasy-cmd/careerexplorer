@@ -2027,3 +2027,126 @@ footer::after {
     color: white;
   }
 }
+/* ── Nav Dropdown ── */
+.nav-dropdown {
+  position: relative;
+}
+
+.nav-dropdown-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.nav-dropdown-toggle svg {
+  transition: transform 0.25s ease;
+}
+
+.nav-dropdown.open .nav-dropdown-toggle svg {
+  transform: rotate(180deg);
+}
+
+/* Menu — ซ่อนด้วย max-height ทั้ง desktop และ mobile */
+.nav-dropdown-menu {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.3s ease, opacity 0.25s ease;
+  /* Desktop: absolute */
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.13);
+  padding: 0 6px;
+  min-width: 210px;
+  z-index: 200;
+}
+
+.nav-dropdown.open .nav-dropdown-menu {
+  max-height: 300px;
+  opacity: 1;
+  padding: 6px;
+}
+
+.nav-dropdown-menu a {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 11px 13px;
+  border-radius: 9px;
+  color: #374151;
+  font-size: 13.5px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+
+.nav-dropdown-menu a:hover {
+  background: #fce7f3;
+  color: #be185d;
+}
+
+.nav-dropdown-menu a .dd-text strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 1px;
+}
+
+.nav-dropdown-menu a:hover .dd-text strong {
+  color: #be185d;
+}
+
+.nav-dropdown-menu a .dd-text span {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+.nav-dropdown-divider {
+  height: 1px;
+  background: #f3f4f6;
+  margin: 3px 6px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .nav-dropdown-menu {
+    position: static;
+    box-shadow: none;
+    background: transparent;
+    border-radius: 0;
+    min-width: unset;
+  }
+
+  .nav-dropdown-menu a {
+    padding: 8px 0 8px 16px;
+    color: rgba(255,255,255,0.8);
+    border-radius: 0;
+  }
+
+  .nav-dropdown-menu a:hover {
+    background: transparent;
+    color: white;
+  }
+
+  .nav-dropdown-menu a .dd-text strong {
+    color: rgba(255,255,255,0.9);
+  }
+
+  .nav-dropdown-menu a:hover .dd-text strong {
+    color: white;
+  }
+
+  .nav-dropdown-menu a .dd-text span {
+    color: rgba(255,255,255,0.45);
+  }
+
+  .nav-dropdown-divider {
+    background: rgba(255,255,255,0.1);
+    margin: 2px 0 2px 16px;
+  }
+}

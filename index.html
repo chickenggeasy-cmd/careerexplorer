@@ -6,6 +6,123 @@
   <title>Career Explorer Pro - สำรวจอาชีพในฝัน</title>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
+  <style>
+  .nav-dropdown { position: relative; }
+
+  .nav-dropdown-toggle {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+  }
+
+  .nav-dropdown-toggle svg {
+    transition: transform 0.25s ease;
+    flex-shrink: 0;
+  }
+
+  .nav-dropdown.open .nav-dropdown-toggle svg {
+    transform: rotate(180deg);
+  }
+
+  /* ซ่อนด้วย JS class .open เท่านั้น — ไม่มี hover เลย */
+  .nav-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    padding: 6px;
+    min-width: 220px;
+    z-index: 999;
+    animation: ddFadeIn 0.2s ease;
+  }
+
+  @keyframes ddFadeIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(-6px); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
+
+  .nav-dropdown.open .nav-dropdown-menu {
+    display: block;
+  }
+
+  .nav-dropdown-menu a {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 11px 13px;
+    border-radius: 9px;
+    color: #374151;
+    font-size: 13.5px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+
+  .nav-dropdown-menu a:hover {
+    background: #fce7f3;
+    color: #be185d;
+  }
+
+  .nav-dropdown-menu a .dd-text strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 1px;
+  }
+
+  .nav-dropdown-menu a:hover .dd-text strong { color: #be185d; }
+
+  .nav-dropdown-menu a .dd-text span {
+    font-size: 11px;
+    color: #9ca3af;
+  }
+
+  .nav-dropdown-divider {
+    height: 1px;
+    background: #f3f4f6;
+    margin: 3px 6px;
+  }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .nav-dropdown-menu {
+      position: static;
+      transform: none;
+      box-shadow: none;
+      background: white;
+      border-radius: 10px;
+      min-width: unset;
+      width: calc(100% - 0px);
+      margin-top: 4px;
+      animation: none;
+    }
+
+    .nav-dropdown-menu a {
+      color: #374151;
+      border-radius: 8px;
+    }
+
+    .nav-dropdown-menu a:hover {
+      background: #fce7f3;
+      color: #be185d;
+    }
+
+    .nav-dropdown-menu a .dd-text strong { color: #111827; }
+    .nav-dropdown-menu a:hover .dd-text strong { color: #be185d; }
+    .nav-dropdown-menu a .dd-text span { color: #9ca3af; }
+
+    .nav-dropdown-divider {
+      background: #f3f4f6;
+      margin: 3px 6px;
+    }
+  }
+</style>
 </head>
 <body>
 
@@ -28,21 +145,31 @@
 
     <div class="nav-menu" id="navMenu">
       <div class="nav-main-links">
-        <a href="javascript:void(0)" class="nav-link" onclick="goHome(); closeMobileMenu();">หน้าหลัก</a>
+        <a href="javascript:void(0)" class="nav-link" onclick="goHome(); closeAll();">หน้าหลัก</a>
 
-        <!-- ── Dropdown เกี่ยวกับเรา ── -->
-        <div class="nav-dropdown">
-          <a href="javascript:void(0)" class="nav-link nav-dropdown-toggle">
+        <div class="nav-dropdown" id="aboutDropdown">
+          <a href="javascript:void(0)" class="nav-link nav-dropdown-toggle" onclick="toggleAboutDropdown(event)">
             เกี่ยวกับเรา
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </a>
           <div class="nav-dropdown-menu">
-            <a href="javascript:void(0)" onclick="showPage('page-about-org'); closeMobileMenu();">🏢 เกี่ยวกับองค์กร</a>
-            <a href="javascript:void(0)" onclick="showPage('page-about-app'); closeMobileMenu();">🚀 เกี่ยวกับแอป</a>
+            <a href="javascript:void(0)" onclick="showPage('page-about-org'); closeAll();">
+              <span class="dd-text">
+                <strong>เกี่ยวกับองค์กร</strong>
+                <span>ประวัติ สกสค. และผลิตภัณฑ์</span>
+              </span>
+            </a>
+            <div class="nav-dropdown-divider"></div>
+            <a href="javascript:void(0)" onclick="showPage('page-about-app'); closeAll();">
+              <span class="dd-text">
+                <strong>เกี่ยวกับแอป</strong>
+                <span>ฟีเจอร์ สถิติ และทีมผู้พัฒนา</span>
+              </span>
+            </a>
           </div>
         </div>
 
-        <a href="javascript:void(0)" class="nav-link" onclick="showPage('page-quiz'); closeMobileMenu();">ทดสอบสายงาน</a>
+        <a href="javascript:void(0)" class="nav-link" onclick="showPage('page-quiz'); closeAll();">ทดสอบสายงาน</a>
       </div>
       <div class="nav-search">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
@@ -53,7 +180,6 @@
 
   <!-- ==================== PAGE-HOME ==================== -->
   <div id="page-home" class="page active">
-
     <section class="hero-v2">
       <div class="hero-bg-pattern"></div>
       <div class="hero-glow hero-glow-1"></div>
@@ -74,9 +200,7 @@
             สำรวจสายงาน
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </button>
-          <button class="btn-secondary-hero" onclick="showPage('page-quiz')">
-            ทำแบบทดสอบ
-          </button>
+          <button class="btn-secondary-hero" onclick="showPage('page-quiz')">ทำแบบทดสอบ</button>
         </div>
       </div>
       <div class="hero-stats-bar animate-up" style="animation-delay:0.4s;">
@@ -132,14 +256,13 @@
         </div>
       </div>
     </section>
-
   </div>
 
   <!-- ==================== PAGE-CAT ==================== -->
   <div id="page-cat" class="page">
     <div class="container">
       <div class="breadcrumb animate-up">
-        <span onclick="goHome()">🏠 หน้าหลัก</span>
+        <span onclick="goHome()">หน้าหลัก</span>
         <span class="sep">›</span>
         <span class="current" id="breadcat"></span>
       </div>
@@ -154,7 +277,7 @@
   <div id="page-detail" class="page">
     <div class="container">
       <div class="breadcrumb animate-up">
-        <span onclick="goHome()">🏠 หน้าหลัก</span>
+        <span onclick="goHome()">หน้าหลัก</span>
         <span class="sep">›</span>
         <span onclick="goBack()" id="breadcat2" style="cursor:pointer;"></span>
         <span class="sep">›</span>
@@ -171,7 +294,7 @@
   <div id="page-search" class="page">
     <div class="container">
       <div class="breadcrumb">
-        <span onclick="goHome()">🏠 หน้าหลัก</span>
+        <span onclick="goHome()">หน้าหลัก</span>
         <span class="sep">›</span>
         <span class="current">ผลการค้นหา</span>
       </div>
@@ -184,7 +307,7 @@
   <div id="page-quiz" class="page">
     <div class="container">
       <div class="breadcrumb animate-up">
-        <span onclick="goHome()">🏠 หน้าหลัก</span>
+        <span onclick="goHome()">หน้าหลัก</span>
         <span class="sep">›</span>
         <span class="current">ทดสอบสายงาน</span>
       </div>
@@ -228,7 +351,7 @@
 
     <div class="container">
       <div class="breadcrumb animate-up" style="margin-top:20px;">
-        <span onclick="goHome()">🏠 หน้าหลัก</span>
+        <span onclick="goHome()">หน้าหลัก</span>
         <span class="sep">›</span>
         <span class="current">เกี่ยวกับองค์กร</span>
       </div>
@@ -330,7 +453,7 @@
   <div id="page-about-app" class="page">
     <div class="container" style="padding-top:100px;">
       <div class="breadcrumb animate-up">
-        <span onclick="goHome()">🏠 หน้าหลัก</span>
+        <span onclick="goHome()">หน้าหลัก</span>
         <span class="sep">›</span>
         <span class="current">เกี่ยวกับแอป</span>
       </div>
@@ -432,7 +555,7 @@
             <div class="line2">Explorer Pro</div>
           </div>
         </div>
-        <p class="ft-brand-desc">สร้างด้วย 🌸 เพื่อนักเรียนไทย<br />องค์การค้าของ สกสค. มีภารกิจในการผลิตและพัฒนาสื่อการเรียนการสอนที่ทันสมัย</p>
+        <p class="ft-brand-desc">สร้างด้วย เพื่อนักเรียนไทย<br />องค์การค้าของ สกสค. มีภารกิจในการผลิตและพัฒนาสื่อการเรียนการสอนที่ทันสมัย</p>
         <div class="ft-social-btns">
           <a href="https://web.facebook.com/suksapanpanitcenter" target="_blank" class="ft-social-btn">
             <img src="https://static.xx.fbcdn.net/rsrc.php/y-/r/yhD4cqC_Wzs.webp" alt="" role="presentation" />
@@ -446,24 +569,24 @@
       </div>
 
       <div class="ft-contact">
-        <div class="ft-col-title"><div class="ft-col-title-icon">📬</div>ติดต่อเรา</div>
+        <div class="ft-col-title"><div class="ft-col-title-icon">ติดต่อเรา</div></div>
         <div class="ft-contact-list">
           <div class="ft-contact-item">
-            <div class="ft-ci-icon">📍</div>
+            <div class="ft-ci-icon">ที่อยู่</div>
             <div>
               <div class="ft-ci-label">ที่อยู่</div>
               <div class="ft-ci-value">2249 ถนนลาดพร้าว แขวงสะพานสอง<br />เขตวังทองหลาง กทม. 10310</div>
             </div>
           </div>
           <div class="ft-contact-item">
-            <div class="ft-ci-icon">📞</div>
+            <div class="ft-ci-icon">โทร</div>
             <div>
               <div class="ft-ci-label">โทรศัพท์</div>
               <div class="ft-ci-value">0 2514 4023-30 ต่อ 222, 223</div>
             </div>
           </div>
           <div class="ft-contact-item">
-            <div class="ft-ci-icon">✉️</div>
+            <div class="ft-ci-icon">อีเมล</div>
             <div>
               <div class="ft-ci-label">อีเมล</div>
               <div class="ft-ci-value"><a href="mailto:eshop.bowt2@gmail.com">eshop.bowt2@gmail.com</a></div>
@@ -472,12 +595,12 @@
         </div>
         <div class="ft-map">
           <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.2764952044813!2d100.59609657508933!3d13.760233086641885!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e29e843f55e09d%3A0x6334f5905187e1f!2z4Liq4LiW4Liy4Lia4Liy4LiH4Liq4Liy4LiZ4Liq4Liy4Li44Lij4Li14LiZ4Liy4LiH4Liq4Li04LiX4Lii4Liy4Lio4Li44LiB4Lip4Liy!5e0!3m2!1sth!2sth!4v1716777000000!5m2!1sth!2sth" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy" title="แผนที่กูเกิลแมปแสดงที่ตั้งองค์การค้าของ สกสค."></iframe>
-          <a href="https://maps.app.goo.gl/4yTzcFRytRqG7XG29" target="_blank" class="ft-map-pill">🗺️ เปิดใน Maps</a>
+          <a href="https://maps.app.goo.gl/4yTzcFRytRqG7XG29" target="_blank" class="ft-map-pill">เปิดใน Maps</a>
         </div>
       </div>
 
       <div class="ft-download">
-        <div class="ft-col-title"><div class="ft-col-title-icon">📱</div>ดาวน์โหลดแอป</div>
+        <div class="ft-col-title"><div class="ft-col-title-icon">ดาวน์โหลดแอป</div></div>
         <div class="ft-store-btns">
           <a href="https://play.google.com/store/apps/details?id=td.webuild.ssp" target="_blank" class="ft-store-link">
             <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="" role="presentation" />
@@ -490,7 +613,7 @@
         </div>
         <div class="ft-qr-wrap">
           <div class="ft-qr-img">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://suksapanmall.com" alt="คิวอาร์โค้ดสำหรับลิงก์ดาวน์โหลดแอป Suksapan Mall" />
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://suksapanmall.com" alt="QR Code Suksapan Mall" />
           </div>
           <div class="ft-qr-info">
             <small>สแกน QR Code</small>
@@ -510,16 +633,35 @@
   <script src="js/loader.js"></script>
 
   <script>
+    // ── Mobile Menu ──
     function toggleMobileMenu() {
-      const navMenu = document.getElementById('navMenu');
-      if (navMenu) navMenu.classList.toggle('active');
+      document.getElementById('navMenu')?.classList.toggle('active');
     }
 
     function closeMobileMenu() {
-      const navMenu = document.getElementById('navMenu');
-      if (navMenu) navMenu.classList.remove('active');
+      document.getElementById('navMenu')?.classList.remove('active');
     }
 
+    // ── Dropdown About ──
+    function toggleAboutDropdown(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      document.getElementById('aboutDropdown').classList.toggle('open');
+    }
+
+    function closeAll() {
+      document.getElementById('aboutDropdown')?.classList.remove('open');
+      closeMobileMenu();
+    }
+
+    // กดนอก dropdown ปิด
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('#aboutDropdown')) {
+        document.getElementById('aboutDropdown')?.classList.remove('open');
+      }
+    });
+
+    // ── Nav hide on scroll ──
     let lastScrollY = window.scrollY;
     const nav = document.querySelector('nav');
     window.addEventListener('scroll', () => {
@@ -529,6 +671,7 @@
       lastScrollY = currentScrollY;
     });
 
+    // ── Logo Slider ──
     document.addEventListener('DOMContentLoaded', () => {
       const ticker = document.getElementById('tickerTrack');
       if (ticker) ticker.innerHTML += ticker.innerHTML;
@@ -537,9 +680,7 @@
       if (!track) return;
       track.innerHTML += track.innerHTML;
 
-      let isDown = false;
-      let startX, scrollLeft;
-      let isAutoScrolling = true;
+      let isDown = false, startX, scrollLeft, isAutoScrolling = true;
 
       function autoScroll() {
         if (isAutoScrolling && !isDown) {

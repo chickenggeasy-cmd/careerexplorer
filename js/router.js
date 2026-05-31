@@ -14,9 +14,7 @@ function showPage(pageId, addToHistory = true) {
 function goHome() {
   currentCategory = null;
   const searchInput = document.getElementById('searchInput');
-  if (searchInput) {
-    searchInput.value = '';
-  }
+  if (searchInput) searchInput.value = '';
   showPage('page-home');
 }
 
@@ -30,9 +28,12 @@ function goBack() {
 
 function toggleMobileMenu() {
   const navMenu = document.getElementById('navMenu');
-  if (navMenu) {
-    navMenu.classList.toggle('active');
-  }
+  if (navMenu) navMenu.classList.toggle('active');
+}
+
+function closeMobileMenu() {
+  const navMenu = document.getElementById('navMenu');
+  if (navMenu) navMenu.classList.remove('active');
 }
 
 window.onpopstate = function (event) {
