@@ -3753,7 +3753,7 @@ const DATA = {
           nameT: "กีฬาปาเป้า",
           nameE: "Darts",
           icon: "🎯",
-          img: "https://www.pdc-europe.tv/wp-content/uploads/2024/11/ET1_Anderson-v-Price_11-e1730731812822.jpg",
+          img: "https://image.platoapp.com/games/darts/chooser2.jpg",
           salary: { entry: "5,000", mid: "32,000", senior: "648,000+" },
           salaryBar: { entry: 10, mid: 45, senior: 90 },
           education: "ฝึกทักษะเฉพาะทาง",
