@@ -308,7 +308,8 @@ nav {
    ========================================================================== */
 .hero-v2 {
   position: relative;
-  min-height: 92vh;
+  min-height: 0;
+  padding: 120px 2rem 80px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1388,7 +1389,8 @@ nav {
    ========================================================================== */
 .about-hero-full {
   position: relative;
-  min-height: 100vh;
+  min-height: 0;
+  padding: 120px 2rem 80px;
   display: flex;
   flex-direction: column;
   align-items: center;
