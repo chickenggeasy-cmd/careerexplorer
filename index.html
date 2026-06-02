@@ -977,6 +977,78 @@
     .rc-progress .rc-dot { background: #f59e0b; box-shadow: 0 0 6px rgba(245,158,11,0.5); animation: pulse-ring 1.5s infinite; }
     .rc-soon .rc-dot     { background: rgba(190,24,93,0.4); }
 
+    /* ─── REFERENCES SECTION ─── */
+    .app-refs-section {
+      padding: 70px 0;
+      background: #fff;
+    }
+    .refs-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-top: 40px;
+    }
+    .ref-card {
+      background: #fff;
+      border-radius: 24px;
+      padding: 32px 24px;
+      text-align: center;
+      border: 1px solid rgba(190,24,93,0.08);
+      box-shadow: 0 4px 20px rgba(190,24,93,0.05);
+      transition: all 0.35s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+    }
+    .ref-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(131,24,67,0.12);
+      border-color: rgba(190,24,93,0.2);
+    }
+    .ref-logo-wrap {
+      width: 100%;
+      height: 100px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 16px;
+      background: #f8f9fa;
+      padding: 10px;
+    }
+    .ref-logo-img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      transition: transform 0.3s;
+    }
+    .ref-card:hover .ref-logo-img {
+      transform: scale(1.05);
+    }
+    .ref-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--primary-deep);
+      margin-bottom: 8px;
+    }
+    .ref-desc {
+      font-size: 13px;
+      color: #9d4a70;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .ref-btn {
+      margin-top: auto;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
     /* ─── RESPONSIVE FIXES for new sections ─── */
     @media (max-width: 1024px) {
       .showcase-inner   { grid-template-columns: 1fr; gap: 40px; }
@@ -1107,7 +1179,7 @@
         </div>
         <div class="stat-divider"></div>
         <div class="hero-stat-item">
-          <div class="stat-num">ปี 2568</div>
+          <div class="stat-num">ปี 2569</div>
           <div class="stat-label">ข้อมูลอัปเดต</div>
         </div>
       </div>
@@ -1404,9 +1476,9 @@
           </div>
           <div class="timeline-item">
             <div class="tl-card">
-              <div class="tl-year">พ.ศ. 2568</div>
+              <div class="tl-year">พ.ศ. 2569</div>
               <div class="tl-title">Career Explorer Pro</div>
-              <div class="tl-desc">เปิดตัวแพลตฟอร์มสำรวจอาชีพ เพื่อช่วยเยาวชนไทยค้นพบเส้นทางอาชีพที่เหมาะสม</div>
+              <div class="tl-desc">อัปเดตฐานข้อมูลเงินเดือนครั้งใหญ่และระบบสำรวจอาชีพ เพื่อช่วยเยาวชนไทยค้นพบเส้นทางอนาคต</div>
             </div>
             <div class="tl-dot"></div>
             <div class="tl-empty"></div>
@@ -1583,7 +1655,7 @@
             <div class="sc-check">
               <div class="sc-icon">💰</div>
               <div>
-                <strong>ข้อมูลเงินเดือนอัปเดตปี 2568</strong>
+                <strong>ข้อมูลเงินเดือนอัปเดตปี 2569</strong>
                 <span>Entry / Mid / Senior Level ในทุกสายงาน</span>
               </div>
             </div>
@@ -1722,7 +1794,7 @@
             <div class="ftc-icon-wrap" style="background:linear-gradient(135deg,rgba(190,24,93,0.9),rgba(244,114,182,0.9));">💰</div>
             <div class="ftc-content">
               <div class="ftc-label">ข้อมูลทางการเงิน</div>
-              <div class="ftc-title">ฐานข้อมูลเงินเดือนปี 2568</div>
+              <div class="ftc-title">ฐานข้อมูลเงินเดือนปี 2569</div>
               <div class="ftc-desc">เปรียบเทียบเงินเดือนทุกระดับตั้งแต่เริ่มงานจนถึงผู้เชี่ยวชาญ พร้อมกราฟแสดงผลที่เข้าใจง่ายในแต่ละอาชีพ</div>
               <div class="ftc-tags">
                 <span class="ftc-tag">Entry Level</span>
@@ -1775,6 +1847,49 @@
     </div>
 
     <div class="container">
+
+      <!-- DATA SOURCES / REFERENCES -->
+      <div class="app-refs-section animate-up">
+        <div class="section-header" style="text-align:center;">
+          <div class="section-tag">ความน่าเชื่อถือ</div>
+          <h2 class="section-title-v2">แหล่งข้อมูลอ้างอิง</h2>
+          <p class="section-desc" style="margin:0 auto;">ข้อมูลเงินเดือนและแนวโน้มอาชีพปี 2569 รวบรวมจากสถาบันและบริษัทจัดหางานชั้นนำ</p>
+        </div>
+        <div class="refs-grid">
+          <a href="https://www.adecco.com/th-th/salary-guide/" target="_blank" class="ref-card">
+            <div class="ref-logo-wrap">
+              <img src="data:image/png;base64,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" alt="Adecco Thailand" class="ref-logo-img">
+            </div>
+            <div class="ref-title">Adecco Thailand</div>
+            <p class="ref-desc">คู่มือฐานเงินเดือนพนักงานเอกชนประจำปี 2569 (Salary Guide 2026)</p>
+            <div class="ref-btn">ดูข้อมูลต้นฉบับ ↗</div>
+          </a>
+          <a href="https://www.robertwalters.co.th/our-services/salary-survey.html" target="_blank" class="ref-card">
+            <div class="ref-logo-wrap">
+              <img src="https://www.robertwalters.co.uk/content/dam/robert-walters-redesign/global/images/logos/RW_logo_380x214px_dark%20grey.png" alt="Robert Walters" class="ref-logo-img">
+            </div>
+            <div class="ref-title">Robert Walters</div>
+            <p class="ref-desc">รายงานสำรวจเงินเดือนเชิงลึกในกลุ่มอุตสาหกรรมเทคโนโลยีและวิศวกรรม</p>
+            <div class="ref-btn">ดูข้อมูลต้นฉบับ ↗</div>
+          </a>
+          <a href="https://www.manpowerthailand.com/en/salary-guide" target="_blank" class="ref-card">
+            <div class="ref-logo-wrap">
+              <img src="https://www.manpowerthailand.com/-/jssmedia/project/manpowergroup/admin/logos/brand/light-bg/manpower-logo-horizontal.svg" alt="ManpowerGroup" class="ref-logo-img">
+            </div>
+            <div class="ref-title">ManpowerGroup</div>
+            <p class="ref-desc">ข้อมูลอัตราค่าจ้างในตลาดแรงงานไทยครอบคลุม 9 อุตสาหกรรมหลัก</p>
+            <div class="ref-btn">ดูข้อมูลต้นฉบับ ↗</div>
+          </a>
+          <a href="https://th.jobsdb.com/career-advice/explore-salaries" target="_blank" class="ref-card">
+            <div class="ref-logo-wrap">
+              <img src="data:image/png;base64,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" alt="JobsDB by SEEK" class="ref-logo-img">
+            </div>
+            <div class="ref-title">JobsDB (SEEK)</div>
+            <p class="ref-desc">ฐานข้อมูลเงินเดือนเฉลี่ยรายอาชีพที่ใหญ่ที่สุดในประเทศไทย</p>
+            <div class="ref-btn">ดูข้อมูลต้นฉบับ ↗</div>
+          </a>
+        </div>
+      </div>
 
       <!-- ROADMAP -->
       <div class="app-roadmap-section animate-up">
