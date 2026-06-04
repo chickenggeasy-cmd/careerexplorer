@@ -377,7 +377,7 @@ const QUIZ_QUESTIONS = [
   },
   {
     q: "ถ้าคุณต้องเลือกงานอดิเรกใหม่ คุณจะเลือกอะไร?",
-    emoji: "🎨",  // ✅ FIX: แก้จาก " hobby " เป็น emoji จริง
+    emoji: "🎨",  
     choices: [
       { text: "เรียนรู้ภาษาใหม่ เล่นเครื่องดนตรี หรือวาดภาพ",            scores: { education: 3, arts: 2, lifestyle: 1 } },
       { text: "ทำสวน ปลูกต้นไม้ เลี้ยงสัตว์ หรือทำเกษตรอินทรีย์",       scores: { agriculture: 3, food: 2, sports: 1 } },
