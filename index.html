@@ -1214,28 +1214,26 @@
   let conversationHistory = [];
   let currentModelIndex = 0;
 
-  /* ── 5. System Prompt ── */
+/* ── 5. System Prompt ── */
   function buildSystemPrompt() {
     let jobInfo = '';
+    
+    // แทนที่จะส่งข้อมูลทั้งก้อน ให้สรุปออกมาเป็นรายชื่อหมวดหมู่
     if (typeof DATA !== 'undefined' && DATA.categories) {
-      const totalJobs = DATA.categories.reduce((s, c) => s + (c.jobs ? c.jobs.length : 0), 0);
-      const catList = DATA.categories.map(cat => {
-        const top3 = cat.jobs.slice(0, 3).map(j =>
-          `${j.nameT}(฿${j.salary?.entry || '?'})`
-        ).join(', ');
-        return `${cat.nameT}: ${top3}`;
-      }).join(' | ');
-      jobInfo = `\nข้อมูลในระบบ (${totalJobs} อาชีพ, ${DATA.categories.length} สายงาน):\n${catList}`;
+      // ดึงแค่ชื่อหมวดหมู่มา เพื่อให้ AI รู้ว่าในระบบมีเรื่องอะไรบ้าง
+      const categoriesSummary = DATA.categories.map(c => c.nameT).join(', ');
+      jobInfo = `\nฐานข้อมูลอาชีพในระบบประกอบด้วยสายงาน: ${categoriesSummary} 
+      (หากผู้ใช้ถามถึงอาชีพใดเป็นพิเศษ ให้คุณค้นหาข้อมูลรายละเอียดอาชีพนั้นจากโครงสร้าง DATA ที่คุณมีอยู่)`;
     }
 
     return `คุณคือ AI Career Advisor ของ Career Explorer Pro (สกสค.)
-ช่วยแนะนำอาชีพและเส้นทางการทำงานให้คนไทย${jobInfo}
+ช่วยแนะนำอาชีพและเส้นทางการทำงานให้คนไทย โดยอิงจากข้อมูลฐานข้อมูลอาชีพในระบบเป็นหลัก
 
 กฎ:
-- ตอบภาษาไทย กระชับ เป็นมิตร ไม่เกิน 200 คำ
-- ตอบได้อิสระทุกคำถามเกี่ยวกับอาชีพ เงินเดือน การศึกษา ทักษะ
-- ใช้ emoji บ้างเล็กน้อย
-- ห้ามแต่งข้อมูลที่ไม่มีในฐานข้อมูล`;
+- ตอบภาษาไทย กระชับ เป็นมิตร
+- หากผู้ใช้ถามถึงอาชีพ ให้คุณเลือกดึงข้อมูลรายละเอียดของอาชีพนั้นๆ มาตอบ
+- ถ้าข้อมูลอาชีพนั้นไม่มีในระบบ ให้บอกผู้ใช้ตามตรงว่าไม่มีในฐานข้อมูลของเรา
+- ใช้ emoji บ้างเล็กน้อย`;
   }
 
   /* ── 6. Toggle ── */
