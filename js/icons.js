@@ -1,3 +1,12 @@
+/**
+ * ══════════════════════════════════════════════════════════════
+ *  Career Explorer Pro — SVG Icon System  v1.0
+ *  ไฟล์: js/icons.js
+ *  วิธีใช้: เพิ่ม <script src="js/icons.js"></script>
+ *           ก่อนปิด </body> ใน index.html
+ * ══════════════════════════════════════════════════════════════
+ */
+
 (function () {
   'use strict';
 
@@ -117,48 +126,50 @@
       <circle cx="13.5" cy="18" r="1.2" fill="white"/>
     </svg>`,
 
-    // ── Roadmap Cards (อัปเกรดเป็นไอคอน Modern Duotone) ──────
-    database: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M21 12C21 13.6569 16.9706 15 12 15C7.02944 15 3 13.6569 3 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-      <path d="M21 19C21 20.6569 16.9706 22 12 22C7.02944 22 3 20.6569 3 19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-      <path d="M21 5C21 6.65685 16.9706 8 12 8C7.02944 8 3 6.65685 3 5C3 3.34315 7.02944 2 12 2C16.9706 2 21 3.34315 21 5Z" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-width="1.8"/>
+    // ── Roadmap Cards ────────────────────────────────────────
+    database: `<svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="9.5" cy="5" rx="6" ry="2.2" stroke="currentColor" stroke-width="1.5" fill="currentColor" fill-opacity="0.1"/>
+      <path d="M3.5 5V9.5C3.5 10.881 6.239 12 9.5 12C12.761 12 15.5 10.881 15.5 9.5V5" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M3.5 9.5V14C3.5 15.381 6.239 16.5 9.5 16.5C12.761 16.5 15.5 15.381 15.5 14V9.5" stroke="currentColor" stroke-width="1.5"/>
     </svg>`,
 
-    brain_sm: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12 4.5C12 4.5 10 2.5 7 2.5C4 2.5 2 5 2 8C2 10.5 4.5 12 6 12.5V17C6 19.5 8 21.5 10.5 21.5H13.5C16 21.5 18 19.5 18 17V12.5C19.5 12 22 10.5 22 8C22 5 20 2.5 17 2.5C14 2.5 12 4.5 12 4.5Z" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-width="1.8"/>
-      <path d="M12 4.5V21.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="3 3"/>
-      <path d="M6 10C6 10 7.5 8.5 9.5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-      <circle cx="9.5" cy="14.5" r="1.5" fill="currentColor"/>
+    brain_sm: `<svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M9.5 3C7 3 5 5 5 7.5C5 9 5.8 10.3 7 11.2V13H12V11.2C13.2 10.3 14 9 14 7.5C14 5 12 3 9.5 3Z" stroke="currentColor" stroke-width="1.5" fill="currentColor" fill-opacity="0.1"/>
+      <path d="M7.5 7.5C7.5 7.5 8 6 9.5 6.5C11 7 11.5 9 9.8 10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+      <circle cx="9.5" cy="12" r="0.8" fill="currentColor"/>
+      <path d="M7.5 14H11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
     </svg>`,
 
-    mobile_sm: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="5" y="2" width="14" height="20" rx="3" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-width="1.8"/>
-      <path d="M10 5H14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-      <rect x="9" y="9" width="6" height="6" rx="1.5" fill="currentColor" fill-opacity="0.3"/>
-      <circle cx="12" cy="18" r="1.5" fill="currentColor"/>
+    mobile_sm: `<svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="5" y="2" width="9" height="15" rx="2" stroke="currentColor" stroke-width="1.5" fill="currentColor" fill-opacity="0.08"/>
+      <path d="M8 4.5H11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+      <circle cx="9.5" cy="14.5" r="1" fill="currentColor"/>
+      <rect x="7" y="7" width="5" height="5" rx="1" fill="currentColor" fill-opacity="0.2"/>
     </svg>`,
 
-    bell_sm: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12 3V4C9 4 7 6.5 7 9.5V15L5 17H19L17 15V9.5C17 6.5 15 4 12 4V3Z" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-      <path d="M10 17C10 18.1046 10.8954 19 12 19C13.1046 19 14 18.1046 14 17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-      <circle cx="18" cy="6" r="3" fill="#ef4444" stroke="#ffffff" stroke-width="1.5"/>
+    bell_sm: `<svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M9.5 2.5V3.5C7.2 4 5.5 6 5.5 8.5V13L4 14.5H15L13.5 13V8.5C13.5 6 11.8 4 9.5 3.5V2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M8 14.5C8 15.328 8.672 16 9.5 16C10.328 16 11 15.328 11 14.5" stroke="currentColor" stroke-width="1.5"/>
+      <circle cx="14" cy="4.5" r="2.5" fill="#ef4444" stroke="white" stroke-width="1"/>
     </svg>`,
 
-    users_sm: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M16 21V19C16 16.7909 14.2091 15 12 15H5C2.79086 15 1 16.7909 1 19V21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-      <circle cx="8.5" cy="7" r="4" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-width="1.8"/>
-      <path d="M23 21V19C23 17.1325 21.7221 15.563 19.9826 15.1354" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-      <path d="M16 3.13544C17.7395 3.563 19 5.13253 19 7.00004C19 8.86754 17.7395 10.4371 16 10.8646" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    users_sm: `<svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="7" cy="7" r="2.8" stroke="currentColor" stroke-width="1.5"/>
+      <circle cx="12" cy="7" r="2.8" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M2 17.5C2 14.5 4.239 12 7 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M17 17.5C17 14.5 14.761 12 12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M9.5 13.5C11.985 13.5 14 15.239 14 17.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M9.5 13.5C7.015 13.5 5 15.239 5 17.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
     </svg>`,
 
-    robot_sm: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="4" y="8" width="16" height="12" rx="3" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-width="1.8"/>
-      <path d="M12 8V4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-      <circle cx="12" cy="3" r="1.5" fill="currentColor"/>
-      <circle cx="9" cy="13" r="2" fill="currentColor"/>
-      <circle cx="15" cy="13" r="2" fill="currentColor"/>
-      <path d="M10 17H14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-      <path d="M4 12H2M22 12H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    robot_sm: `<svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3.5" y="7" width="12" height="9.5" rx="2" stroke="currentColor" stroke-width="1.5" fill="currentColor" fill-opacity="0.08"/>
+      <circle cx="7.5" cy="11" r="1.5" fill="currentColor"/>
+      <circle cx="11.5" cy="11" r="1.5" fill="currentColor"/>
+      <path d="M7.8 14H11.2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+      <path d="M9.5 7V5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="9.5" cy="4.2" r="1.3" fill="currentColor"/>
+      <path d="M3.5 11H1.5M15.5 11H17.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
     </svg>`,
 
     // ── Branch Cards ─────────────────────────────────────────
@@ -260,7 +271,7 @@
     document.querySelectorAll('.sc-icon').forEach((el, i) => {
       if (scIcons[i]) {
         el.innerHTML = scIcons[i];
-        el.style.fontSize = '0'; 
+        el.style.fontSize = '0'; // hide any leftover text
       }
     });
 
@@ -290,8 +301,7 @@
           const isDone     = !!el.closest('.rc-done');
           const isProgress = !!el.closest('.rc-progress');
           const c = isDone ? '#166534' : isProgress ? '#92400e' : '#be185d';
-          // ปรับโครงสร้างระยะห่างเล็กน้อยเพื่อให้เข้ากับไอคอนขนาดใหญ่ขึ้น (24x24)
-          const iconHtml = `<span style="color:${color||c};display:inline-flex;align-items:center;vertical-align:middle;margin-right:6px;position:relative;top:-1px;">${svg}</span>`;
+          const iconHtml = `<span style="color:${color||c};display:inline-flex;align-items:center;vertical-align:middle;margin-right:5px;position:relative;top:-1px;">${svg}</span>`;
           html = html.replace(emoji, iconHtml);
           changed = true;
         }
