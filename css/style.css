@@ -3130,6 +3130,7 @@ footer::after {
       .values-grid       { grid-template-columns: 1fr; }
       .branches-grid     { grid-template-columns: repeat(2, 1fr); }
       .how-steps-grid    { grid-template-columns: repeat(2, 1fr); }
+      .refs-grid         { grid-template-columns: repeat(2, 1fr); }
       .how-steps-grid::before { display: none; }
       .feature-tabs-grid { grid-template-columns: 1fr; }
       .tech-grid         { grid-template-columns: repeat(3, 1fr); }
@@ -3150,9 +3151,42 @@ footer::after {
     }
     @media (max-width: 600px) {
       .impact-banner-grid { grid-template-columns: 1fr 1fr; }
+      .refs-grid { grid-template-columns: 1fr; }
       .impact-num { font-size: 36px; }
       .branches-grid { grid-template-columns: 1fr 1fr; }
       .tech-grid { grid-template-columns: repeat(3, 1fr); }
       .quote-card-v2 { padding: 28px 24px; }
       .qt-headline { font-size: 22px; }
     }
+    /* ─── refs-grid responsive fix ─── */
+@media (max-width: 900px) {
+  .refs-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .refs-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .ref-card {
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    padding: 20px;
+    gap: 16px;
+  }
+  
+  .ref-logo-wrap {
+    width: 80px;
+    height: 70px;
+    min-width: 80px;
+    flex-shrink: 0;
+    margin-bottom: 0;
+  }
+  
+  .ref-btn {
+    margin-top: 8px;
+  }
+}
