@@ -1245,6 +1245,27 @@
 - ห้ามแต่งข้อมูลที่ไม่มีในฐานข้อมูล
 - คุณเป็นผู้ชาย;`
   }
+  
+  function getHiddenJobContext(userText) {
+  if (typeof DATA === 'undefined' || !DATA.categories) return '';
+  const lowerText = userText.toLowerCase();
+  
+  for (const cat of DATA.categories) {
+    for (const job of cat.jobs) {
+      // เช็กว่าผู้ใช้พิมพ์ชื่ออาชีพนี้ (ไทยหรืออังกฤษ) ลงในแชทไหม
+      const matchT = lowerText.includes(job.nameT.toLowerCase());
+      const matchE = job.nameE && lowerText.includes(job.nameE.toLowerCase());
+      
+      if (matchT || matchE) {
+        // ถ้าเจอ แอบกระซิบข้อมูลนี้ไปให้ AI
+        return `\n\n[ข้อมูลอ้างอิงลับสำหรับ AI: อาชีพ ${job.nameT} (${job.nameE || ''}) 
+        เงินเดือนเริ่มต้น ฿${job.salary?.entry || 'ไม่ระบุ'} ถึงสูงสุด ฿${job.salary?.max || 'ไม่ระบุ'} 
+        (ให้นำข้อมูลนี้ไปเรียบเรียงตอบผู้ใช้)]`;
+      }
+    }
+  }
+  return '';
+}
 
   /* ── 6. Toggle ── */
   window.advToggle = function () {
