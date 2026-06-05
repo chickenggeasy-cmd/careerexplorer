@@ -245,7 +245,7 @@ function showJob(jobId, catId) {
       <div class="dhb-content">
         <div class="dhb-header">
           <div class="dhb-icon-wrap">${job.icon}</div>
-          <div>
+          <div class="dhb-title-group">
             <div class="dhb-title-th">${job.nameT}</div>
             <div class="dhb-title-en">${job.nameE}</div>
           </div>
