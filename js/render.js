@@ -218,6 +218,23 @@ function showJob(jobId, catId) {
   document.getElementById('breadcat2').innerText = cat.nameT;
   document.getElementById('breadjob').innerText  = job.nameT;
 
+  // 👇 สร้างตัวแปรเช็คและเตรียม HTML สำหรับมหาวิทยาลัยที่แนะนำ
+  let uniHtml = '';
+  if (job.universities && job.universities.length > 0) {
+    uniHtml = `
+      <div class="edu-item">
+        <div class="edu-dot">🏛️</div>
+        <div class="edu-text" style="flex:1;">
+          <strong>มหาวิทยาลัย / คณะที่แนะนำ</strong>
+          <ul style="margin: 8px 0 0 20px; padding: 0; font-size: 0.9em; opacity: 0.85; line-height: 1.6;">
+            ${job.universities.map(u => `<li style="margin-bottom: 4px;">${u}</li>`).join('')}
+          </ul>
+        </div>
+      </div>
+    `;
+  }
+  // 👆 สิ้นสุดส่วนที่เพิ่มใหม่
+
   document.getElementById('detailContent').innerHTML = `
     <div class="detail-hero-banner">
       <div class="dhb-bg" style="background-image: url('${job.img}');"></div>
@@ -300,6 +317,9 @@ function showJob(jobId, catId) {
                 <span>${job.years}</span>
               </div>
             </div>
+
+            ${uniHtml}
+            
             <div class="edu-item" style="padding-bottom:0;">
               <div class="edu-dot">⚡</div>
               <div class="edu-text" style="flex:1;">
@@ -414,7 +434,6 @@ function showJob(jobId, catId) {
     }
   }, 0);
 
-  // ใช้ Optional Chaining (?.) ป้องกันการแครชหากไม่มีการระบุโครงสร้างสัดส่วนบาร์
   setTimeout(() => {
     const e = document.getElementById('bar2-entry');
     const m = document.getElementById('bar2-mid');
