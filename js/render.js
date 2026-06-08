@@ -4,7 +4,6 @@
  */
 
 // ── GLOBAL CONFIGURATION ──
-// รวมศูนย์ข้อมูลเพื่อไม่ให้ประกาศซ้ำในฟังก์ชัน ช่วยลด Memory Usage และบำรุงรักษาง่าย
 const CAT_CONFIG = {
   images: {
     medical: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1200&q=80",
@@ -46,17 +45,138 @@ const CAT_CONFIG = {
   }
 };
 
+// ── SVG ICON LIBRARY (detail page) ──────────────────────────────────────────
+const DETAIL_ICONS = {
+
+  // Stat strip
+  graduation: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+    <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+  </svg>`,
+
+  clock: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+    <polyline points="12 6 12 12 16 14"/>
+  </svg>`,
+
+  wallet: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2" y="5" width="20" height="14" rx="2"/>
+    <path d="M16 13a1 1 0 1 0 2 0 1 1 0 0 0-2 0z" fill="currentColor" stroke="none"/>
+    <path d="M2 10h20"/>
+  </svg>`,
+
+  trophy: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 9H4a2 2 0 0 1-2-2V5h4"/>
+    <path d="M18 9h2a2 2 0 0 0 2-2V5h-4"/>
+    <path d="M12 17v4"/>
+    <path d="M8 21h8"/>
+    <path d="M6 5h12v4a6 6 0 0 1-6 6 6 6 0 0 1-6-6V5z"/>
+  </svg>`,
+
+  // Education timeline
+  book: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+  </svg>`,
+
+  clockSm: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+    <polyline points="12 6 12 12 16 14"/>
+  </svg>`,
+
+  university: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 21h18"/>
+    <path d="M3 10h18"/>
+    <path d="M5 6l7-3 7 3"/>
+    <path d="M4 10v11"/>
+    <path d="M20 10v11"/>
+    <path d="M8 14v3"/>
+    <path d="M12 14v3"/>
+    <path d="M16 14v3"/>
+  </svg>`,
+
+  bolt: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+  </svg>`,
+
+  // Pro/con section header
+  scale: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3v18"/>
+    <path d="M3 9l9-6 9 6"/>
+    <path d="M3 15h18"/>
+    <path d="M3 15l3 6h12l3-6"/>
+    <circle cx="12" cy="3" r="1" fill="currentColor" stroke="none"/>
+  </svg>`,
+
+  // Growth card
+  trendUp: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+    <polyline points="17 6 23 6 23 12"/>
+  </svg>`,
+
+  fileText: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+    <polyline points="14 2 14 8 20 8"/>
+    <line x1="16" y1="13" x2="8" y2="13"/>
+    <line x1="16" y1="17" x2="8" y2="17"/>
+    <polyline points="10 9 9 9 8 9"/>
+  </svg>`,
+
+  // Related skills card
+  link: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+  </svg>`,
+
+  // Salary card
+  barChart: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="18" y1="20" x2="18" y2="10"/>
+    <line x1="12" y1="20" x2="12" y2="4"/>
+    <line x1="6" y1="20" x2="6" y2="14"/>
+    <line x1="2" y1="20" x2="22" y2="20"/>
+  </svg>`,
+
+  info: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+    <line x1="12" y1="8" x2="12" y2="12"/>
+    <line x1="12" y1="16" x2="12.01" y2="16"/>
+  </svg>`,
+
+  // Growth badge
+  trendUpSm: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+    <polyline points="17 6 23 6 23 12"/>
+  </svg>`,
+
+  arrowRight: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M5 12h14M12 5l7 7-7 7"/>
+  </svg>`,
+
+  arrowRightSm: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M5 12h14M12 5l7 7-7 7"/>
+  </svg>`,
+};
+
+// helper — wrap SVG in a styled span สำหรับ inline use
+function icon(svgKey, { color = 'currentColor', size = null, style = '' } = {}) {
+  const svg = DETAIL_ICONS[svgKey];
+  if (!svg) return '';
+  const colorStyle = color !== 'currentColor' ? `color:${color};` : '';
+  const sizeStyle  = size ? `width:${size}px;height:${size}px;` : '';
+  return `<span class="svg-icon" style="display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;${colorStyle}${sizeStyle}${style}">${svg}</span>`;
+}
+
 function renderCategories() {
   const catGrid = document.getElementById('catGrid');
   if (!catGrid) return;
 
   let html = '';
   DATA.categories.forEach((cat, index) => {
-    const img = CAT_CONFIG.images[cat.id] || '';
+    const img  = CAT_CONFIG.images[cat.id]    || '';
     const grad = CAT_CONFIG.gradients[cat.id] || 'linear-gradient(135deg, #be185d, #f472b6)';
-    
+
     html += `
-      <div class="cat-card-new" onclick="showCategory('${cat.id}')" 
+      <div class="cat-card-new" onclick="showCategory('${cat.id}')"
            style="animation: fadeInUp 0.5s ease forwards; opacity: 0; animation-delay: ${0.2 + (index * 0.1)}s;">
         <div class="cat-card-bg" style="background-image: url('${img}');"></div>
         <div class="cat-card-overlay" style="background: ${grad};"></div>
@@ -75,7 +195,7 @@ function renderCategories() {
 }
 
 /* ═══════════════════════════════════════════════════
-   JOB CARD  —  page-cat grid (redesigned)
+   JOB CARD  —  page-cat grid
 ═══════════════════════════════════════════════════ */
 function createJobCard(job, cat) {
   const tagsHtml = job.tags.slice(0, 3)
@@ -83,18 +203,14 @@ function createJobCard(job, cat) {
 
   return `
     <div class="jcn-card" onclick="showJob('${job.id}', '${cat.id}')">
-
       <div class="jcn-thumb">
         <img src="${job.img}" alt="${job.nameT}" loading="lazy"
           onload="this.closest('.jcn-thumb').classList.add('img-loaded')"
           onerror="this.closest('.jcn-thumb').classList.add('img-loaded'); this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'%3E%3Crect width=\'100\' height=\'100\' fill=\'%23fce7f3\'/%3E%3Ctext x=\'50\' y=\'55\' font-size=\'30\' text-anchor=\'middle\' fill=\'%23be185d\'%3E${job.icon}%3C/text%3E%3C/svg%3E'">
         <div class="jcn-thumb-overlay"></div>
-
         <div class="jcn-color-strip" style="background: ${cat.color || 'var(--primary)'};"></div>
       </div>
-
       <div class="jcn-body">
-
         <div class="jcn-header">
           <div class="jcn-icon" style="background: ${cat.color}; color: ${cat.iconColor};">
             ${job.icon}
@@ -103,17 +219,9 @@ function createJobCard(job, cat) {
             <div class="jcn-title-th">${job.nameT}</div>
             <div class="jcn-title-en">${job.nameE}</div>
           </div>
-          <div class="jcn-arrow">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2.5"
-              stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
-          </div>
+          <div class="jcn-arrow">${DETAIL_ICONS.arrowRight}</div>
         </div>
-
         <div class="jcn-tags">${tagsHtml}</div>
-
         <div class="jcn-salary-footer">
           <div class="jcn-sf-item">
             <div class="jcn-sf-label">เริ่มต้น</div>
@@ -124,22 +232,15 @@ function createJobCard(job, cat) {
             <div class="jcn-sf-label">ระดับสูง</div>
             <div class="jcn-sf-value">${job.salary.senior} ฿</div>
           </div>
-          <div class="jcn-sf-arrow-wrap">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2.5"
-              stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
-          </div>
+          <div class="jcn-sf-arrow-wrap">${DETAIL_ICONS.arrowRightSm}</div>
         </div>
-
       </div>
     </div>
   `;
 }
 
 /* ═══════════════════════════════════════════════════
-   SHOW CATEGORY  —  page-cat (redesigned header)
+   SHOW CATEGORY  —  page-cat
 ═══════════════════════════════════════════════════ */
 function showCategory(catId) {
   currentCategory = catId;
@@ -148,11 +249,10 @@ function showCategory(catId) {
 
   document.getElementById('breadcat').innerText = cat.nameT;
 
-  const emoji = CAT_CONFIG.emojis[cat.id] || "🚀";
-  const heroImg = CAT_CONFIG.images[cat.id] || '';
-  const grad = CAT_CONFIG.gradients[cat.id] || 'linear-gradient(135deg,#be185d,#f472b6)';
+  const emoji   = CAT_CONFIG.emojis[cat.id] || '🚀';
+  const heroImg = CAT_CONFIG.images[cat.id]  || '';
+  const grad    = CAT_CONFIG.gradients[cat.id] || 'linear-gradient(135deg,#be185d,#f472b6)';
 
-  /* ── build hero banner for page-cat ── */
   const catHero = document.getElementById('catHero');
   if (catHero) {
     catHero.innerHTML = `
@@ -182,9 +282,8 @@ function showCategory(catId) {
   }
 
   const titleEl = document.getElementById('catPageTitle');
-  if (titleEl) titleEl.innerHTML = ''; 
+  if (titleEl) titleEl.innerHTML = '';
 
-  /* ── render job cards ── */
   let html = '';
   cat.jobs.forEach((job, index) => {
     html += `
@@ -196,7 +295,6 @@ function showCategory(catId) {
   document.getElementById('jobGrid').innerHTML = html;
   showPage('page-cat');
 
-  /* ── preload hero bg image ── */
   const heroBg = document.querySelector('.cph-bg');
   if (heroBg && heroImg) {
     const preload = new Image();
@@ -207,23 +305,23 @@ function showCategory(catId) {
 }
 
 /* ═══════════════════════════════════════════════════
-   SHOW JOB  —  page-detail (full redesign)
+   SHOW JOB  —  page-detail (SVG icons, no emoji)
 ═══════════════════════════════════════════════════ */
 function showJob(jobId, catId) {
   currentCategory = catId;
-  const cat  = DATA.categories.find(c => c.id === catId);
-  const job  = cat?.jobs.find(j => j.id === jobId);
+  const cat = DATA.categories.find(c => c.id === catId);
+  const job = cat?.jobs.find(j => j.id === jobId);
   if (!cat || !job) return;
 
   document.getElementById('breadcat2').innerText = cat.nameT;
   document.getElementById('breadjob').innerText  = job.nameT;
 
-  // 👇 สร้างตัวแปรเช็คและเตรียม HTML สำหรับมหาวิทยาลัยที่แนะนำ
+  // Universities block
   let uniHtml = '';
   if (job.universities && job.universities.length > 0) {
     uniHtml = `
       <div class="edu-item">
-        <div class="edu-dot">🏛️</div>
+        <div class="edu-dot edu-dot--svg" style="color:#be185d;">${DETAIL_ICONS.university}</div>
         <div class="edu-text" style="flex:1;">
           <strong>มหาวิทยาลัย / คณะที่แนะนำ</strong>
           <ul style="margin: 8px 0 0 20px; padding: 0; font-size: 0.9em; opacity: 0.85; line-height: 1.6;">
@@ -233,14 +331,16 @@ function showJob(jobId, catId) {
       </div>
     `;
   }
-  // 👆 สิ้นสุดส่วนที่เพิ่มใหม่
 
   document.getElementById('detailContent').innerHTML = `
     <div class="detail-hero-banner">
       <div class="dhb-bg" style="background-image: url('${job.img}');"></div>
       <div class="dhb-overlay"></div>
       <div class="dhb-badge-wrap">
-        <div class="dhb-growth-badge">📈 แนวโน้มการเติบโต: สูง</div>
+        <div class="dhb-growth-badge">
+          ${icon('trendUpSm', { style: 'margin-right:5px;' })}
+          แนวโน้มการเติบโต: สูง
+        </div>
       </div>
       <div class="dhb-content">
         <div class="dhb-header">
@@ -257,9 +357,10 @@ function showJob(jobId, catId) {
       </div>
     </div>
 
+    <!-- ── Stat Strip ── -->
     <div class="detail-stat-strip">
       <div class="dss-item">
-        <div class="dss-icon">🎓</div>
+        <div class="dss-icon">${icon('graduation', { color: '#be185d' })}</div>
         <div class="dss-text">
           <div class="dss-label">วุฒิที่ต้องการ</div>
           <div class="dss-value">${job.degree}</div>
@@ -267,7 +368,7 @@ function showJob(jobId, catId) {
       </div>
       <div class="dss-divider"></div>
       <div class="dss-item">
-        <div class="dss-icon">⏳</div>
+        <div class="dss-icon">${icon('clock', { color: '#0891b2' })}</div>
         <div class="dss-text">
           <div class="dss-label">ระยะเวลาเรียน</div>
           <div class="dss-value">${job.years}</div>
@@ -275,7 +376,7 @@ function showJob(jobId, catId) {
       </div>
       <div class="dss-divider"></div>
       <div class="dss-item">
-        <div class="dss-icon">💰</div>
+        <div class="dss-icon">${icon('wallet', { color: '#16a34a' })}</div>
         <div class="dss-text">
           <div class="dss-label">เงินเดือนเริ่มต้น</div>
           <div class="dss-value">${job.salary.entry} ฿</div>
@@ -283,7 +384,7 @@ function showJob(jobId, catId) {
       </div>
       <div class="dss-divider"></div>
       <div class="dss-item">
-        <div class="dss-icon">🏆</div>
+        <div class="dss-icon">${icon('trophy', { color: '#b45309' })}</div>
         <div class="dss-text">
           <div class="dss-label">ระดับสูงสุด</div>
           <div class="dss-value">${job.salary.senior} ฿</div>
@@ -293,14 +394,17 @@ function showJob(jobId, catId) {
 
     <div class="detail-grid-v2">
       <div class="detail-main-v2">
+
+        <!-- ── Education & Skills Card ── -->
         <div class="info-card-v2">
           <div class="icv2-header">
-            <div class="icv2-header-icon">🎓</div>
+            <div class="icv2-header-icon">${icon('graduation', { color: '#f4e9ed', size: 22 })}</div>
             <div class="icv2-title">ข้อมูลการศึกษาและทักษะ</div>
           </div>
           <div class="edu-timeline">
+
             <div class="edu-item">
-              <div class="edu-dot">📘</div>
+              <div class="edu-dot edu-dot--svg" style="color:#6d28d9;">${DETAIL_ICONS.book}</div>
               <div class="edu-text">
                 <strong>วุฒิการศึกษาที่ต้องการ</strong>
                 <span>${job.degree}<br>
@@ -310,8 +414,9 @@ function showJob(jobId, catId) {
                 </span>
               </div>
             </div>
+
             <div class="edu-item">
-              <div class="edu-dot">⏳</div>
+              <div class="edu-dot edu-dot--svg" style="color:#0891b2;">${DETAIL_ICONS.clockSm}</div>
               <div class="edu-text">
                 <strong>ระยะเวลาเรียน / ฝึกฝนโดยเฉลี่ย</strong>
                 <span>${job.years}</span>
@@ -319,9 +424,9 @@ function showJob(jobId, catId) {
             </div>
 
             ${uniHtml}
-            
+
             <div class="edu-item" style="padding-bottom:0;">
-              <div class="edu-dot">⚡</div>
+              <div class="edu-dot edu-dot--svg" style="color:#d97706;">${DETAIL_ICONS.bolt}</div>
               <div class="edu-text" style="flex:1;">
                 <strong>ทักษะสำคัญที่จำเป็น (Hard / Soft Skills)</strong>
                 <div class="skills-cloud">
@@ -329,12 +434,14 @@ function showJob(jobId, catId) {
                 </div>
               </div>
             </div>
+
           </div>
         </div>
 
+        <!-- ── Pros / Cons Card ── -->
         <div class="info-card-v2">
           <div class="icv2-header">
-            <div class="icv2-header-icon">⚖️</div>
+            <div class="icv2-header-icon">${icon('scale', { color: '#f8f0f3', size: 22 })}</div>
             <div class="icv2-title">วิเคราะห์ข้อดี — ข้อจำกัด</div>
           </div>
           <div class="pro-con-v2">
@@ -354,11 +461,18 @@ function showJob(jobId, catId) {
             </div>
           </div>
         </div>
+
       </div>
 
+      <!-- ── Sidebar ── -->
       <div class="detail-sidebar-v2">
+
+        <!-- Salary Card -->
         <div class="salary-card-v2">
-          <div class="scv2-title">💰 โครงสร้างเงินเดือน (โดยประมาณ)</div>
+          <div class="scv2-title">
+            ${icon('barChart', { color: '#be185d', style: 'margin-right:6px;' })}
+            โครงสร้างเงินเดือน (โดยประมาณ)
+          </div>
           <div class="scv2-row">
             <div class="scv2-header">
               <span class="scv2-level">เริ่มต้น (Entry)</span>
@@ -387,25 +501,30 @@ function showJob(jobId, catId) {
             </div>
           </div>
           <div class="scv2-note">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2.5"
-              stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"/>
-              <line x1="12" y1="8" x2="12" y2="12"/>
-              <line x1="12" y1="16" x2="12.01" y2="16"/>
-            </svg>
+            ${DETAIL_ICONS.info}
             ข้อมูลอ้างอิงจากสถิติตลาดแรงงานไทย
           </div>
         </div>
 
+        <!-- Growth Card -->
         <div class="growth-card-v2">
-          <div class="growth-indicator">📈 แนวโน้มการเติบโต</div>
-          <div class="gcv2-title">📝 โอกาสในอนาคต</div>
+          <div class="growth-indicator">
+            ${icon('trendUp', { style: 'margin-right:6px;' })}
+            แนวโน้มการเติบโต
+          </div>
+          <div class="gcv2-title">
+            ${icon('fileText', { style: 'margin-right:6px;flex-shrink:0;' })}
+            โอกาสในอนาคต
+          </div>
           <p class="gcv2-text">${job.growth}</p>
         </div>
 
+        <!-- Related Skills Card -->
         <div class="detail-related-card">
-          <div class="drc-title"><span>🔗</span> ทักษะที่เกี่ยวข้อง</div>
+          <div class="drc-title">
+            ${icon('link', { color: '#be185d', style: 'margin-right:6px;' })}
+            ทักษะที่เกี่ยวข้อง
+          </div>
           <div class="drc-skills">
             ${job.skills.slice(0, 5).map((s, i) => `
               <div class="drc-skill-row">
@@ -417,13 +536,14 @@ function showJob(jobId, catId) {
               </div>`).join('')}
           </div>
         </div>
+
       </div>
     </div>
   `;
 
   showPage('page-detail');
 
-  /* ── preload detail hero bg ── */
+  // Preload hero bg
   setTimeout(() => {
     const detailBg = document.querySelector('.dhb-bg');
     if (detailBg && job.img) {
@@ -434,12 +554,13 @@ function showJob(jobId, catId) {
     }
   }, 0);
 
+  // Animate salary bars
   setTimeout(() => {
     const e = document.getElementById('bar2-entry');
     const m = document.getElementById('bar2-mid');
     const s = document.getElementById('bar2-senior');
-    if (e && job.salaryBar?.entry) e.style.width = job.salaryBar.entry + '%';
-    if (m && job.salaryBar?.mid) m.style.width = job.salaryBar.mid + '%';
+    if (e && job.salaryBar?.entry)  e.style.width = job.salaryBar.entry  + '%';
+    if (m && job.salaryBar?.mid)    m.style.width = job.salaryBar.mid    + '%';
     if (s && job.salaryBar?.senior) s.style.width = job.salaryBar.senior + '%';
   }, 140);
 }
@@ -447,7 +568,6 @@ function showJob(jobId, catId) {
 /* ═══════════════════════════════════════════════════
    WINDOW.ONLOAD
 ═══════════════════════════════════════════════════ */
-// ── ใหม่ (แทนที่ทั้งก้อน) ──
 window.onload = () => {
   renderCategories();
   if (typeof startSlider === 'function') startSlider();
@@ -462,6 +582,4 @@ window.onload = () => {
 
   const aboutTotalJobsEl = document.getElementById('aboutTotalJobs');
   if (aboutTotalJobsEl) aboutTotalJobsEl.textContent = total + '+';
-
-  // ไม่ replaceState ที่นี่อีกแล้ว — ให้ router.js จัดการ
 };
