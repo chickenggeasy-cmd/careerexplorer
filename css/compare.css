@@ -517,12 +517,158 @@
   transform: translateX(-50%) translateY(0);
 }
 
-/* ── Responsive ── */
-@media (max-width: 640px) {
-  .cmp-search-section { top: 56px; padding: 16px; }
-  .cmp-slot-name { max-width: 80px; }
-  .cmp-row-label { font-size: 0.72rem; padding: 10px 8px; }
-  .cmp-table td { padding: 12px 10px; }
-  .cmp-header { padding: 36px 16px 24px; }
-  .cmp-body { padding: 0 12px; margin-top: 20px; }
+/* ── Desktop: ซ่อน mobile cards ── */
+#cmp-cards-mobile { display: none; }
+.cmp-mobile-hint { display: none; }
+
+/* ══════════════════════════════════════
+   MOBILE  — card layout แทน table
+   ══════════════════════════════════════ */
+@media (max-width: 700px) {
+
+  /* แสดง mobile cards, ซ่อน desktop table */
+  #cmp-cards-mobile { display: flex !important; flex-direction: column; gap: 16px; padding: 0 12px; }
+  .cmp-mobile-hint { display: block !important; }
+  .cmp-table-scroll { display: none !important; }
+
+  /* Header */
+  .cmp-header { padding: 32px 16px 20px; }
+  .cmp-header h1 { font-size: 1.25rem; }
+  .cmp-header p { font-size: 0.82rem; }
+
+  /* Sticky bar */
+  .cmp-search-section { top: 56px; padding: 12px 14px; }
+  .cmp-search-inner { gap: 10px; }
+  .cmp-slots-label { display: none; } /* ซ่อน label บน mobile ประหยัดพื้นที่ */
+  #cmp-slots { gap: 6px; }
+
+  .cmp-slot { padding: 5px 10px; font-size: 0.76rem; }
+  .cmp-slot-name { max-width: 72px; }
+  .cmp-slot-empty span { display: none; } /* ซ่อน "เลือกอาชีพ" text เหลือแค่ + icon */
+  .cmp-slot-empty { padding: 6px 10px; }
+
+  #cmp-count { font-size: 0.74rem; }
+  #cmp-clear-btn { font-size: 0.74rem; padding: 3px 8px; }
+
+  .cmp-search-box { padding: 8px 12px; }
+  #cmp-search-input { font-size: 0.82rem; }
+  #cmp-search-input::placeholder { font-size: 0.78rem; }
+
+  /* Body */
+  .cmp-body { padding: 0; margin: 16px 0 0; }
+
+  /* ── ซ่อน table เดิม แสดง card แทน ── */
+  .cmp-table-scroll { display: none; }
+
+  /* Empty state */
+  .cmp-empty { padding: 48px 24px; }
+
+  /* Card stack layout */
+  #cmp-cards-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 0 12px;
+  }
+
+  .cmp-mobile-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+
+  .cmp-mobile-card-header {
+    background: linear-gradient(135deg, var(--primary-deep), var(--primary));
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    position: relative;
+  }
+
+  .cmp-mobile-card-icon { font-size: 1.8rem; }
+
+  .cmp-mobile-card-title {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .cmp-mobile-card-name {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: white;
+  }
+
+  .cmp-mobile-card-cat {
+    font-size: 0.72rem;
+    opacity: 0.85;
+  }
+
+  .cmp-mobile-remove {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+  }
+
+  .cmp-mobile-card-body {
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .cmp-mobile-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .cmp-mobile-row-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--primary-deep);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 4px;
+    margin-bottom: 4px;
+  }
+
+  .cmp-mobile-card-body .cmp-salary-bars { gap: 5px; }
+  .cmp-mobile-card-body .cmp-bar-num { min-width: 70px; font-size: 0.68rem; }
+  .cmp-mobile-card-body .cmp-bar-label { font-size: 0.68rem; width: 30px; }
+
+  .cmp-mobile-card-body .cmp-edu-degree { font-size: 0.82rem; }
+  .cmp-mobile-card-body .cmp-edu-years { font-size: 0.76rem; }
+  .cmp-mobile-card-body .cmp-edu-field { font-size: 0.74rem; }
+
+  .cmp-mobile-card-body .cmp-skills { gap: 4px; }
+  .cmp-mobile-card-body .cmp-skill-pill { font-size: 0.68rem; padding: 2px 7px; }
+
+  .cmp-mobile-card-body .cmp-list li { font-size: 0.78rem; }
+
+  .cmp-mobile-card-footer {
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .cmp-mobile-card-footer .cmp-detail-btn { font-size: 0.85rem; padding: 10px; }
+
+  /* hint text */
+  .cmp-mobile-hint {
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--muted);
+    padding: 8px 16px 0;
+  }
 }

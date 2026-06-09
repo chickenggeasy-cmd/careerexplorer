@@ -76,7 +76,7 @@
       return;
     }
 
-    // Header row
+    /* ── Desktop: table layout ── */
     const headerCols = compareList.map(job => `
       <th>
         <div class="cmp-th-inner">
@@ -90,12 +90,10 @@
       </th>
     `).join('');
 
-    // Salary row
     const salaryCols = compareList.map(job => `
       <td><div class="cmp-salary-bars">${salaryBarHTML(job)}</div></td>
     `).join('');
 
-    // Education row
     const eduCols = compareList.map(job => `
       <td>
         <div class="cmp-edu">
@@ -106,12 +104,10 @@
       </td>
     `).join('');
 
-    // Growth row
     const growthCols = compareList.map(job => `
       <td><div class="cmp-growth">${growthLabel(job.growth)}<p>${job.growth || '—'}</p></div></td>
     `).join('');
 
-    // Skills row
     const skillsCols = compareList.map(job => `
       <td>
         <div class="cmp-skills">
@@ -120,7 +116,6 @@
       </td>
     `).join('');
 
-    // Pros row
     const prosCols = compareList.map(job => `
       <td>
         <ul class="cmp-list cmp-pros">
@@ -129,7 +124,6 @@
       </td>
     `).join('');
 
-    // Cons row
     const consCols = compareList.map(job => `
       <td>
         <ul class="cmp-list cmp-cons">
@@ -138,13 +132,76 @@
       </td>
     `).join('');
 
-    // CTA row
     const ctaCols = compareList.map(job => `
       <td>
-        <button class="cmp-detail-btn" onclick="showJob('${job.catId}','${job.id}')">
+        <button class="cmp-detail-btn" onclick="showJob('${job.id}','${job.catId}')">
           ดูรายละเอียด →
         </button>
       </td>
+    `).join('');
+
+    /* ── Mobile: card per job ── */
+    const mobileCards = compareList.map(job => `
+      <div class="cmp-mobile-card">
+        <div class="cmp-mobile-card-header">
+          <span class="cmp-mobile-card-icon">${job.icon || '💼'}</span>
+          <div class="cmp-mobile-card-title">
+            <span class="cmp-mobile-card-name">${job.nameT}</span>
+            <span class="cmp-mobile-card-cat">${job.catName}</span>
+          </div>
+          <button class="cmp-mobile-remove" onclick="compareRemove('${job.id}')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+        <div class="cmp-mobile-card-body">
+
+          <div class="cmp-mobile-row">
+            <div class="cmp-mobile-row-label">💰 เงินเดือน</div>
+            <div class="cmp-salary-bars">${salaryBarHTML(job)}</div>
+          </div>
+
+          <div class="cmp-mobile-row">
+            <div class="cmp-mobile-row-label">🎓 การศึกษา</div>
+            <div class="cmp-edu">
+              <div class="cmp-edu-degree">${job.degree || '—'}</div>
+              <div class="cmp-edu-years">⏱ ${job.years || '—'}</div>
+              <div class="cmp-edu-field">${job.education || '—'}</div>
+            </div>
+          </div>
+
+          <div class="cmp-mobile-row">
+            <div class="cmp-mobile-row-label">📈 โอกาสเติบโต</div>
+            <div class="cmp-growth">${growthLabel(job.growth)}<p>${job.growth || '—'}</p></div>
+          </div>
+
+          <div class="cmp-mobile-row">
+            <div class="cmp-mobile-row-label">🛠 ทักษะสำคัญ</div>
+            <div class="cmp-skills">
+              ${(job.skills || []).map(s => `<span class="cmp-skill-pill">${s}</span>`).join('')}
+            </div>
+          </div>
+
+          <div class="cmp-mobile-row">
+            <div class="cmp-mobile-row-label">✅ ข้อดี</div>
+            <ul class="cmp-list cmp-pros">
+              ${(job.pros || []).map(p => `<li>${p}</li>`).join('')}
+            </ul>
+          </div>
+
+          <div class="cmp-mobile-row">
+            <div class="cmp-mobile-row-label">⚠️ ข้อพิจารณา</div>
+            <ul class="cmp-list cmp-cons">
+              ${(job.cons || []).map(c => `<li>${c}</li>`).join('')}
+            </ul>
+          </div>
+
+        </div>
+        <div class="cmp-mobile-card-footer">
+          <button class="cmp-detail-btn" onclick="showJob('${job.id}','${job.catId}')">
+            ดูรายละเอียดเพิ่มเติม →
+          </button>
+        </div>
+      </div>
     `).join('');
 
     wrap.innerHTML = `
@@ -187,6 +244,10 @@
             </tr>
           </tbody>
         </table>
+      </div>
+      <div id="cmp-cards-mobile">
+        <p class="cmp-mobile-hint">เลื่อนดูแต่ละอาชีพด้านล่าง</p>
+        ${mobileCards}
       </div>`;
   }
 
@@ -338,8 +399,8 @@
   /* ─────────────── ADD BUTTON ON DETAIL PAGE ─────────────── */
   // Patch showJob to inject "เพิ่มเพื่อเปรียบเทียบ" button
   const _origShowJob = window.showJob;
-  window.showJob = function (catId, jobId) {
-    if (_origShowJob) _origShowJob(catId, jobId);
+  window.showJob = function (jobId, catId) {
+    if (_origShowJob) _origShowJob(jobId, catId);
 
     setTimeout(() => {
       const detailPage = document.getElementById('page-detail');
