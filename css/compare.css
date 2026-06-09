@@ -1,0 +1,528 @@
+/* ════════════════════════════════════════════════
+   CAREER COMPARISON TOOL  —  compare.css
+   ใส่ใน css/  แล้ว link ใน <head> ของ index.html
+   ════════════════════════════════════════════════ */
+
+/* ── Page wrapper ── */
+#page-compare {
+  min-height: 100vh;
+  padding: 0 0 80px;
+}
+
+.cmp-header {
+  background: linear-gradient(135deg, var(--primary-deep), var(--primary));
+  padding: 48px 24px 32px;
+  color: white;
+  text-align: center;
+}
+
+.cmp-header h1 {
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  font-weight: 800;
+  margin: 0 0 8px;
+  color: white;
+}
+
+.cmp-header p {
+  opacity: 0.85;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+/* ── Search bar section ── */
+.cmp-search-section {
+  background: white;
+  border-bottom: 1px solid var(--border);
+  padding: 24px;
+  position: sticky;
+  top: 64px;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+.cmp-search-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Slots row */
+.cmp-slots-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.cmp-slots-label {
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+#cmp-slots {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.cmp-slot {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  border: 2px dashed var(--border);
+  transition: all 0.2s;
+}
+
+.cmp-slot-empty {
+  color: var(--muted);
+  background: var(--surface);
+  cursor: default;
+}
+
+.cmp-slot-filled {
+  border-style: solid;
+  border-color: var(--primary);
+  background: #fdf2f8;
+  color: var(--primary-deep);
+}
+
+.cmp-slot-remove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  padding: 0;
+  display: flex;
+  align-items: center;
+  transition: color 0.15s;
+}
+
+.cmp-slot-remove:hover { color: #ef4444; }
+
+.cmp-slot-icon { font-size: 1rem; }
+.cmp-slot-name {
+  max-width: 120px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Counter + clear */
+.cmp-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#cmp-count {
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+#cmp-clear-btn {
+  display: none;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+#cmp-clear-btn:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+/* Search input */
+#cmp-search-wrap {
+  position: relative;
+}
+
+.cmp-search-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 16px;
+  transition: border-color 0.2s;
+}
+
+.cmp-search-box:focus-within {
+  border-color: var(--primary);
+  background: white;
+}
+
+.cmp-search-box svg { color: var(--muted); flex-shrink: 0; }
+
+#cmp-search-input {
+  border: none;
+  background: none;
+  outline: none;
+  font-family: 'Prompt', sans-serif;
+  font-size: 0.9rem;
+  color: var(--text);
+  flex: 1;
+}
+
+#cmp-search-input::placeholder { color: var(--muted); }
+
+/* Dropdown */
+#cmp-search-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  overflow: hidden;
+  z-index: 200;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.cmp-dd-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.15s;
+  border-bottom: 1px solid var(--border);
+}
+
+.cmp-dd-item:last-child { border-bottom: none; }
+.cmp-dd-item:hover { background: #fdf2f8; }
+
+.cmp-dd-icon { font-size: 1.2rem; width: 28px; text-align: center; }
+
+.cmp-dd-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.cmp-dd-name { font-size: 0.88rem; font-weight: 600; color: var(--text); }
+.cmp-dd-cat { font-size: 0.76rem; color: var(--muted); }
+.cmp-dd-salary { font-size: 0.78rem; color: var(--primary); font-weight: 600; }
+
+.cmp-dd-empty {
+  padding: 20px 16px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+/* ── Main table area ── */
+.cmp-body {
+  max-width: 1100px;
+  margin: 32px auto;
+  padding: 0 24px;
+}
+
+/* Empty state */
+.cmp-empty {
+  text-align: center;
+  padding: 80px 24px;
+  color: var(--muted);
+}
+
+.cmp-empty-icon {
+  width: 80px;
+  height: 80px;
+  background: var(--surface);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  color: var(--muted);
+}
+
+.cmp-empty p {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 6px;
+  color: var(--text);
+}
+
+.cmp-empty small { font-size: 0.82rem; }
+
+/* Table scroll wrapper */
+.cmp-table-scroll {
+  overflow-x: auto;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+}
+
+.cmp-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+  background: white;
+}
+
+/* Row alternating */
+.cmp-table tbody tr:nth-child(even) { background: #fafafa; }
+.cmp-table tbody tr:hover { background: #fdf2f8; transition: background 0.15s; }
+
+/* Header row */
+.cmp-header-row th {
+  padding: 20px 16px;
+  vertical-align: top;
+  border-bottom: 2px solid var(--border);
+}
+
+.cmp-header-row th:first-child { width: 120px; }
+
+.cmp-th-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+}
+
+.cmp-job-icon { font-size: 2rem; }
+
+.cmp-job-name {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.cmp-job-cat {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.cmp-remove-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--muted);
+  padding: 4px 6px;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s;
+  margin-top: 4px;
+}
+
+.cmp-remove-btn:hover { border-color: #ef4444; color: #ef4444; }
+
+/* Row label column */
+.cmp-row-label {
+  padding: 16px 12px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--primary-deep);
+  white-space: nowrap;
+  border-right: 2px solid var(--border);
+  vertical-align: top;
+  background: #fdf2f8 !important;
+}
+
+.cmp-row-label span {
+  writing-mode: horizontal-tb;
+  display: block;
+}
+
+/* Data cells */
+.cmp-table td {
+  padding: 16px;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  font-size: 0.85rem;
+}
+
+.cmp-table td:last-child { border-right: none; }
+
+/* Salary bars */
+.cmp-salary-bars { display: flex; flex-direction: column; gap: 6px; }
+
+.cmp-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cmp-bar-label {
+  font-size: 0.72rem;
+  color: var(--muted);
+  width: 36px;
+  flex-shrink: 0;
+  font-weight: 600;
+}
+
+.cmp-bar-track {
+  flex: 1;
+  height: 8px;
+  background: var(--surface);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.cmp-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--primary-light));
+  border-radius: 4px;
+  transition: width 0.6s ease;
+}
+
+.cmp-bar-num {
+  font-size: 0.72rem;
+  color: var(--primary-deep);
+  font-weight: 600;
+  white-space: nowrap;
+  min-width: 80px;
+  text-align: right;
+}
+
+/* Education */
+.cmp-edu { display: flex; flex-direction: column; gap: 4px; }
+.cmp-edu-degree { font-weight: 700; color: var(--text); font-size: 0.85rem; }
+.cmp-edu-years { color: var(--primary); font-weight: 600; font-size: 0.8rem; }
+.cmp-edu-field { color: var(--muted); font-size: 0.78rem; }
+
+/* Growth */
+.cmp-growth { display: flex; flex-direction: column; gap: 4px; }
+.cmp-growth p { color: var(--muted); font-size: 0.8rem; margin: 0; line-height: 1.5; }
+
+/* Skills */
+.cmp-skills { display: flex; flex-wrap: wrap; gap: 5px; }
+
+.cmp-skill-pill {
+  background: #fdf2f8;
+  color: var(--primary-deep);
+  border: 1px solid #fbcfe8;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 20px;
+}
+
+/* Pros / Cons */
+.cmp-list {
+  margin: 0;
+  padding: 0 0 0 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cmp-list li {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.cmp-pros li::marker { color: #22c55e; }
+.cmp-cons li::marker { color: #f59e0b; }
+
+/* Detail button */
+.cmp-detail-btn {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-family: 'Prompt', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+  width: 100%;
+}
+
+.cmp-detail-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+/* ── "เพิ่มเพื่อเปรียบเทียบ" button on detail page ── */
+.cmp-add-from-detail {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 12px 0;
+  background: white;
+  border: 1.5px solid var(--primary);
+  color: var(--primary);
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-family: 'Prompt', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cmp-add-from-detail:hover {
+  background: var(--primary);
+  color: white;
+}
+
+/* ── Navbar link ── */
+.nav-link-compare {
+  color: var(--primary-light) !important;
+  font-weight: 700 !important;
+}
+
+/* ── Toast ── */
+#cmp-toast {
+  position: fixed;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: #1e1b4b;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  z-index: 9999;
+  white-space: nowrap;
+}
+
+#cmp-toast.cmp-toast-show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .cmp-search-section { top: 56px; padding: 16px; }
+  .cmp-slot-name { max-width: 80px; }
+  .cmp-row-label { font-size: 0.72rem; padding: 10px 8px; }
+  .cmp-table td { padding: 12px 10px; }
+  .cmp-header { padding: 36px 16px 24px; }
+  .cmp-body { padding: 0 12px; margin-top: 20px; }
+}

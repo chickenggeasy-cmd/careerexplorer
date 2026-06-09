@@ -6,6 +6,7 @@
   <title>Career Explorer Pro - สำรวจอาชีพในฝัน</title>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/compare.css" />
 </head>
 <body>
 
@@ -53,6 +54,7 @@
         </div>
 
         <a href="javascript:void(0)" class="nav-link" onclick="showPage('page-quiz'); closeAll();">ทดสอบสายงาน</a>
+        <a href="javascript:void(0)" class="nav-link" onclick="showPage('page-compare'); initComparePage(); closeAll();">เปรียบเทียบ</a>
       </div>
       <div class="nav-search">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
@@ -929,6 +931,69 @@
       </div>
     </div>
   </div><!-- /page-about-app -->
+  <!-- ==================== PAGE-COMPARE ==================== -->
+
+  <div id="page-compare" class="page">
+
+    <!-- Header -->
+    <div class="cmp-header">
+      <h1>🔍 เปรียบเทียบอาชีพ</h1>
+      <p>ค้นหาและเลือกอาชีพสูงสุด 3 รายการเพื่อเปรียบเทียบแบบ Side-by-Side</p>
+    </div>
+
+    <!-- Sticky search + slots bar -->
+    <div class="cmp-search-section">
+      <div class="cmp-search-inner">
+
+        <!-- Selected slots -->
+        <div class="cmp-slots-row">
+          <span class="cmp-slots-label">เลือกแล้ว</span>
+          <div id="cmp-slots"><!-- rendered by JS --></div>
+        </div>
+
+        <!-- Counter + clear -->
+        <div class="cmp-meta-row">
+          <span id="cmp-count">0/3</span>
+          <button id="cmp-clear-btn" onclick="compareClear()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+            ล้างทั้งหมด
+          </button>
+        </div>
+
+        <!-- Search input -->
+        <div id="cmp-search-wrap">
+          <div class="cmp-search-box">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input
+              id="cmp-search-input"
+              type="text"
+              placeholder="ค้นหาอาชีพที่ต้องการเปรียบเทียบ... เช่น แพทย์, โปรแกรมเมอร์"
+              oninput="compareSearchInput(this.value)"
+              onblur="compareSearchBlur()"
+              autocomplete="off"
+            />
+          </div>
+          <div id="cmp-search-dropdown"><!-- rendered by JS --></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="cmp-body">
+      <div id="cmp-table-wrap"><!-- rendered by JS --></div>
+    </div>
+
+    <!-- Back button -->
+    <div style="text-align:center; padding: 0 0 40px;">
+      <button onclick="goHome()" style="background:none;border:none;color:var(--muted);font-family:'Prompt',sans-serif;font-size:0.85rem;cursor:pointer;display:inline-flex;align-items:center;gap:6px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        กลับสู่หน้าหลัก
+      </button>
+    </div>
+
+  </div><!-- /page-compare -->
+  
 
   <!-- ==================== FOOTER ==================== -->
   <footer>
@@ -1018,7 +1083,7 @@
   <script src="js/quiz.js"></script>
   <script src="js/loader.js"></script>
   <script src="js/icons.js"></script>
- 
+  <script src="js/compare.js"></script>
 
 
 
