@@ -396,7 +396,7 @@
     toast._t = setTimeout(() => toast.classList.remove('cmp-toast-show'), 2500);
   }
 
-  /* ─────────────── ADD BUTTON ON DETAIL PAGE ─────────────── */
+/* ─────────────── ADD BUTTON ON DETAIL PAGE ─────────────── */
   // Patch showJob to inject "เพิ่มเพื่อเปรียบเทียบ" button
   const _origShowJob = window.showJob;
   window.showJob = function (jobId, catId) {
@@ -406,8 +406,11 @@
       const detailPage = document.getElementById('page-detail');
       if (!detailPage) return;
 
-      // avoid duplicate
-      if (detailPage.querySelector('.cmp-add-from-detail')) return;
+      // 🛠️ แก้ไข: ลบปุ่มเดิมออกถ้ามีอยู่ เพื่อให้สร้างใหม่พร้อม jobId ปัจจุบัน
+      const existingBtn = detailPage.querySelector('.cmp-add-from-detail');
+      if (existingBtn) {
+        existingBtn.remove();
+      }
 
       const breadcrumb = detailPage.querySelector('.breadcrumb');
       if (!breadcrumb) return;
