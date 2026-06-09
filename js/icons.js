@@ -26,6 +26,12 @@
       <path d="M21 15L22.8 19.5H27L23.8 22.1L25 26.5L21 24L17 26.5L18.2 22.1L15 19.5H19.2L21 15Z" fill="currentColor"/>
     </svg>`,
 
+    balance: `<svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M9.5 2.5V16.5M3.5 16.5H15.5M7 6.5L3.5 10.5M12 6.5L15.5 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="7" cy="6.5" r="1.5" stroke="currentColor" stroke-width="1.5"/>
+      <circle cx="12" cy="6.5" r="1.5" stroke="currentColor" stroke-width="1.5"/>
+    </svg>`,
+
     handshake: `<svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M7 20L14 13H19L24 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       <path d="M35 20L28 13H23L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -287,6 +293,7 @@
     /* 5 ── Roadmap cards (.rc-title) */
     const roadmapMap = {
       '🗄️': { svg: SVG.database,  green: true },
+      '⚖️': { svg: SVG.balance, green: true },
       '🧠': { svg: SVG.brain_sm,  green: true },
       '📱': { svg: SVG.mobile_sm, green: true },
       '🔔': { svg: SVG.bell_sm,   green: false, color: '#92400e' },
