@@ -1503,7 +1503,7 @@ const DATA_TECH = {
       "nameT": "วิศวกรระบบสมองกลฝังตัว",
       "nameE": "Embedded Systems Engineer",
       "icon": "🔌",
-      "img": "https://media.licdn.com/dms/image/v2/C4E12AQFrhJaw2GN3bw/article-inline_image-shrink_1000_1488/article-inline_image-shrink_1000_1488/0/1520194776234?e=1781136000&v=beta&t=1_GyuDVaaNLDmO8TcTrR7cBX1pNh3sZ9v53L6bBdZ2U",
+      "img": "https://www.ziprecruiter.com/svc/fotomat/public-ziprecruiter/cms/968289364EmbeddedSystemsEngineerEntryLevel.jpg=ws1280x960",
       "salary": {
         "entry": "37,000",
         "mid": "91,000",

@@ -1564,7 +1564,7 @@ const DATA_SPORTS = {
       "nameT": "กีฬายิงธนู",
       "nameE": "Archery",
       "icon": "🏹",
-      "img": "https://nsdf.or.th/wp-content/uploads/2022/01/545444.jpg",
+      "img": "https://image.posttoday.com/media/content/2015/07/14/95D92883986E4F52995AD3C483705536.jpg",
       "salary": {
         "entry": "10,000",
         "mid": "48,000",
