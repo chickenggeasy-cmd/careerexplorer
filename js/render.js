@@ -170,28 +170,35 @@ function renderCategories() {
   const catGrid = document.getElementById('catGrid');
   if (!catGrid) return;
 
-  let html = '';
-  DATA.categories.forEach((cat, index) => {
-    const img  = CAT_CONFIG.images[cat.id]    || '';
-    const grad = CAT_CONFIG.gradients[cat.id] || 'linear-gradient(135deg, #be185d, #f472b6)';
+  // แสดง skeleton ก่อน 14 ช่อง
+  catGrid.innerHTML = Array(14).fill(0)
+    .map(() => `<div class="cat-skeleton"></div>`)
+    .join('');
 
-    html += `
-      <div class="cat-card-new" onclick="showCategory('${cat.id}')"
-           style="animation: fadeInUp 0.5s ease forwards; opacity: 0; animation-delay: ${0.2 + (index * 0.1)}s;">
-        <div class="cat-card-bg" style="background-image: url('${img}');"></div>
-        <div class="cat-card-overlay" style="background: ${grad};"></div>
-        <div class="cat-card-content">
-          <div class="cat-icon-new">
-            <img src="${cat.icon}" alt="${cat.nameT}">
+  // โหลด data เสร็จแล้วค่อย render จริง
+  loadAllCategories().then(() => {
+    let html = '';
+    DATA.categories.forEach((cat, index) => {
+      const img  = CAT_CONFIG.images[cat.id]    || '';
+      const grad = CAT_CONFIG.gradients[cat.id] || 'linear-gradient(135deg, #be185d, #f472b6)';
+      html += `
+        <div class="cat-card-new" onclick="showCategory('${cat.id}')"
+             style="animation: fadeInUp 0.5s ease forwards; opacity: 0; animation-delay: ${0.2 + (index * 0.1)}s;">
+          <div class="cat-card-bg" style="background-image: url('${img}');"></div>
+          <div class="cat-card-overlay" style="background: ${grad};"></div>
+          <div class="cat-card-content">
+            <div class="cat-icon-new">
+              <img src="${cat.icon}" alt="${cat.nameT}">
+            </div>
+            <div class="cat-name-th-new">${cat.nameT}</div>
+            <div class="cat-name-en-new">${cat.nameE}</div>
+            <div class="cat-count-new">✦ ${cat.jobs.length} อาชีพ</div>
           </div>
-          <div class="cat-name-th-new">${cat.nameT}</div>
-          <div class="cat-name-en-new">${cat.nameE}</div>
-          <div class="cat-count-new">✦ ${cat.jobs.length} อาชีพ</div>
         </div>
-      </div>
-    `;
+      `;
+    });
+    catGrid.innerHTML = html;
   });
-  catGrid.innerHTML = html;
 }
 
 /* ═══════════════════════════════════════════════════
@@ -242,7 +249,8 @@ function createJobCard(job, cat) {
 /* ═══════════════════════════════════════════════════
    SHOW CATEGORY  —  page-cat
 ═══════════════════════════════════════════════════ */
-function showCategory(catId) {
+async function showCategory(catId) {
+  await loadCategory(catId);
   currentCategory = catId;
   const cat = DATA.categories.find(c => c.id === catId);
   if (!cat) return;
@@ -568,7 +576,8 @@ function showJob(jobId, catId) {
 /* ═══════════════════════════════════════════════════
    WINDOW.ONLOAD
 ═══════════════════════════════════════════════════ */
-window.onload = () => {
+window.onload = async () => {
+  await loadAllCategories();
   renderCategories();
   if (typeof startSlider === 'function') startSlider();
 

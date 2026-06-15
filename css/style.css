@@ -4049,3 +4049,11 @@ footer::after {
   .dss-item       { flex: 1 1 100%; border-bottom: 1px solid rgba(190,24,93,0.07); }
   .dss-item:last-child { border-bottom: none; }
 }
+/* ── Skeleton Loading ── */
+.cat-skeleton {
+  border-radius: 20px;
+  height: 280px;
+  background: linear-gradient(90deg, #fce7f3 25%, #fff0f6 50%, #fce7f3 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
