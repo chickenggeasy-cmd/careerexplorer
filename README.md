@@ -236,7 +236,11 @@ GitHub Pages จะ deploy อัตโนมัติภายใน 1–3 น�
 แก้ได้ที่ script `ai-advisor` ใน `index.html` ส่วน `const MODELS = [...]` เปลี่ยน model หรือเพิ่ม fallback model
 
 **ถ้าจะอัปเกรดเป็น Backend จริงๆ**
-แนะนำ Firebase Firestore หรือ Supabase แทน static JS files เพื่อให้อัปเดตข้อมูลโดยไม่ต้อง deploy ใหม่ — แต่โปรเจกต์นี้ยังเป็น static site บน GitHub Pages ดังนั้นการย้ายไป backend จริงต้องวางแผนเรื่อง hosting ใหม่ทั้งหมดด้วย
+แนะนำ Stack: Supabase (PostgreSQL) + Vercel Serverless Functions
+- Supabase — ฐานข้อมูลจริง, dashboard แก้ข้อมูลได้โดยไม่ต้องแตะโค้ด, free tier
+- Vercel — host Front-End + Back-End (API Routes) ในที่เดียว, ผูก GitHub auto-deploy
+- สิ่งที่ต้องเปลี่ยนในโค้ดเดิม: เฉพาะ `data-loader.js` ให้ fetch จาก API แทนอ่าน JS files
+- ย้าย hosting จาก GitHub Pages ไป Vercel (ฟรีเหมือนกัน)
 
 ---
 
