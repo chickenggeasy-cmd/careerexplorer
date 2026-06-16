@@ -1,9 +1,6 @@
-นี่คือไฟล์ `README.md` ฉบับอัปเดตล่าสุด ที่ผมปรับแก้สถานะตรงส่วน **Known Issues (Accessibility)** ให้กลายเป็น **✅ แก้แล้ว** พร้อมระบุรายละเอียดสิ่งที่เราเพิ่งอัปเกรดเข้าไป (เช่น Keyboard Navigation, Screen Reader, WCAG Contrast) และอัปเดตคำแนะนำสำหรับ Developer คนต่อไปให้คอยรักษามาตรฐานนี้ไว้ครับ
+นี่คือโค้ดไฟล์ `README.md` ฉบับเต็มและสมบูรณ์ที่สุดตามที่คุณอัปเดตไว้ สามารถคัดลอกไปวางทับไฟล์เดิมในโปรเจกต์ได้เลยครับ:
 
-คุณสามารถก็อปปี้เนื้อหาด้านล่างนี้ไปวางทับไฟล์ `README.md` เดิมได้เลยครับ:
-
----
-
+```markdown
 # Career Explorer Pro
 
 **พัฒนาโดย องค์การค้าของ สกสค. | อัปเดต 2569**
@@ -31,7 +28,7 @@
 
 ## 📁 โครงสร้างโปรเจกต์
 
-```
+```text
 career-explorer/
 ├── index.html                 — หน้าหลัก SPA (ทุก page อยู่ในไฟล์นี้)
 ├── README.md
@@ -152,7 +149,7 @@ career-explorer/
 
 ```bash
 # clone repo
-git clone https://github.com/chickenggeasy-cmd/careerexplorer.git
+git clone [https://github.com/chickenggeasy-cmd/careerexplorer.git](https://github.com/chickenggeasy-cmd/careerexplorer.git)
 cd careerexplorer
 
 # เปิดผ่าน XAMPP (แนะนำ)
@@ -206,7 +203,7 @@ GitHub Pages จะ deploy อัตโนมัติภายใน 1–3 น�
 | Accessibility (a11y) & SEO | ✅ แก้แล้ว (V2) | อัปเกรดโค้ดให้ผ่านมาตรฐาน WCAG AA แล้ว ปรับปรุง Heading Hierarchy (`h1`, `h2`), เพิ่มการรองรับ Keyboard 100% (`tabindex`, `onkeydown`), เพิ่ม `aria-label` และซ่อมเรื่อง Color Contrast แล้วในอัปเดตล่าสุด |
 | `toggleMobileMenu` ซ้ำสองที่ | 🔶 รอตรวจสอบ | เคยพบฟังก์ชันนี้ถูกประกาศซ้ำในมากกว่าหนึ่งไฟล์ — ควรเหลือไว้ที่ `router.js` ที่เดียว ถ้าพบไฟล์อื่นมีซ้ำให้ลบออก |
 | CSS ถูก inject ผ่าน JavaScript | 🔶 ทราบแล้ว | บางไฟล์ (เช่น `quiz.js`) ฉีด `<style>` เข้า `<head>` ด้วย JS แทนเขียนใน `.css` ตรงๆ ทำให้ search CSS ในไฟล์ style ปกติไม่เจอ ถ้าจะแก้ดีไซน์หน้า quiz ต้องไปหาใน `quiz.js` ไม่ใช่ `style.css` |
-| ไฟล์ data ขนาดใหญ่ | 🔶 แนะนำให้ปรับ | ข้อมูล 435+ อาชีพโหลดทั้งหมดพร้อมกันตอนเปิดเว็บ ถ้าจะปรับ performance ในอนาคต แนะนำใช้ dynamic `import()` โหลดเฉพาะสายงานที่ผู้ใช้เปิดดู |
+| ไฟล์ data ขนาดใหญ่ | ✅ เป็นความตั้งใจ (By Design) | ข้อมูลถูกตั้งค่าให้โหลดพร้อมกันตั้งแต่หน้าแรก (ผ่าน Promise.all) เพื่อให้ระบบ Real-time Search และระบบประมวลผล Quiz ข้ามสายงานทำงานได้ทันทีโดยไม่มีดีเลย์ (ขนาดรวมของไฟล์ Text เล็กมาก ไม่กระทบ Performance) |
 
 ---
 
@@ -244,3 +241,7 @@ GitHub Pages จะ deploy อัตโนมัติภายใน 1–3 น�
 ---
 
 © 2026 SUKSAPANPANIT — Career Explorer Pro | สงวนลิขสิทธิ์
+
+```
+
+```
