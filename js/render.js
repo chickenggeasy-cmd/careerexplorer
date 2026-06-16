@@ -182,13 +182,18 @@ function renderCategories() {
       const img  = CAT_CONFIG.images[cat.id]    || '';
       const grad = CAT_CONFIG.gradients[cat.id] || 'linear-gradient(135deg, #be185d, #f472b6)';
       html += `
-        <div class="cat-card-new" onclick="showCategory('${cat.id}')"
+        <div class="cat-card-new"
+             role="button"
+             tabindex="0"
+             aria-label="ดูอาชีพในสายงาน${cat.nameT}"
+             onclick="showCategory('${cat.id}')"
+             onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showCategory('${cat.id}');}"
              style="animation: fadeInUp 0.5s ease forwards; opacity: 0; animation-delay: ${0.2 + (index * 0.1)}s;">
           <div class="cat-card-bg" style="background-image: url('${img}');"></div>
           <div class="cat-card-overlay" style="background: ${grad};"></div>
           <div class="cat-card-content">
             <div class="cat-icon-new">
-              <img src="${cat.icon}" alt="${cat.nameT}">
+              <img src="${cat.icon}" alt="">
             </div>
             <div class="cat-name-th-new">${cat.nameT}</div>
             <div class="cat-name-en-new">${cat.nameE}</div>
@@ -209,7 +214,12 @@ function createJobCard(job, cat) {
     .map(t => `<span class="jcn-tag">${t}</span>`).join('');
 
   return `
-    <div class="jcn-card" onclick="showJob('${job.id}', '${cat.id}')">
+    <div class="jcn-card"
+         role="button"
+         tabindex="0"
+         aria-label="${job.nameT} — เงินเดือนเริ่มต้น ${job.salary.entry} บาท"
+         onclick="showJob('${job.id}', '${cat.id}')"
+         onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showJob('${job.id}','${cat.id}');}">
       <div class="jcn-thumb">
         <img src="${job.img}" alt="${job.nameT}" loading="lazy"
           onload="this.closest('.jcn-thumb').classList.add('img-loaded')"
@@ -226,7 +236,7 @@ function createJobCard(job, cat) {
             <div class="jcn-title-th">${job.nameT}</div>
             <div class="jcn-title-en">${job.nameE}</div>
           </div>
-          <div class="jcn-arrow">${DETAIL_ICONS.arrowRight}</div>
+          <div class="jcn-arrow" aria-hidden="true">${DETAIL_ICONS.arrowRight}</div>
         </div>
         <div class="jcn-tags">${tagsHtml}</div>
         <div class="jcn-salary-footer">
@@ -239,7 +249,7 @@ function createJobCard(job, cat) {
             <div class="jcn-sf-label">ระดับสูง</div>
             <div class="jcn-sf-value">${job.salary.senior} ฿</div>
           </div>
-          <div class="jcn-sf-arrow-wrap">${DETAIL_ICONS.arrowRightSm}</div>
+          <div class="jcn-sf-arrow-wrap" aria-hidden="true">${DETAIL_ICONS.arrowRightSm}</div>
         </div>
       </div>
     </div>
@@ -352,7 +362,7 @@ function showJob(jobId, catId) {
       </div>
       <div class="dhb-content">
         <div class="dhb-header">
-          <div class="dhb-icon-wrap">${job.icon}</div>
+          <div class="dhb-icon-wrap" aria-hidden="true">${job.icon}</div>
           <div class="dhb-title-group">
             <div class="dhb-title-th">${job.nameT}</div>
             <div class="dhb-title-en">${job.nameE}</div>
@@ -368,7 +378,7 @@ function showJob(jobId, catId) {
     <!-- ── Stat Strip ── -->
     <div class="detail-stat-strip">
       <div class="dss-item">
-        <div class="dss-icon">${icon('graduation', { color: '#be185d' })}</div>
+        <div class="dss-icon" aria-hidden="true">${icon('graduation', { color: '#be185d' })}</div>
         <div class="dss-text">
           <div class="dss-label">วุฒิที่ต้องการ</div>
           <div class="dss-value">${job.degree}</div>
@@ -376,7 +386,7 @@ function showJob(jobId, catId) {
       </div>
       <div class="dss-divider"></div>
       <div class="dss-item">
-        <div class="dss-icon">${icon('clock', { color: '#0891b2' })}</div>
+        <div class="dss-icon" aria-hidden="true">${icon('clock', { color: '#0891b2' })}</div>
         <div class="dss-text">
           <div class="dss-label">ระยะเวลาเรียน</div>
           <div class="dss-value">${job.years}</div>
@@ -384,7 +394,7 @@ function showJob(jobId, catId) {
       </div>
       <div class="dss-divider"></div>
       <div class="dss-item">
-        <div class="dss-icon">${icon('wallet', { color: '#16a34a' })}</div>
+        <div class="dss-icon" aria-hidden="true">${icon('wallet', { color: '#16a34a' })}</div>
         <div class="dss-text">
           <div class="dss-label">เงินเดือนเริ่มต้น</div>
           <div class="dss-value">${job.salary.entry} ฿</div>
@@ -392,7 +402,7 @@ function showJob(jobId, catId) {
       </div>
       <div class="dss-divider"></div>
       <div class="dss-item">
-        <div class="dss-icon">${icon('trophy', { color: '#b45309' })}</div>
+        <div class="dss-icon" aria-hidden="true">${icon('trophy', { color: '#b45309' })}</div>
         <div class="dss-text">
           <div class="dss-label">ระดับสูงสุด</div>
           <div class="dss-value">${job.salary.senior} ฿</div>
@@ -406,13 +416,13 @@ function showJob(jobId, catId) {
         <!-- ── Education & Skills Card ── -->
         <div class="info-card-v2">
           <div class="icv2-header">
-            <div class="icv2-header-icon">${icon('graduation', { color: '#f4e9ed', size: 22 })}</div>
+            <div class="icv2-header-icon" aria-hidden="true">${icon('graduation', { color: '#f4e9ed', size: 22 })}</div>
             <div class="icv2-title">ข้อมูลการศึกษาและทักษะ</div>
           </div>
           <div class="edu-timeline">
 
             <div class="edu-item">
-              <div class="edu-dot edu-dot--svg" style="color:#6d28d9;">${DETAIL_ICONS.book}</div>
+              <div class="edu-dot edu-dot--svg" style="color:#6d28d9;" aria-hidden="true">${DETAIL_ICONS.book}</div>
               <div class="edu-text">
                 <strong>วุฒิการศึกษาที่ต้องการ</strong>
                 <span>${job.degree}<br>
@@ -424,7 +434,7 @@ function showJob(jobId, catId) {
             </div>
 
             <div class="edu-item">
-              <div class="edu-dot edu-dot--svg" style="color:#0891b2;">${DETAIL_ICONS.clockSm}</div>
+              <div class="edu-dot edu-dot--svg" style="color:#0891b2;" aria-hidden="true">${DETAIL_ICONS.clockSm}</div>
               <div class="edu-text">
                 <strong>ระยะเวลาเรียน / ฝึกฝนโดยเฉลี่ย</strong>
                 <span>${job.years}</span>
@@ -434,7 +444,7 @@ function showJob(jobId, catId) {
             ${uniHtml}
 
             <div class="edu-item" style="padding-bottom:0;">
-              <div class="edu-dot edu-dot--svg" style="color:#d97706;">${DETAIL_ICONS.bolt}</div>
+              <div class="edu-dot edu-dot--svg" style="color:#d97706;" aria-hidden="true">${DETAIL_ICONS.bolt}</div>
               <div class="edu-text" style="flex:1;">
                 <strong>ทักษะสำคัญที่จำเป็น (Hard / Soft Skills)</strong>
                 <div class="skills-cloud">
@@ -449,7 +459,7 @@ function showJob(jobId, catId) {
         <!-- ── Pros / Cons Card ── -->
         <div class="info-card-v2">
           <div class="icv2-header">
-            <div class="icv2-header-icon">${icon('scale', { color: '#f8f0f3', size: 22 })}</div>
+            <div class="icv2-header-icon" aria-hidden="true">${icon('scale', { color: '#f8f0f3', size: 22 })}</div>
             <div class="icv2-title">วิเคราะห์ข้อดี — ข้อจำกัด</div>
           </div>
           <div class="pro-con-v2">
@@ -457,14 +467,14 @@ function showJob(jobId, catId) {
               <div class="pc-col-title pros">✓ ข้อดี (Pros)</div>
               ${job.pros.map(p => `
                 <div class="pc-item pro">
-                  <span class="pc-dot" style="color:#22c55e;">●</span>${p}
+                  <span class="pc-dot" style="color:#22c55e;" aria-hidden="true">●</span>${p}
                 </div>`).join('')}
             </div>
             <div>
               <div class="pc-col-title cons">✗ ข้อจำกัด (Cons)</div>
               ${job.cons.map(c => `
                 <div class="pc-item con">
-                  <span class="pc-dot" style="color:#f43f5e;">●</span>${c}
+                  <span class="pc-dot" style="color:#f43f5e;" aria-hidden="true">●</span>${c}
                 </div>`).join('')}
             </div>
           </div>
@@ -478,7 +488,7 @@ function showJob(jobId, catId) {
         <!-- Salary Card -->
         <div class="salary-card-v2">
           <div class="scv2-title">
-            ${icon('barChart', { color: '#be185d', style: 'margin-right:6px;' })}
+            <span aria-hidden="true">${icon('barChart', { color: '#be185d', style: 'margin-right:6px;' })}</span>
             โครงสร้างเงินเดือน (โดยประมาณ)
           </div>
           <div class="scv2-row">
@@ -486,7 +496,7 @@ function showJob(jobId, catId) {
               <span class="scv2-level">เริ่มต้น (Entry)</span>
               <span class="scv2-amount">${job.salary.entry} ฿</span>
             </div>
-            <div class="scv2-bar-track">
+            <div class="scv2-bar-track" role="img" aria-label="เงินเดือนเริ่มต้น ${job.salary.entry} บาท">
               <div class="scv2-bar-fill entry" id="bar2-entry"></div>
             </div>
           </div>
@@ -495,7 +505,7 @@ function showJob(jobId, catId) {
               <span class="scv2-level">มีประสบการณ์ (Mid)</span>
               <span class="scv2-amount">${job.salary.mid} ฿</span>
             </div>
-            <div class="scv2-bar-track">
+            <div class="scv2-bar-track" role="img" aria-label="เงินเดือนระดับกลาง ${job.salary.mid} บาท">
               <div class="scv2-bar-fill mid" id="bar2-mid"></div>
             </div>
           </div>
@@ -504,12 +514,12 @@ function showJob(jobId, catId) {
               <span class="scv2-level">ระดับสูง / ผู้เชี่ยวชาญ</span>
               <span class="scv2-amount">${job.salary.senior} ฿</span>
             </div>
-            <div class="scv2-bar-track">
+            <div class="scv2-bar-track" role="img" aria-label="เงินเดือนระดับสูง ${job.salary.senior} บาท">
               <div class="scv2-bar-fill senior" id="bar2-senior"></div>
             </div>
           </div>
           <div class="scv2-note">
-            ${DETAIL_ICONS.info}
+            <span aria-hidden="true">${DETAIL_ICONS.info}</span>
             ข้อมูลอ้างอิงจากสถิติตลาดแรงงานไทย
           </div>
         </div>
@@ -517,11 +527,11 @@ function showJob(jobId, catId) {
         <!-- Growth Card -->
         <div class="growth-card-v2">
           <div class="growth-indicator">
-            ${icon('trendUp', { style: 'margin-right:6px;' })}
+            <span aria-hidden="true">${icon('trendUp', { style: 'margin-right:6px;' })}</span>
             แนวโน้มการเติบโต
           </div>
           <div class="gcv2-title">
-            ${icon('fileText', { style: 'margin-right:6px;flex-shrink:0;' })}
+            <span aria-hidden="true">${icon('fileText', { style: 'margin-right:6px;flex-shrink:0;' })}</span>
             โอกาสในอนาคต
           </div>
           <p class="gcv2-text">${job.growth}</p>
@@ -530,14 +540,14 @@ function showJob(jobId, catId) {
         <!-- Related Skills Card -->
         <div class="detail-related-card">
           <div class="drc-title">
-            ${icon('link', { color: '#be185d', style: 'margin-right:6px;' })}
+            <span aria-hidden="true">${icon('link', { color: '#be185d', style: 'margin-right:6px;' })}</span>
             ทักษะที่เกี่ยวข้อง
           </div>
           <div class="drc-skills">
             ${job.skills.slice(0, 5).map((s, i) => `
               <div class="drc-skill-row">
                 <span class="drc-skill-name">${s}</span>
-                <div class="drc-skill-bar-track">
+                <div class="drc-skill-bar-track" role="img" aria-label="${s}">
                   <div class="drc-skill-bar-fill"
                     style="width:${85 - i * 10}%; animation-delay:${0.2 + i * 0.1}s;"></div>
                 </div>

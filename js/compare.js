@@ -67,7 +67,7 @@
     if (compareList.length === 0) {
       wrap.innerHTML = `
         <div class="cmp-empty">
-          <div class="cmp-empty-icon">
+          <div class="cmp-empty-icon" aria-hidden="true">
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 17H5a2 2 0 0 0-2 2v0a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v0a2 2 0 0 0-2-2h-4"/><rect x="9" y="3" width="6" height="14" rx="2"/></svg>
           </div>
           <p>เลือกอาชีพจากช่องด้านบนเพื่อเริ่มเปรียบเทียบ</p>
@@ -80,11 +80,11 @@
     const headerCols = compareList.map(job => `
       <th>
         <div class="cmp-th-inner">
-          <span class="cmp-job-icon">${job.icon || '💼'}</span>
+          <span class="cmp-job-icon" aria-hidden="true">${job.icon || '💼'}</span>
           <span class="cmp-job-name">${job.nameT}</span>
           <span class="cmp-job-cat" style="background:${job.catColor};color:${job.catIconColor}">${job.catName}</span>
-          <button class="cmp-remove-btn" onclick="compareRemove('${job.id}')" title="ลบออก">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          <button type="button" class="cmp-remove-btn" onclick="compareRemove('${job.id}')" title="ลบ ${job.nameT} ออก" aria-label="ลบอาชีพ ${job.nameT} ออกจากรายการ">
+            <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button>
         </div>
       </th>
@@ -134,7 +134,7 @@
 
     const ctaCols = compareList.map(job => `
       <td>
-        <button class="cmp-detail-btn" onclick="showJob('${job.id}','${job.catId}')">
+        <button type="button" class="cmp-detail-btn" onclick="showJob('${job.id}','${job.catId}')" aria-label="ดูรายละเอียดอาชีพ ${job.nameT}">
           ดูรายละเอียด →
         </button>
       </td>
@@ -144,13 +144,13 @@
     const mobileCards = compareList.map(job => `
       <div class="cmp-mobile-card">
         <div class="cmp-mobile-card-header">
-          <span class="cmp-mobile-card-icon">${job.icon || '💼'}</span>
+          <span class="cmp-mobile-card-icon" aria-hidden="true">${job.icon || '💼'}</span>
           <div class="cmp-mobile-card-title">
             <span class="cmp-mobile-card-name">${job.nameT}</span>
             <span class="cmp-mobile-card-cat">${job.catName}</span>
           </div>
-          <button class="cmp-mobile-remove" onclick="compareRemove('${job.id}')">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          <button type="button" class="cmp-mobile-remove" onclick="compareRemove('${job.id}')" aria-label="ลบอาชีพ ${job.nameT} ออกจากรายการ">
+            <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button>
         </div>
         <div class="cmp-mobile-card-body">
@@ -197,7 +197,7 @@
 
         </div>
         <div class="cmp-mobile-card-footer">
-          <button class="cmp-detail-btn" onclick="showJob('${job.id}','${job.catId}')">
+          <button type="button" class="cmp-detail-btn" onclick="showJob('${job.id}','${job.catId}')" aria-label="ดูรายละเอียดเพิ่มเติมเกี่ยวกับ ${job.nameT}">
             ดูรายละเอียดเพิ่มเติม →
           </button>
         </div>
@@ -205,7 +205,7 @@
     `).join('');
 
     wrap.innerHTML = `
-      <div class="cmp-table-scroll">
+      <div class="cmp-table-scroll" role="region" aria-label="ตารางเปรียบเทียบอาชีพ" tabindex="0">
         <table class="cmp-table">
           <thead>
             <tr class="cmp-header-row">
@@ -262,15 +262,15 @@
       if (job) {
         html += `
           <div class="cmp-slot cmp-slot-filled">
-            <span class="cmp-slot-icon">${job.icon || '💼'}</span>
+            <span class="cmp-slot-icon" aria-hidden="true">${job.icon || '💼'}</span>
             <span class="cmp-slot-name">${job.nameT}</span>
-            <button class="cmp-slot-remove" onclick="compareRemove('${job.id}')">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            <button type="button" class="cmp-slot-remove" onclick="compareRemove('${job.id}')" aria-label="ลบอาชีพ ${job.nameT} ออกจากช่องเปรียบเทียบ">
+              <svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
           </div>`;
       } else {
         html += `
-          <div class="cmp-slot cmp-slot-empty">
+          <div class="cmp-slot cmp-slot-empty" aria-hidden="true">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
             <span>เลือกอาชีพ</span>
           </div>`;
@@ -311,14 +311,18 @@
       .slice(0, 8);
 
     if (results.length === 0) {
-      dropdown.innerHTML = `<div class="cmp-dd-empty">ไม่พบอาชีพที่ค้นหา</div>`;
+      dropdown.innerHTML = `<div class="cmp-dd-empty" role="status">ไม่พบอาชีพที่ค้นหา</div>`;
       dropdown.style.display = 'block';
       return;
     }
 
+    // 🛠️ แก้ไข: เปลี่ยนกลับเป็น div แต่เพิ่ม role, tabindex และ onkeydown เพื่อรองรับคีย์บอร์ดโดยไม่กระทบ CSS
     dropdown.innerHTML = results.map(j => `
-      <div class="cmp-dd-item" onclick="compareAdd('${j.catId}','${j.id}')">
-        <span class="cmp-dd-icon">${j.icon || '💼'}</span>
+      <div class="cmp-dd-item" role="button" tabindex="0" 
+           onclick="compareAdd('${j.catId}','${j.id}')" 
+           onkeydown="if(event.key === 'Enter' || event.key === ' ') { event.preventDefault(); compareAdd('${j.catId}','${j.id}'); }" 
+           aria-label="เพิ่มอาชีพ ${j.nameT} ลงในรายการเปรียบเทียบ">
+        <span class="cmp-dd-icon" aria-hidden="true">${j.icon || '💼'}</span>
         <div class="cmp-dd-text">
           <span class="cmp-dd-name">${j.nameT}</span>
           <span class="cmp-dd-cat">${j.catName}</span>
@@ -388,6 +392,7 @@
     if (!toast) {
       toast = document.createElement('div');
       toast.id = 'cmp-toast';
+      toast.setAttribute('role', 'alert'); // เพิ่ม role alert เพื่อบอก Screen Reader อัตโนมัติ
       document.body.appendChild(toast);
     }
     toast.textContent = msg;
@@ -406,7 +411,6 @@
       const detailPage = document.getElementById('page-detail');
       if (!detailPage) return;
 
-      // 🛠️ แก้ไข: ลบปุ่มเดิมออกถ้ามีอยู่ เพื่อให้สร้างใหม่พร้อม jobId ปัจจุบัน
       const existingBtn = detailPage.querySelector('.cmp-add-from-detail');
       if (existingBtn) {
         existingBtn.remove();
@@ -418,9 +422,11 @@
       const alreadyAdded = () => compareList.find(j => j.id === jobId);
 
       const btn = document.createElement('button');
+      btn.type = 'button';
       btn.className = 'cmp-add-from-detail';
+      btn.setAttribute('aria-label', 'นำอาชีพนี้ไปเปรียบเทียบ');
       btn.innerHTML = `
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+        <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
         เปรียบเทียบอาชีพนี้
       `;
       btn.onclick = () => {
@@ -440,6 +446,12 @@
   window.initComparePage = function () {
     renderSlots();
     renderTable();
+
+    // เพิ่ม aria-label ให้ search input ที่อยู่ใน HTML แบบอัตโนมัติ
+    const searchInput = document.getElementById('cmp-search-input');
+    if (searchInput && !searchInput.hasAttribute('aria-label')) {
+      searchInput.setAttribute('aria-label', 'ค้นหาอาชีพเพื่อเปรียบเทียบ');
+    }
 
     // close dropdown on outside click
     document.addEventListener('click', e => {
