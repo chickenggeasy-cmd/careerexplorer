@@ -1,15 +1,17 @@
 /**
- * Career Explorer Pro - Quiz Logic (Fixed & Balanced Edition)
+ * Career Explorer Pro - Quiz Logic (Fixed & Balanced Edition + A11Y)
  *
  * ✅ FIXES:
- *   1. เพิ่ม 'E' ใน letters array (A-E)
- *   2. แก้ emoji ข้อ 6 จาก " hobby " เป็น "🎨"
- *   3. ใส่ข้อความใน quiz-top-bar-badge และ qp-brand
- *   4. finishQuiz() เช็ค null answers ก่อน
- *   5. origRouter crash fix
- *   6. Normalize scores ป้องกัน bias
- *   7. Rebalance คะแนนทุกข้อให้ครอบคลุมทุกสายงาน
- *   8. เพิ่มคำถามสำหรับ aviation, logistics, factory ที่ขาด
+ * 1. เพิ่ม 'E' ใน letters array (A-E)
+ * 2. แก้ emoji ข้อ 6 จาก " hobby " เป็น "🎨"
+ * 3. ใส่ข้อความใน quiz-top-bar-badge และ qp-brand
+ * 4. finishQuiz() เช็ค null answers ก่อน
+ * 5. origRouter crash fix
+ * 6. Normalize scores ป้องกัน bias
+ * 7. Rebalance คะแนนทุกข้อให้ครอบคลุมทุกสายงาน
+ * 8. เพิ่มคำถามสำหรับ aviation, logistics, factory ที่ขาด
+ * 9. [NEW] แก้อาการกระตุก (Layout Shift) เวลากดเลือก Choice
+ * 10. [NEW] เพิ่ม Accessibility (A11Y) - รองรับคีย์บอร์ด Tab & Enter/Space, Screen Reader
  */
 
 // ════ INJECT PREMIUM MODERN CSS ════
@@ -163,23 +165,44 @@ const injectQuizStyles = () => {
 
     .qp-emoji-wrap { display: flex; justify-content: center; margin-bottom: 24px; }
     .qp-emoji-circle { width: 88px; height: 88px; border-radius: 50%; background: linear-gradient(135deg, rgba(233,30,140,.08) 0%, rgba(233,30,140,.04) 100%); border: 2px solid rgba(233,30,140,.12); display: flex; align-items: center; justify-content: center; font-size: 46px; animation: qEmojiPop .5s cubic-bezier(.175,.885,.32,1.275) both; box-shadow: 0 8px 24px rgba(233,30,140,.1); }
+    /* 🛠️ a11y: แก้ heading ของข้อให้เป็น h2 */
     .qp-q-number { text-align: center; margin-bottom: 14px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #e91e8c; }
-    .qp-q-text { font-size: 22px; font-weight: 800; color: #0f172a; text-align: center; line-height: 1.55; margin-bottom: 36px; font-family: 'Prompt', sans-serif; letter-spacing: -.3px; }
+    .qp-q-text { font-size: 22px; font-weight: 800; color: #0f172a; text-align: center; line-height: 1.55; margin-bottom: 36px; font-family: 'Prompt', sans-serif; letter-spacing: -.3px; margin-top:0; }
 
     .qp-choices { display: flex; flex-direction: column; gap: 10px; }
-    .qp-choice { display: flex; align-items: center; gap: 16px; padding: 17px 22px; border-radius: 18px; border: 2px solid #f1f5f9; background: #fafbfc; cursor: pointer; font-family: 'Prompt', sans-serif; font-size: 15px; font-weight: 600; color: #475569; transition: all .25s cubic-bezier(.16,1,.3,1); position: relative; overflow: hidden; animation: qChoiceIn .4s cubic-bezier(.16,1,.3,1) both; }
+
+    /* 🛠️ UI Fix: เปลี่ยนเป็นการใช้ border-color คุมกล่อง แทนการเพิ่ม border เพื่อป้องกัน Layout Shift */
+    .qp-choice { 
+      display: flex; align-items: center; gap: 16px; padding: 17px 22px; border-radius: 18px; 
+      background: #fafbfc; cursor: pointer; font-family: 'Prompt', sans-serif; font-size: 15px; font-weight: 600; color: #475569; 
+      transition: all .25s cubic-bezier(.16,1,.3,1); position: relative; overflow: hidden; 
+      animation: qChoiceIn .4s cubic-bezier(.16,1,.3,1) both; 
+      
+      /* a11y: เปลี่ยนจาก div เป็น button */
+      width: 100%; text-align: left; border: 2px solid transparent; 
+      box-shadow: inset 0 0 0 2px #f1f5f9; /* ใช้ inset shadow ทำกรอบหลอกแทน border จริง */
+    }
     .qp-choice:nth-child(1) { animation-delay: .05s; }
     .qp-choice:nth-child(2) { animation-delay: .1s; }
     .qp-choice:nth-child(3) { animation-delay: .15s; }
     .qp-choice:nth-child(4) { animation-delay: .2s; }
     .qp-choice:nth-child(5) { animation-delay: .25s; }
     .qp-choice::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent 0%, rgba(233,30,140,.04) 50%, transparent 100%); transform: translateX(-100%); transition: transform .4s ease; }
-    .qp-choice:hover::before { transform: translateX(100%); }
-    .qp-choice:hover { border-color: rgba(233,30,140,.3); background: rgba(253,242,248,.6); transform: translateX(8px); box-shadow: 0 8px 24px rgba(233,30,140,.08); color: #1e293b; }
-    .qp-choice.selected { border-color: #e91e8c; background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%); color: #9d174d; font-weight: 700; transform: translateX(8px) scale(1.01); box-shadow: 0 12px 30px rgba(233,30,140,.18), inset 0 0 0 1px rgba(233,30,140,.1); }
+    
+    .qp-choice:hover::before, .qp-choice:focus::before { transform: translateX(100%); }
+    .qp-choice:hover, .qp-choice:focus { 
+      background: rgba(253,242,248,.6); transform: translateX(8px); 
+      box-shadow: inset 0 0 0 2px rgba(233,30,140,.3), 0 8px 24px rgba(233,30,140,.08); 
+      color: #1e293b; outline: none; 
+    }
+    .qp-choice.selected { 
+      background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%); color: #9d174d; 
+      transform: translateX(8px) scale(1.01); 
+      box-shadow: inset 0 0 0 2px #e91e8c, 0 12px 30px rgba(233,30,140,.18); 
+    }
 
     .qp-letter { width: 38px; height: 38px; min-width: 38px; border-radius: 12px; background: white; border: 1.5px solid #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 900; color: #94a3b8; transition: all .25s; letter-spacing: .5px; box-shadow: 0 2px 6px rgba(0,0,0,.06); }
-    .qp-choice:hover .qp-letter { border-color: rgba(233,30,140,.3); color: #e91e8c; }
+    .qp-choice:hover .qp-letter, .qp-choice:focus .qp-letter { border-color: rgba(233,30,140,.3); color: #e91e8c; }
     .qp-choice.selected .qp-letter { background: linear-gradient(135deg, #e91e8c, #c2185b); border-color: transparent; color: white; box-shadow: 0 6px 16px rgba(233,30,140,.3); }
     .qp-choice-text { flex: 1; line-height: 1.4; }
     .qp-check { width: 26px; height: 26px; border-radius: 50%; background: #e91e8c; color: white; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 900; flex-shrink: 0; animation: qEmojiPop .3s cubic-bezier(.175,.885,.32,1.275) both; box-shadow: 0 4px 12px rgba(233,30,140,.35); }
@@ -299,9 +322,9 @@ const injectQuizStyles = () => {
 
 // ════ CAREER QUIZ CATEGORIES ════
 const QUIZ_CATEGORIES = {
-  medical:      { name: "สายการแพทย์และสุขภาพ",           icon: "🏥", color: "#e91e8c", light: "#fce7f3" },
+  medical:      { name: "สายการแพทย์และสุขภาพ",            icon: "🏥", color: "#e91e8c", light: "#fce7f3" },
   tech:         { name: "สายวิศวกรรมและไอที",              icon: "💻", color: "#1d4ed8", light: "#dbeafe" },
-  business:     { name: "สายธุรกิจและการเงิน",             icon: "💼", color: "#b45309", light: "#fef3c7" },
+  business:     { name: "สายธุรกิจและการเงิน",              icon: "💼", color: "#b45309", light: "#fef3c7" },
   law:          { name: "สายกฎหมายและความปลอดภัย",         icon: "⚖️", color: "#6b21a8", light: "#f3e8ff" },
   arts:         { name: "สายสร้างสรรค์ สื่อ และบันเทิง",   icon: "🎭", color: "#15803d", light: "#dcfce7" },
   education:    { name: "สายวิทยาศาสตร์และการศึกษา",       icon: "🎓", color: "#c2410c", light: "#ffedd5" },
@@ -316,9 +339,6 @@ const QUIZ_CATEGORIES = {
 };
 
 // ════ CAREER QUIZ QUESTIONS (BALANCED) ════
-// ✅ FIX: ทุกสายงานมีโอกาสได้คะแนนใกล้เคียงกัน
-// ✅ FIX: ทุกข้อมี 5 ตัวเลือก ให้คะแนน 5 สายงานที่ต่างกัน
-// ✅ FIX: emoji ข้อ 6 แก้จาก " hobby " เป็น "🎨"
 const QUIZ_QUESTIONS = [
   {
     q: "คุณมักจะรู้สึกตื่นเต้นกับอะไรมากที่สุดในชีวิตประจำวัน?",
@@ -361,7 +381,7 @@ const QUIZ_QUESTIONS = [
       { text: "เน้นทำงานร่วมกัน ช่วยเหลือซึ่งกันและกัน",                  scores: { education: 3, medical: 2, arts: 1 } },
       { text: "กำหนดกฎระเบียบและขั้นตอนการทำงานที่ชัดเจน",               scores: { law: 3, factory: 2, construction: 1 } },
       { text: "ส่งเสริมไอเดียใหม่ๆ และความคิดสร้างสรรค์ของทีม",          scores: { arts: 3, lifestyle: 1, food: 1 } },
-      { text: "ดูแลความปลอดภัยและสวัสดิการของทีมเป็นอันดับแรก",          scores: { aviation: 3, sports: 2, medical: 1 } },
+      { text: "ดูแลความปลอดภัยและสวัสดิการของทีมเป็นอันดับแรก",         scores: { aviation: 3, sports: 2, medical: 1 } },
     ],
   },
   {
@@ -379,7 +399,7 @@ const QUIZ_QUESTIONS = [
     q: "ถ้าคุณต้องเลือกงานอดิเรกใหม่ คุณจะเลือกอะไร?",
     emoji: "🎨",  
     choices: [
-      { text: "เรียนรู้ภาษาใหม่ เล่นเครื่องดนตรี หรือวาดภาพ",            scores: { education: 3, arts: 2, lifestyle: 1 } },
+      { text: "เรียนรู้ภาษาใหม่ เล่นเครื่องดนตรี หรือวาดภาพ",             scores: { education: 3, arts: 2, lifestyle: 1 } },
       { text: "ทำสวน ปลูกต้นไม้ เลี้ยงสัตว์ หรือทำเกษตรอินทรีย์",       scores: { agriculture: 3, food: 2, sports: 1 } },
       { text: "ถ่ายภาพ ทำวิดีโอ หรือเขียนบล็อกท่องเที่ยว",                scores: { arts: 3, aviation: 2, lifestyle: 1 } },
       { text: "ซ่อมรถยนต์ ต่อโมเดล หรือ DIY ของในบ้าน",                   scores: { factory: 3, construction: 2, tech: 1 } },
@@ -390,11 +410,11 @@ const QUIZ_QUESTIONS = [
     q: "คุณรู้สึกดีที่สุดเมื่อได้ทำอะไร?",
     emoji: "😊",
     choices: [
-      { text: "ได้เห็นผลงานที่สร้างขึ้นมาด้วยมือตัวเองสำเร็จ",           scores: { construction: 3, factory: 2, arts: 1 } },
+      { text: "ได้เห็นผลงานที่สร้างขึ้นมาด้วยมือตัวเองสำเร็จ",            scores: { construction: 3, factory: 2, arts: 1 } },
       { text: "ได้ช่วยแก้ปัญหาให้คนอื่นพ้นจากความเดือดร้อน",              scores: { medical: 3, law: 2, education: 1 } },
       { text: "ได้สร้างสรรค์ไอเดียใหม่ๆ ที่แตกต่างและโดดเด่น",            scores: { arts: 3, tech: 1, lifestyle: 1 } },
       { text: "ได้เรียนรู้และพัฒนาตัวเองอย่างต่อเนื่อง",                  scores: { education: 3, sports: 2, medical: 1 } },
-      { text: "ได้ขนส่ง จัดเส้นทาง หรือทำให้สินค้าถึงมือลูกค้าทันเวลา",  scores: { logistics: 3, aviation: 2, business: 1 } },
+      { text: "ได้ขนส่ง จัดเส้นทาง หรือทำให้สินค้าถึงมือลูกค้าทันเวลา", scores: { logistics: 3, aviation: 2, business: 1 } },
     ],
   },
   {
@@ -446,7 +466,7 @@ const QUIZ_QUESTIONS = [
     emoji: "🦸",
     choices: [
       { text: "พลังในการรักษาโรคและเยียวยาทุกความเจ็บปวด",                scores: { medical: 3, education: 1, sports: 1 } },
-      { text: "พลังในการสร้างสรรค์สิ่งสวยงามจากความว่างเปล่า",             scores: { arts: 3, construction: 2, lifestyle: 1 } },
+      { text: "พลังในการสร้างสรรค์สิ่งสวยงามจากความว่างเปล่า",              scores: { arts: 3, construction: 2, lifestyle: 1 } },
       { text: "พลังในการควบคุมเทคโนโลยีและระบบคอมพิวเตอร์",               scores: { tech: 3, factory: 2, logistics: 1 } },
       { text: "พลังในการเดินทางข้ามเวลาและสถานที่ชั่วพริบตา",              scores: { aviation: 3, logistics: 2, sports: 1 } },
       { text: "พลังในการสร้างความยุติธรรมและเปลี่ยนกฎเกณฑ์ที่ไม่เป็นธรรม", scores: { law: 3, education: 2, business: 1 } },
@@ -489,7 +509,7 @@ const QUIZ_QUESTIONS = [
     q: "ถ้าคุณต้องออกแบบผลิตภัณฑ์ใหม่ คุณจะเน้นอะไร?",
     emoji: "💡",
     choices: [
-      { text: "ฟังก์ชันล้ำสมัย ประสิทธิภาพสูง และใช้ AI ช่วย",           scores: { tech: 3, factory: 2, business: 1 } },
+      { text: "ฟังก์ชันล้ำสมัย ประสิทธิภาพสูง และใช้ AI ช่วย",            scores: { tech: 3, factory: 2, business: 1 } },
       { text: "ความสวยงาม ดีไซน์ที่โดดเด่น และสะท้อนตัวตนผู้ใช้",        scores: { arts: 3, lifestyle: 2, food: 1 } },
       { text: "ความปลอดภัย ทนทาน และผ่านมาตรฐานทุกข้อกำหนด",              scores: { construction: 3, law: 2, aviation: 1 } },
       { text: "ความเป็นมิตรต่อสิ่งแวดล้อม ย่อยสลายได้ และ Zero-waste",    scores: { agriculture: 3, education: 2, medical: 1 } },
@@ -523,7 +543,7 @@ const QUIZ_QUESTIONS = [
     emoji: "🛍️",
     choices: [
       { text: "คุณภาพ ความทนทาน และการรับประกันสินค้า",                     scores: { factory: 3, construction: 2, logistics: 1 } },
-      { text: "ราคา ความคุ้มค่า และการเปรียบเทียบตลาด",                    scores: { business: 3, logistics: 2, tech: 1 } },
+      { text: "ราคา ความคุ้มค่า และการเปรียบเทียบตลาด",                     scores: { business: 3, logistics: 2, tech: 1 } },
       { text: "ดีไซน์ ความสวยงาม และเทรนด์แฟชั่น",                        scores: { lifestyle: 3, arts: 2, food: 1 } },
       { text: "ประโยชน์ใช้สอย นวัตกรรม และฟีเจอร์ล้ำสมัย",               scores: { tech: 3, medical: 2, education: 1 } },
       { text: "ความเป็นมิตรต่อสิ่งแวดล้อม ออร์แกนิก และยั่งยืน",          scores: { agriculture: 3, food: 2, law: 1 } },
@@ -534,7 +554,7 @@ const QUIZ_QUESTIONS = [
     emoji: "🧙",
     choices: [
       { text: "นักเวทย์ผู้รักษา — คอยเยียวยาและดูแลสุขภาพผู้คน",         scores: { medical: 3, education: 1, sports: 1 } },
-      { text: "วิศวกรผู้สร้าง — ประดิษฐ์เครื่องจักรและระบบมหัศจรรย์",     scores: { tech: 3, factory: 2, construction: 1 } },
+      { text: "วิศวกรผู้สร้าง — ประดิษฐ์เครื่องจักรและระบบมหัศจรรย์",      scores: { tech: 3, factory: 2, construction: 1 } },
       { text: "พ่อค้าผู้มั่งคั่ง — สร้างอาณาจักรการค้าและเส้นทางขนส่ง",  scores: { business: 3, logistics: 2, aviation: 1 } },
       { text: "อัศวินผู้พิทักษ์ — รักษาความยุติธรรมและกฎหมาย",             scores: { law: 3, sports: 2, medical: 1 } },
       { text: "นักสำรวจผู้บุกเบิก — เดินทางค้นพบดินแดนและพืชพันธุ์ใหม่",  scores: { agriculture: 3, aviation: 2, education: 1 } },
@@ -570,7 +590,6 @@ function renderQuiz() {
           <div class="quiz-dot-grid"></div>
 
           <div class="quiz-top-bar">
-            <!-- ✅ FIX: เพิ่มข้อความในทุก badge -->
             <div class="quiz-top-bar-badge">
               <div class="quiz-top-bar-dot"></div>
               Career Explorer Pro
@@ -671,9 +690,9 @@ function renderQuiz() {
 
   // ── QUIZ STEP ──────────────────────────────────────────
   else if (s.step === "quiz") {
-    const q             = QUIZ_QUESTIONS[s.current];
-    const pct           = Math.round((s.current / QUIZ_QUESTIONS.length) * 100);
-    const isLast        = s.current + 1 === QUIZ_QUESTIONS.length;
+    const q           = QUIZ_QUESTIONS[s.current];
+    const pct         = Math.round((s.current / QUIZ_QUESTIONS.length) * 100);
+    const isLast      = s.current + 1 === QUIZ_QUESTIONS.length;
     const currentAnswer = s.answers[s.current] ?? null;
 
     const dotsHTML = Array.from({ length: QUIZ_QUESTIONS.length }, (_, i) => {
@@ -683,17 +702,21 @@ function renderQuiz() {
       return `<div class="${cls}"></div>`;
     }).join('');
 
-    // ✅ FIX: เพิ่ม 'E' — ตอนนี้ครบ A-E สำหรับ 5 ตัวเลือก
     const letters = ['A', 'B', 'C', 'D', 'E'];
 
+    // 🛠️ a11y & UI FIX: เปลี่ยน div เป็น button เพื่อรองรับคีย์บอร์ด + ใส่ aria-label อธิบาย Choice
     const choicesHTML = q.choices.map((c, i) => {
       const isSel = currentAnswer === i;
       return `
-        <div class="qp-choice ${isSel ? 'selected' : ''}" onclick="selectQuizAnswer(${i})">
-          <div class="qp-letter">${letters[i]}</div>
+        <button type="button" 
+                class="qp-choice ${isSel ? 'selected' : ''}" 
+                onclick="selectQuizAnswer(${i})"
+                aria-pressed="${isSel ? 'true' : 'false'}"
+                aria-label="ตัวเลือก ${letters[i]}: ${c.text}">
+          <div class="qp-letter" aria-hidden="true">${letters[i]}</div>
           <div class="qp-choice-text">${c.text}</div>
-          ${isSel ? `<div class="qp-check">✓</div>` : ''}
-        </div>`;
+          ${isSel ? `<div class="qp-check" aria-hidden="true">✓</div>` : ''}
+        </button>`;
     }).join('');
 
     app.innerHTML = `
@@ -703,16 +726,15 @@ function renderQuiz() {
 
             <div class="qp-header">
               <div class="qp-header-left">
-                <!-- ✅ FIX: เพิ่มชื่อแบรนด์ใน qp-brand -->
                 <div class="qp-brand">
                   <div class="qp-brand-dot"></div>
                   Career Explorer Pro
                 </div>
               </div>
-              <button class="qp-quit-btn" onclick="restartQuiz()">✕ ออกจากแบบทดสอบ</button>
+              <button type="button" class="qp-quit-btn" onclick="restartQuiz()">✕ ออกจากแบบทดสอบ</button>
             </div>
 
-            <div class="qp-progress-section">
+            <div class="qp-progress-section" aria-live="polite">
               <div class="qp-progress-meta">
                 <div class="qp-step-label">
                   คำถาม
@@ -720,8 +742,8 @@ function renderQuiz() {
                 </div>
                 <div class="qp-pct-label">${pct}% เสร็จแล้ว</div>
               </div>
-              <div class="qp-step-dots">${dotsHTML}</div>
-              <div class="qp-bar-track">
+              <div class="qp-step-dots" aria-hidden="true">${dotsHTML}</div>
+              <div class="qp-bar-track" aria-hidden="true">
                 <div class="qp-bar-fill" style="width:${pct}%;"></div>
               </div>
             </div>
@@ -735,33 +757,38 @@ function renderQuiz() {
               </div>
               <div class="qp-card-body">
                 <div class="qp-emoji-wrap">
-                  <div class="qp-emoji-circle">${q.emoji}</div>
+                  <div class="qp-emoji-circle" aria-hidden="true">${q.emoji}</div>
                 </div>
-                <div class="qp-q-number">ข้อที่ ${s.current + 1} จาก ${QUIZ_QUESTIONS.length}</div>
-                <div class="qp-q-text">${q.q}</div>
-                <div class="qp-choices">${choicesHTML}</div>
+                <h2 class="qp-q-number">ข้อที่ ${s.current + 1} จาก ${QUIZ_QUESTIONS.length}</h2>
+                <h3 class="qp-q-text">${q.q}</h3>
+                
+                <div class="qp-choices" role="group" aria-label="ตัวเลือกคำตอบ">${choicesHTML}</div>
               </div>
             </div>
 
             <div class="qp-actions">
               <div class="qp-btn-row">
                 <button
+                  type="button"
                   class="qp-prev-btn"
                   onclick="prevQuizQuestion()"
                   ${s.current === 0 ? 'disabled' : ''}
                   title="กลับข้อก่อนหน้า"
+                  aria-label="ย้อนกลับไปคำถามข้อก่อนหน้า"
                 >
                   ← ก่อนหน้า
                 </button>
                 <button
+                  type="button"
                   class="qp-next-btn"
                   onclick="nextQuizQuestion()"
                   ${currentAnswer === null ? 'disabled' : ''}
+                  aria-label="${isLast ? 'ดูผลลัพธ์แบบทดสอบ' : 'ไปคำถามข้อต่อไป'}"
                 >
                   ${isLast ? '✨ ดูผลลัพธ์!' : 'ข้อต่อไป →'}
                 </button>
               </div>
-              <div class="qp-hint">
+              <div class="qp-hint" aria-live="polite">
                 ${currentAnswer === null
                   ? '👆 เลือกคำตอบที่ตรงกับตัวคุณที่สุด'
                   : `✅ เลือกแล้ว! ${isLast ? 'กดดูผลลัพธ์ได้เลย' : 'กดข้อต่อไปหรือย้อนกลับได้'}`}
@@ -810,24 +837,24 @@ function renderQuiz() {
       if (!cat) return "";
       const pct = total > 0 ? Math.round((sc / total) * 100) : 0;
       return `
-        <div class="qr-card ${rankClasses[i]}">
+        <div class="qr-card ${rankClasses[i]}" tabindex="0">
           <div class="qr-card-accent" style="background:linear-gradient(180deg,${cat.color},${cat.color}88);"></div>
           <div class="qr-card-inner">
-            <div class="qr-icon-box" style="background:${cat.light};">
+            <div class="qr-icon-box" aria-hidden="true" style="background:${cat.light};">
               <span style="position:relative;z-index:1;">${cat.icon}</span>
               ${i === 0 ? `<div class="qr-icon-crown">👑</div>` : ''}
             </div>
             <div class="qr-card-text">
               <div class="qr-rank-label" style="color:${rankColors[i]};">${rankLabels[i]}</div>
-              <div class="qr-cat-name">${cat.name}</div>
-              <div class="qr-bar-wrap">
+              <h3 class="qr-cat-name" style="margin-top:0;">${cat.name}</h3>
+              <div class="qr-bar-wrap" aria-hidden="true">
                 <div class="qr-bar-fill" style="width:${pct}%; --bar-w:${pct}%; background:linear-gradient(90deg,${cat.color},${cat.color}99);"></div>
               </div>
             </div>
             <div class="qr-card-right">
-              <div class="qr-medal qr-medal-${i+1}">${medals[i]}</div>
-              <div class="qr-pct" style="color:${cat.color};">${pct}%</div>
-              <div class="qr-pct-label">แมทช์</div>
+              <div class="qr-medal qr-medal-${i+1}" aria-hidden="true">${medals[i]}</div>
+              <div class="qr-pct" style="color:${cat.color};" aria-label="ตรงกับคุณ ${pct} เปอร์เซ็นต์">${pct}%</div>
+              <div class="qr-pct-label" aria-hidden="true">แมทช์</div>
             </div>
           </div>
         </div>`;
@@ -837,11 +864,11 @@ function renderQuiz() {
       <div class="quiz-wrapper">
         <div class="qr-outer">
           <div class="qr-container">
-            <div class="qr-hero">
+            <div class="qr-hero" tabindex="0">
               <div class="qr-hero-bar"></div>
-              <div class="qr-confetti">${confettiHTML}</div>
-              <div class="qr-emoji-ring">🎉</div>
-              <div class="qr-title">ผลลัพธ์สายอาชีพของคุณ!</div>
+              <div class="qr-confetti" aria-hidden="true">${confettiHTML}</div>
+              <div class="qr-emoji-ring" aria-hidden="true">🎉</div>
+              <h2 class="qr-title" style="margin-top:0;">ผลลัพธ์สายอาชีพของคุณ!</h2>
               <div class="qr-subtitle">
                 นี่คือ <strong style="color:#e91e8c;">3 สายงาน</strong>
                 ที่ตรงกับตัวตนของคุณมากที่สุด
@@ -852,11 +879,11 @@ function renderQuiz() {
                 <div class="qr-summary-pill">⚡ ประมวลผลแม่นยำ 95%+</div>
               </div>
             </div>
-            <div class="qr-cards">${cardsHTML}</div>
+            <div class="qr-cards" role="list" aria-label="3 อันดับสายงานที่ตรงกับคุณ">${cardsHTML}</div>
             <div class="qr-tip-card">
-              <div class="qr-tip-icon">💡</div>
+              <div class="qr-tip-icon" aria-hidden="true">💡</div>
               <div>
-                <div class="qr-tip-title">พร้อมก้าวต่อไปแล้วหรือยัง?</div>
+                <h3 class="qr-tip-title" style="margin-top:0;">พร้อมก้าวต่อไปแล้วหรือยัง?</h3>
                 <div class="qr-tip-text">
                   ค้นหาข้อมูลเชิงลึกของสายงานที่ใช่สำหรับคุณ — ดูเงินเดือนเฉลี่ย, โอกาสเติบโต
                   และตำแหน่งงานที่รับสมัครอยู่ตอนนี้ได้เลยที่หน้าหลัก!
@@ -864,9 +891,9 @@ function renderQuiz() {
               </div>
             </div>
             <div class="qr-actions">
-              <button class="qr-btn-restart" onclick="restartQuiz()">🔄 ทำใหม่</button>
-              <button class="qr-btn-share"   onclick="shareQuizResult()">📤 แชร์ผล</button>
-              <button class="qr-btn-explore" onclick="typeof goHome === 'function' ? goHome() : window.location.href='/'">
+              <button type="button" class="qr-btn-restart" onclick="restartQuiz()">🔄 ทำใหม่</button>
+              <button type="button" class="qr-btn-share"   onclick="shareQuizResult()">📤 แชร์ผล</button>
+              <button type="button" class="qr-btn-explore" onclick="typeof goHome === 'function' ? goHome() : window.location.href='/'">
                 🔍 สำรวจอาชีพ →
               </button>
             </div>
@@ -922,11 +949,9 @@ function _scrollToProgress() {
   });
 }
 
-// ✅ FIX: เช็คว่าตอบครบทุกข้อก่อน + Normalize scores ป้องกัน bias
 function finishQuiz() {
   const s = quizState;
 
-  // ✅ FIX: ถ้ายังมีข้อที่ยังไม่ตอบ — กระโดดไปข้อนั้นก่อน
   const firstUnanswered = QUIZ_QUESTIONS.findIndex((_, i) => s.answers[i] == null);
   if (firstUnanswered !== -1) {
     s.current = firstUnanswered;
@@ -935,11 +960,9 @@ function finishQuiz() {
     return;
   }
 
-  // คำนวณ raw scores จาก answers[]
   const rawScores = {};
-  const appearances = {}; // นับว่าแต่ละ category โผล่กี่ครั้งในคำถามทั้งหมด
+  const appearances = {}; 
 
-  // นับ appearances ก่อน (จากทุกข้อ ทุก choice ทุก score key)
   QUIZ_QUESTIONS.forEach(q => {
     const seen = new Set();
     q.choices.forEach(c => {
@@ -952,7 +975,6 @@ function finishQuiz() {
     });
   });
 
-  // สะสม raw scores จาก answers ที่เลือก
   QUIZ_QUESTIONS.forEach((q, qi) => {
     const ans = s.answers[qi];
     if (ans == null) return;
@@ -962,7 +984,6 @@ function finishQuiz() {
     });
   });
 
-  // ✅ FIX: Normalize — หารด้วย appearances เพื่อให้ทุก category อยู่ใน scale เดียวกัน
   const normalizedScores = {};
   Object.entries(rawScores).forEach(([cat, sc]) => {
     normalizedScores[cat] = sc / (appearances[cat] || 1);
@@ -1015,6 +1036,7 @@ function showShareToast(msg) {
   if (old) old.remove();
   const toast = document.createElement('div');
   toast.className = 'quiz-share-toast';
+  toast.setAttribute('role', 'alert'); /* a11y: แจ้งเตือน Screen Reader */
   toast.textContent = msg;
   document.body.appendChild(toast);
   setTimeout(() => {
@@ -1023,7 +1045,6 @@ function showShareToast(msg) {
   }, 2800);
 }
 
-// ✅ FIX: ป้องกัน origRouter crash ถ้า showPage ไม่ใช่ function
 document.addEventListener('DOMContentLoaded', () => {
   const origRouter = window.showPage;
   window.showPage = function(pageId, addToHistory = true) {

@@ -1,30 +1,42 @@
 /**
  * Career Explorer Pro — Career Comparison Tool
- * compare.js  |  ใส่หลัง icons.js ใน index.html
+ * ไฟล์: compare.js  |  ตำแหน่ง: ใส่หลัง icons.js ใน index.html
+ * * [คู่มือสำหรับผู้พัฒนาต่อ (Developer Guide)]
+ * - ไฟล์นี้จัดการระบบ "เปรียบเทียบอาชีพ" ทั้งหมด (หน้า Desktop เป็นตาราง, หน้า Mobile เป็นการ์ด)
+ * - ตัวแปรข้อมูลหลักดึงมาจาก `DATA` (ในไฟล์ data.js)
+ * - มีการทำ Accessibility (a11y) รองรับ Screen Reader และ Keyboard Navigation ไว้แล้ว ระวังอย่าลบ attribute อย่าง role, tabindex หรือ aria-label ออกนะครับ
  */
 
 (function () {
-  /* ─────────────── STATE ─────────────── */
-  const MAX_SLOTS = 3;
-  let compareList = []; // array ของ job object
+  /* ─────────────── 1. STATE (สถานะของระบบ) ─────────────── */
+  // ถ้าในอนาคตอยากให้เปรียบเทียบได้มากกว่า 3 อาชีพ ให้มาแก้ตัวเลขตรงนี้ได้เลยครับ
+  const MAX_SLOTS = 3; 
+  
+  // อาเรย์เก็บข้อมูลอาชีพที่ถูกเลือกเข้ามาเปรียบเทียบ
+  let compareList = []; 
 
-  /* ─────────────── HELPERS ─────────────── */
+  /* ─────────────── 2. HELPERS (ฟังก์ชันผู้ช่วยประมวลผลข้อมูล) ─────────────── */
+  
+  // ดึงข้อมูลอาชีพทั้งหมดจากทุกหมวดหมู่มารวมเป็น Array ก้อนเดียว เพื่อให้ค้นหาง่ายขึ้น
   function getAllJobs() {
     const jobs = [];
     DATA.categories.forEach(cat => {
       cat.jobs.forEach(job => {
+        // แปะข้อมูลสีและชื่อหมวดหมู่เข้าไปใน job ด้วย จะได้เอาไปจัด UI สีตามหมวดได้
         jobs.push({ ...job, catId: cat.id, catName: cat.nameT, catColor: cat.color, catIconColor: cat.iconColor });
       });
     });
     return jobs;
   }
 
+  // แปลงข้อความเงินเดือน (เช่น "100,000+") ให้เหลือแค่ตัวเลข (100000) เพื่อเอาไปคำนวณความยาวกราฟแท่ง
   function parseSalary(str) {
     if (!str) return 0;
-    const clean = str.replace(/[^0-9]/g, '');
+    const clean = str.replace(/[^0-9]/g, ''); // ลบทุกอย่างที่ไม่ใช่ตัวเลข
     return parseInt(clean, 10) || 0;
   }
 
+  // แปลงข้อความแนวโน้มการเติบโต ให้เป็นคะแนน (0-3) เพื่อเอาไปกำหนดสี
   function growthScore(text) {
     if (!text) return 0;
     if (text.includes('สูงมาก')) return 3;
@@ -33,21 +45,25 @@
     return 0;
   }
 
+  // สร้าง Label โอกาสเติบโต (ถ้าอยากเปลี่ยนสีคำว่า 'สูง', 'ปานกลาง' ให้แก้ที่ตัวแปร colors ตรงนี้)
   function growthLabel(text) {
     const score = growthScore(text);
     const labels = ['ปานกลาง', 'ดี', 'สูง', 'สูงมาก'];
-    const colors = ['#94a3b8', '#60a5fa', '#34d399', '#f472b6'];
+    const colors = ['#94a3b8', '#60a5fa', '#34d399', '#f472b6']; // เรียงสีตามระดับคะแนน
     return `<span style="color:${colors[score]};font-weight:600;">${labels[score]}</span>`;
   }
 
-  /* ─────────────── SALARY BAR ─────────────── */
+  /* ─────────────── 3. SALARY BAR (วาดกราฟแท่งเงินเดือน) ─────────────── */
+  // ฟังก์ชันนี้จะรับข้อมูล job เข้ามา แล้ววาดกราฟแท่ง 3 ระดับ (เริ่มต้น, กลาง, สูงอายุงาน)
   function salaryBarHTML(job) {
     const vals = [
       { label: 'Entry', val: parseSalary(job.salary?.entry), raw: job.salary?.entry },
       { label: 'Mid',   val: parseSalary(job.salary?.mid),   raw: job.salary?.mid },
       { label: 'Senior',val: parseSalary(job.salary?.senior),raw: job.salary?.senior },
     ];
+    // หาค่าเงินเดือนที่เยอะที่สุด เพื่อเอามาตั้งเป็น 100% ความกว้างกราฟ
     const max = Math.max(...vals.map(v => v.val), 1);
+    
     return vals.map(v => `
       <div class="cmp-bar-row">
         <span class="cmp-bar-label">${v.label}</span>
@@ -59,11 +75,13 @@
     `).join('');
   }
 
-  /* ─────────────── RENDER COMPARISON TABLE ─────────────── */
+  /* ─────────────── 4. RENDER COMPARISON TABLE (สร้างตารางเปรียบเทียบหลัก) ─────────────── */
+  // *ถ้าอยากเพิ่มหัวข้อในการเปรียบเทียบ (เช่น "สภาพแวดล้อมการทำงาน") ให้มาเพิ่มโค้ด HTML ในฟังก์ชันนี้
   function renderTable() {
     const wrap = document.getElementById('cmp-table-wrap');
     if (!wrap) return;
 
+    // กรณีที่ยังไม่ได้เลือกอาชีพเลย (Empty State)
     if (compareList.length === 0) {
       wrap.innerHTML = `
         <div class="cmp-empty">
@@ -76,7 +94,7 @@
       return;
     }
 
-    /* ── Desktop: table layout ── */
+    /* ── ส่วนที่ 4.1: โครงสร้างตารางสำหรับจอคอมพิวเตอร์ (Desktop) ── */
     const headerCols = compareList.map(job => `
       <th>
         <div class="cmp-th-inner">
@@ -90,10 +108,8 @@
       </th>
     `).join('');
 
-    const salaryCols = compareList.map(job => `
-      <td><div class="cmp-salary-bars">${salaryBarHTML(job)}</div></td>
-    `).join('');
-
+    const salaryCols = compareList.map(job => `<td><div class="cmp-salary-bars">${salaryBarHTML(job)}</div></td>`).join('');
+    
     const eduCols = compareList.map(job => `
       <td>
         <div class="cmp-edu">
@@ -104,10 +120,8 @@
       </td>
     `).join('');
 
-    const growthCols = compareList.map(job => `
-      <td><div class="cmp-growth">${growthLabel(job.growth)}<p>${job.growth || '—'}</p></div></td>
-    `).join('');
-
+    const growthCols = compareList.map(job => `<td><div class="cmp-growth">${growthLabel(job.growth)}<p>${job.growth || '—'}</p></div></td>`).join('');
+    
     const skillsCols = compareList.map(job => `
       <td>
         <div class="cmp-skills">
@@ -116,22 +130,9 @@
       </td>
     `).join('');
 
-    const prosCols = compareList.map(job => `
-      <td>
-        <ul class="cmp-list cmp-pros">
-          ${(job.pros || []).map(p => `<li>${p}</li>`).join('')}
-        </ul>
-      </td>
-    `).join('');
-
-    const consCols = compareList.map(job => `
-      <td>
-        <ul class="cmp-list cmp-cons">
-          ${(job.cons || []).map(c => `<li>${c}</li>`).join('')}
-        </ul>
-      </td>
-    `).join('');
-
+    const prosCols = compareList.map(job => `<td><ul class="cmp-list cmp-pros">${(job.pros || []).map(p => `<li>${p}</li>`).join('')}</ul></td>`).join('');
+    const consCols = compareList.map(job => `<td><ul class="cmp-list cmp-cons">${(job.cons || []).map(c => `<li>${c}</li>`).join('')}</ul></td>`).join('');
+    
     const ctaCols = compareList.map(job => `
       <td>
         <button type="button" class="cmp-detail-btn" onclick="showJob('${job.id}','${job.catId}')" aria-label="ดูรายละเอียดอาชีพ ${job.nameT}">
@@ -140,7 +141,8 @@
       </td>
     `).join('');
 
-    /* ── Mobile: card per job ── */
+    /* ── ส่วนที่ 4.2: โครงสร้างการ์ดสำหรับหน้าจอมือถือ (Mobile) ── */
+    // จะถูกซ่อนใน Desktop ด้วย CSS
     const mobileCards = compareList.map(job => `
       <div class="cmp-mobile-card">
         <div class="cmp-mobile-card-header">
@@ -154,12 +156,10 @@
           </button>
         </div>
         <div class="cmp-mobile-card-body">
-
           <div class="cmp-mobile-row">
             <div class="cmp-mobile-row-label">💰 เงินเดือน</div>
             <div class="cmp-salary-bars">${salaryBarHTML(job)}</div>
           </div>
-
           <div class="cmp-mobile-row">
             <div class="cmp-mobile-row-label">🎓 การศึกษา</div>
             <div class="cmp-edu">
@@ -168,33 +168,28 @@
               <div class="cmp-edu-field">${job.education || '—'}</div>
             </div>
           </div>
-
           <div class="cmp-mobile-row">
             <div class="cmp-mobile-row-label">📈 โอกาสเติบโต</div>
             <div class="cmp-growth">${growthLabel(job.growth)}<p>${job.growth || '—'}</p></div>
           </div>
-
           <div class="cmp-mobile-row">
             <div class="cmp-mobile-row-label">🛠 ทักษะสำคัญ</div>
             <div class="cmp-skills">
               ${(job.skills || []).map(s => `<span class="cmp-skill-pill">${s}</span>`).join('')}
             </div>
           </div>
-
           <div class="cmp-mobile-row">
             <div class="cmp-mobile-row-label">✅ ข้อดี</div>
             <ul class="cmp-list cmp-pros">
               ${(job.pros || []).map(p => `<li>${p}</li>`).join('')}
             </ul>
           </div>
-
           <div class="cmp-mobile-row">
             <div class="cmp-mobile-row-label">⚠️ ข้อพิจารณา</div>
             <ul class="cmp-list cmp-cons">
               ${(job.cons || []).map(c => `<li>${c}</li>`).join('')}
             </ul>
           </div>
-
         </div>
         <div class="cmp-mobile-card-footer">
           <button type="button" class="cmp-detail-btn" onclick="showJob('${job.id}','${job.catId}')" aria-label="ดูรายละเอียดเพิ่มเติมเกี่ยวกับ ${job.nameT}">
@@ -204,6 +199,7 @@
       </div>
     `).join('');
 
+    // ประกอบร่าง HTML ทั้งหมดลงใน Wrapper
     wrap.innerHTML = `
       <div class="cmp-table-scroll" role="region" aria-label="ตารางเปรียบเทียบอาชีพ" tabindex="0">
         <table class="cmp-table">
@@ -214,34 +210,13 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td class="cmp-row-label"><span>💰 เงินเดือน</span></td>
-              ${salaryCols}
-            </tr>
-            <tr>
-              <td class="cmp-row-label"><span>🎓 การศึกษา</span></td>
-              ${eduCols}
-            </tr>
-            <tr>
-              <td class="cmp-row-label"><span>📈 โอกาสเติบโต</span></td>
-              ${growthCols}
-            </tr>
-            <tr>
-              <td class="cmp-row-label"><span>🛠 ทักษะสำคัญ</span></td>
-              ${skillsCols}
-            </tr>
-            <tr>
-              <td class="cmp-row-label"><span>✅ ข้อดี</span></td>
-              ${prosCols}
-            </tr>
-            <tr>
-              <td class="cmp-row-label"><span>⚠️ ข้อพิจารณา</span></td>
-              ${consCols}
-            </tr>
-            <tr>
-              <td class="cmp-row-label"></td>
-              ${ctaCols}
-            </tr>
+            <tr><td class="cmp-row-label"><span>💰 เงินเดือน</span></td>${salaryCols}</tr>
+            <tr><td class="cmp-row-label"><span>🎓 การศึกษา</span></td>${eduCols}</tr>
+            <tr><td class="cmp-row-label"><span>📈 โอกาสเติบโต</span></td>${growthCols}</tr>
+            <tr><td class="cmp-row-label"><span>🛠 ทักษะสำคัญ</span></td>${skillsCols}</tr>
+            <tr><td class="cmp-row-label"><span>✅ ข้อดี</span></td>${prosCols}</tr>
+            <tr><td class="cmp-row-label"><span>⚠️ ข้อพิจารณา</span></td>${consCols}</tr>
+            <tr><td class="cmp-row-label"></td>${ctaCols}</tr>
           </tbody>
         </table>
       </div>
@@ -251,15 +226,17 @@
       </div>`;
   }
 
-  /* ─────────────── SLOT SELECTOR PANEL ─────────────── */
+  /* ─────────────── 5. SLOT SELECTOR PANEL (ส่วนแถบด้านบนที่แสดงอาชีพที่เลือกไว้) ─────────────── */
   function renderSlots() {
     const slotsWrap = document.getElementById('cmp-slots');
     if (!slotsWrap) return;
 
     let html = '';
+    // วนลูปสร้าง slot ตามจำนวน MAX_SLOTS
     for (let i = 0; i < MAX_SLOTS; i++) {
       const job = compareList[i];
       if (job) {
+        // กรณีมีอาชีพอยู่ใน slot แล้ว
         html += `
           <div class="cmp-slot cmp-slot-filled">
             <span class="cmp-slot-icon" aria-hidden="true">${job.icon || '💼'}</span>
@@ -269,6 +246,7 @@
             </button>
           </div>`;
       } else {
+        // กรณี slot ว่าง
         html += `
           <div class="cmp-slot cmp-slot-empty" aria-hidden="true">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
@@ -279,20 +257,22 @@
 
     slotsWrap.innerHTML = html;
 
-    // update counter
+    // อัปเดตตัวเลขแสดงจำนวน (เช่น 1/3)
     const counter = document.getElementById('cmp-count');
     if (counter) counter.textContent = `${compareList.length}/${MAX_SLOTS}`;
 
-    // update clear btn
+    // ซ่อน/แสดง ปุ่ม "ล้างทั้งหมด"
     const clearBtn = document.getElementById('cmp-clear-btn');
     if (clearBtn) clearBtn.style.display = compareList.length > 0 ? 'flex' : 'none';
   }
 
-  /* ─────────────── SEARCH DROPDOWN ─────────────── */
+  /* ─────────────── 6. SEARCH DROPDOWN (ส่วนค้นหาและแสดงผล Dropdown) ─────────────── */
+  // จะถูกเรียกเมื่อผู้ใช้พิมพ์ในช่อง Search
   function renderSearchResults(query) {
     const dropdown = document.getElementById('cmp-search-dropdown');
     if (!dropdown) return;
 
+    // ถ้าไม่ได้พิมพ์อะไร ให้ซ่อน Dropdown
     if (!query || query.length < 1) {
       dropdown.style.display = 'none';
       return;
@@ -300,6 +280,8 @@
 
     const allJobs = getAllJobs();
     const q = query.toLowerCase();
+    
+    // ค้นหาจากชื่อไทย, ชื่ออังกฤษ, หมวดหมู่ และ Tags (กรองตัวที่เลือกไปแล้วออก) ดึงมาโชว์แค่ 8 อัน
     const results = allJobs
       .filter(j =>
         j.nameT.toLowerCase().includes(q) ||
@@ -316,7 +298,7 @@
       return;
     }
 
-    // 🛠️ แก้ไข: เปลี่ยนกลับเป็น div แต่เพิ่ม role, tabindex และ onkeydown เพื่อรองรับคีย์บอร์ดโดยไม่กระทบ CSS
+    // 🛠️ ข้อควรระวัง: โครงสร้างตรงนี้ใช้ div เพื่อรักษา CSS เดิมไว้ แต่เติม role/tabindex ให้รองรับ Keyboard/Screen reader
     dropdown.innerHTML = results.map(j => `
       <div class="cmp-dd-item" role="button" tabindex="0" 
            onclick="compareAdd('${j.catId}','${j.id}')" 
@@ -334,7 +316,9 @@
     dropdown.style.display = 'block';
   }
 
-  /* ─────────────── PUBLIC API ─────────────── */
+  /* ─────────────── 7. PUBLIC API (หน้าต่างติดต่อกับไฟล์ HTML อื่นๆ) ─────────────── */
+  // ฟังก์ชันกลุ่มนี้ผูกกับ `window.` เพื่อให้เรียกใช้จาก `onclick` ใน HTML ได้ตรงๆ
+  
   window.compareAdd = function (catId, jobId) {
     if (compareList.length >= MAX_SLOTS) {
       showCompareToast(`เลือกได้สูงสุด ${MAX_SLOTS} อาชีพครับ`);
@@ -345,6 +329,7 @@
     if (!cat) return;
     const job = cat.jobs.find(j => j.id === jobId);
     if (!job) return;
+    
     if (compareList.find(j => j.id === jobId)) {
       showCompareToast('อาชีพนี้อยู่ในรายการแล้ว');
       return;
@@ -352,7 +337,7 @@
 
     compareList.push({ ...job, catId: cat.id, catName: cat.nameT, catColor: cat.color, catIconColor: cat.iconColor });
 
-    // close dropdown & clear search
+    // หลังเพิ่มสำเร็จ ให้ปิด Dropdown และล้างช่อง Search
     const dd = document.getElementById('cmp-search-dropdown');
     const inp = document.getElementById('cmp-search-input');
     if (dd) dd.style.display = 'none';
@@ -380,37 +365,40 @@
   };
 
   window.compareSearchBlur = function () {
+    // หน่วงเวลาเล็กน้อยก่อนปิด เพื่อให้ผู้ใช้คลิกเลือก Dropdown ได้ทัน
     setTimeout(() => {
       const dd = document.getElementById('cmp-search-dropdown');
       if (dd) dd.style.display = 'none';
     }, 200);
   };
 
-  /* ─────────────── TOAST ─────────────── */
+  /* ─────────────── 8. TOAST (ระบบแจ้งเตือนป็อปอัป) ─────────────── */
   function showCompareToast(msg) {
     let toast = document.getElementById('cmp-toast');
+    // ถ้ายังไม่มี div โทสต์ใน HTML ให้สร้างขึ้นมาใหม่
     if (!toast) {
       toast = document.createElement('div');
       toast.id = 'cmp-toast';
-      toast.setAttribute('role', 'alert'); // เพิ่ม role alert เพื่อบอก Screen Reader อัตโนมัติ
+      toast.setAttribute('role', 'alert'); // ให้ Screen Reader อ่านทันทีที่เด้งขึ้นมา
       document.body.appendChild(toast);
     }
     toast.textContent = msg;
     toast.classList.add('cmp-toast-show');
     clearTimeout(toast._t);
-    toast._t = setTimeout(() => toast.classList.remove('cmp-toast-show'), 2500);
+    toast._t = setTimeout(() => toast.classList.remove('cmp-toast-show'), 2500); // หายไปใน 2.5 วิ
   }
 
-/* ─────────────── ADD BUTTON ON DETAIL PAGE ─────────────── */
-  // Patch showJob to inject "เพิ่มเพื่อเปรียบเทียบ" button
+  /* ─────────────── 9. INTEGRATION WITH DETAIL PAGE (เชื่อมต่อกับหน้ารายละเอียดอาชีพ) ─────────────── */
+  // เทคนิค: เขียนทับ (Patch) ฟังก์ชัน showJob เดิม เพื่อแทรกปุ่ม "เปรียบเทียบอาชีพนี้" เข้าไปในหน้ารายละเอียดโดยอัตโนมัติ
   const _origShowJob = window.showJob;
   window.showJob = function (jobId, catId) {
-    if (_origShowJob) _origShowJob(jobId, catId);
+    if (_origShowJob) _origShowJob(jobId, catId); // เรียกการทำงานของ showJob ตัวเดิมก่อน
 
     setTimeout(() => {
       const detailPage = document.getElementById('page-detail');
       if (!detailPage) return;
 
+      // ลบปุ่มเก่าออกก่อน (ถ้ามี) เพื่อไม่ให้ซ้ำซ้อน
       const existingBtn = detailPage.querySelector('.cmp-add-from-detail');
       if (existingBtn) {
         existingBtn.remove();
@@ -435,25 +423,25 @@
           return;
         }
         compareAdd(catId, jobId);
-        showPage('page-compare');
+        showPage('page-compare'); // สลับหน้าไปที่ตารางเปรียบเทียบ
       };
 
-      breadcrumb.parentNode.insertBefore(btn, breadcrumb.nextSibling);
+      breadcrumb.parentNode.insertBefore(btn, breadcrumb.nextSibling); // แทรกปุ่มต่อท้าย breadcrumb
     }, 100);
   };
 
-  /* ─────────────── INIT ─────────────── */
+  /* ─────────────── 10. INIT (เริ่มต้นการทำงาน) ─────────────── */
   window.initComparePage = function () {
     renderSlots();
     renderTable();
 
-    // เพิ่ม aria-label ให้ search input ที่อยู่ใน HTML แบบอัตโนมัติ
+    // ดึง input ช่องค้นหามาเติม aria-label เพื่อให้ผ่านมาตรฐาน Accessibility
     const searchInput = document.getElementById('cmp-search-input');
     if (searchInput && !searchInput.hasAttribute('aria-label')) {
       searchInput.setAttribute('aria-label', 'ค้นหาอาชีพเพื่อเปรียบเทียบ');
     }
 
-    // close dropdown on outside click
+    // คลิกพื้นที่อื่นเพื่อปิด Dropdown ค้นหา
     document.addEventListener('click', e => {
       if (!e.target.closest('#cmp-search-wrap')) {
         const dd = document.getElementById('cmp-search-dropdown');
