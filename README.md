@@ -68,7 +68,7 @@ career-explorer/
 │   ├── quiz.js                — แบบทดสอบ 20 ข้อ + ระบบคะแนน
 │   ├── compare.js             — เปรียบเทียบอาชีพ Side-by-Side
 │   ├── compare-deco.js        — เอฟเฟกต์ตกแต่งหน้าเปรียบเทียบ
-│   ├── icons.js                — จัดการ SVG icon ทั่วทั้งเว็บ
+│   ├── icons.js               — จัดการ SVG icon ทั่วทั้งเว็บ
 │   ├── loader.js              — Loading screen
 │   ├── colorblind.js          — โหมดช่วยผู้มีภาวะตาบอดสี
 │   └── floating-dock.js       — ควบคุม dock ปุ่มลอยตัว
