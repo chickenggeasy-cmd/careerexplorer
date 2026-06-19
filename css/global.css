@@ -48,6 +48,8 @@ body {
   color: var(--text);
   min-height: 100vh;
   overflow-x: hidden;
+  display: flex;          
+  flex-direction: column; 
 }
 
 input, button, select, textarea {
@@ -328,7 +330,7 @@ nav {
    ========================================================================== */
 footer {
   background: linear-gradient(135deg, #5c0930 0%, #831843 50%, #be185d 100%); color: #fff;
-  padding-top: 50px; margin-top: 80px; width: 100%; position: relative; overflow: hidden;
+  padding-top: 50px; margin-top: auto; width: 100%; position: relative; overflow: hidden; /* <-- เปลี่ยนเป็น auto ตรงบรรทัดนี้ */
   box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.15);
 }
 footer::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, rgba(252,231,243,0.6), transparent); }
