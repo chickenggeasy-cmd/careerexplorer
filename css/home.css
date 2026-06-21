@@ -389,3 +389,285 @@
   .hero-stats-bar   { flex-direction: column; gap: 16px; padding: 24px 30px; }
   .stat-divider     { width: 60px; height: 1px; }
 }
+
+
+/* ==========================================================================
+   PREMIUM HOME PAGE STYLES — UPGRADE PASS
+   ใช้แทนที่บล็อก "NEW PREMIUM HOME PAGE STYLES" เดิมใน style.css ทั้งหมด
+   ตัวแปรสี --pink-main / --pink-light / --pink-pale / --text-dark / --text-muted
+   ยังคงค่าเดิมไว้ เพื่อไม่กระทบไฟล์อื่น (compare.css ฯลฯ) ที่อาจอ้างอิงอยู่
+   ========================================================================== */
+
+:root {
+  --pink-main: #D81B7A;
+  --pink-light: #F48FB1;
+  --pink-pale: #FFF0F7;
+  --text-dark: #1A1A2E;
+  --text-muted: #6B7280;
+
+  /* เพิ่มใหม่: ใช้คู่กับธีมเข็มทิศอาชีพ ให้มีมิติมากกว่าชมพูล้วน */
+  --plum-deep: #2A1330;
+  --pink-soft: #FBD9E7;
+  --shadow-pink: rgba(216, 27, 122, 0.18);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bg-pale-pink { background-color: var(--pink-pale); }
+
+/* --- 00. SHARED MOTION / UTILITIES --- */
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+@keyframes bob-y { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+@keyframes fade-rise {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-up { animation: fade-rise 0.8s var(--ease-out) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-up, .ph-compass-needle, .ph-scroll-cue svg, .pb-feature-img-wrap img,
+  .pf-img, .journey-marker, .btn-solid-pink, .btn-solid-white { animation: none !important; transition: none !important; }
+}
+
+/* --- 01. HERO SECTION --- */
+.premium-hero {
+  position: relative;
+  height: 82vh;
+  min-height: 560px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  background: var(--plum-deep);
+}
+.ph-bg {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;
+  transform: scale(1.06);
+}
+.ph-overlay {
+  position: absolute; inset: 0; z-index: 2;
+  background: linear-gradient(180deg, rgba(20,8,24,0.78) 0%, rgba(216,27,122,0.38) 65%, rgba(20,8,24,0.85) 100%);
+}
+/* เกรนละเอียดทับบนภาพ ให้ความรู้สึกพรีเมียมแบบนิตยสาร ไม่ใช่ภาพแบนๆ */
+.ph-grain {
+  position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: 0.05; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* เข็มทิศอาชีพ — ลายเซ็นของหน้าแรก สื่อถึงการ "ค้นหาทิศทางชีวิต" */
+.ph-compass {
+  position: absolute; z-index: 2; right: -40px; bottom: -60px;
+  width: 380px; height: 380px; opacity: 0.5; pointer-events: none;
+}
+.ph-compass-svg { width: 100%; height: 100%; }
+.ph-compass-ring-outer { fill: none; stroke: rgba(255,255,255,0.25); stroke-width: 1; }
+.ph-compass-ring-inner { fill: none; stroke: rgba(255,255,255,0.15); stroke-width: 1; stroke-dasharray: 2 6; }
+.ph-compass-ticks line { stroke: rgba(255,255,255,0.35); stroke-width: 2; }
+.ph-compass-needle { transform-origin: 100px 100px; animation: spin-slow 50s linear infinite; }
+.needle-pink { fill: var(--pink-main); }
+.needle-white { fill: rgba(255,255,255,0.85); }
+.ph-compass-core { fill: #fff; }
+
+.ph-content {
+  position: relative; z-index: 4; color: white; max-width: 800px; padding: 0 24px;
+}
+.ph-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 600; letter-spacing: 3px; margin-bottom: 22px;
+  padding: 8px 18px; border: 1px solid rgba(255,255,255,0.3); border-radius: 50px;
+  background: rgba(255,255,255,0.06); backdrop-filter: blur(6px);
+}
+.ph-eyebrow svg { width: 15px; height: 15px; flex-shrink: 0; }
+.ph-title {
+  font-size: 3.5rem; font-weight: 800; line-height: 1.2; margin-bottom: 20px;
+}
+.ph-title-accent {
+  background: linear-gradient(100deg, #FFD6E8 0%, #F48FB1 50%, #FFD6E8 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.ph-subtext {
+  font-size: 1.1rem; opacity: 0.85; margin-bottom: 40px;
+}
+.ph-actions {
+  display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; margin-bottom: 56px;
+}
+.ph-btn-primary, .ph-btn-outline, .btn-solid-white, .btn-solid-pink {
+  display: inline-flex; align-items: center; gap: 8px; padding: 14px 32px; border-radius: 50px;
+  font-size: 1rem; font-weight: 600; cursor: pointer; transition: transform 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
+  border: none; font-family: 'Prompt', sans-serif;
+}
+.ph-btn-primary { background: white; color: var(--pink-main); }
+.ph-btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 24px rgba(0,0,0,0.25); }
+.ph-btn-outline { background: transparent; border: 2px solid white; color: white; }
+.ph-btn-outline:hover { background: rgba(255,255,255,0.12); transform: translateY(-3px); }
+
+/* ตัวชี้ชวนเลื่อนดูต่อ — รายละเอียดเล็กๆ ที่เพิ่มความรู้สึกพรีเมียม */
+.ph-scroll-cue {
+  display: inline-flex; flex-direction: column; align-items: center; gap: 6px;
+  font-size: 12px; letter-spacing: 2px; opacity: 0.7;
+}
+.ph-scroll-cue svg { width: 18px; height: 18px; animation: bob-y 1.8s ease-in-out infinite; }
+
+@media (max-width: 768px) {
+  .ph-compass { width: 220px; height: 220px; right: -50px; bottom: -50px; opacity: 0.35; }
+}
+
+/* --- 02. ABOUT SECTION --- */
+.premium-about { padding: 110px 0; background: white; position: relative; overflow: hidden; }
+.pa-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; position: relative; z-index: 2; }
+.pa-eyebrow { color: var(--pink-main); font-weight: 700; font-size: 14px; display: block; margin-bottom: 16px; letter-spacing: 1px; }
+.pa-content h2 { font-size: 2.2rem; font-weight: 800; color: var(--text-dark); margin-bottom: 24px; line-height: 1.3; }
+.pa-content p { color: var(--text-muted); margin-bottom: 20px; line-height: 1.7; }
+
+/* สถิติแบบตัวเลขใหญ่ + label เล็ก พร้อมเอฟเฟกต์นับขึ้น */
+.pa-stats { display: flex; gap: 36px; padding-top: 28px; border-top: 1px solid #F0E5EC; margin-bottom: 28px; }
+.pa-stat-item { display: flex; flex-direction: column; }
+.pa-stat-number-wrap { display: flex; align-items: baseline; gap: 2px; }
+.pa-stat-number { font-size: 2.1rem; font-weight: 800; color: var(--text-dark); font-variant-numeric: tabular-nums; }
+.pa-stat-suffix { font-size: 1.4rem; font-weight: 800; color: var(--pink-main); }
+.pa-stat-label { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+.btn-text-link { background: none; border: none; color: var(--pink-main); font-weight: 700; font-size: 1rem; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-family: 'Prompt', sans-serif; transition: gap 0.25s var(--ease-out); }
+.btn-text-link:hover { gap: 14px; text-decoration: underline; }
+
+.pa-image-wrapper { position: relative; }
+.pa-image-wrapper::before {
+  content: ''; position: absolute; top: -28px; right: -28px; bottom: 28px; left: 28px;
+  border: 2px dashed var(--pink-light); border-radius: 20px; z-index: 0;
+}
+.pa-img { position: relative; z-index: 1; border-radius: 20px; width: 100%; height: 450px; object-fit: cover; box-shadow: 0 30px 60px -20px rgba(42,19,48,0.3); }
+.pa-floating-badge {
+  position: absolute; bottom: -24px; left: -24px; z-index: 2; background: white; padding: 16px 24px;
+  border-radius: 14px; box-shadow: 0 16px 36px rgba(42,19,48,0.16); display: flex; align-items: center; gap: 12px; font-weight: 700; color: var(--text-dark);
+}
+.pa-floating-badge svg { flex-shrink: 0; }
+
+/* บลอบสีเบลอด้านหลัง เพิ่มมิติให้พื้นหลังขาวไม่จืดเกินไป */
+.pa-blob {
+  position: absolute; width: 480px; height: 480px; border-radius: 50%; z-index: 1;
+  background: radial-gradient(circle, var(--pink-pale) 0%, rgba(255,240,247,0) 70%);
+  top: -140px; left: -180px; pointer-events: none;
+}
+
+/* --- 03. FEATURES → JOURNEY PATH (ค้นหา → วิเคราะห์ → วางแผน) --- */
+.premium-journey { padding: 110px 0; }
+.section-head-center { text-align: center; margin-bottom: 90px; }
+.pf-eyebrow { display: inline-block; color: var(--pink-main); font-weight: 700; font-size: 13px; letter-spacing: 2px; margin-bottom: 14px; }
+.pf-main-title { font-size: 2.5rem; font-weight: 800; color: var(--text-dark); }
+
+.journey-path { position: relative; }
+.journey-path::before {
+  content: ''; position: absolute; left: 50%; top: 8px; bottom: 8px; width: 2px;
+  background: repeating-linear-gradient(to bottom, var(--pink-light) 0 8px, transparent 8px 16px);
+  transform: translateX(-50%); z-index: 0;
+}
+.journey-stop {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+  position: relative; margin-bottom: 90px;
+}
+.journey-stop:last-child { margin-bottom: 0; }
+.journey-stop.reverse .journey-text { order: -1; }
+.journey-stop.reverse .journey-img-col { order: 1; }
+
+.journey-marker {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 2;
+  width: 56px; height: 56px; border-radius: 50%; background: var(--pink-main); color: white;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 0 8px var(--pink-pale), 0 16px 24px -8px var(--shadow-pink);
+}
+.journey-marker svg { width: 26px; height: 26px; }
+
+.journey-img-col img { width: 100%; height: 340px; object-fit: cover; border-radius: 16px; box-shadow: 0 24px 48px -16px rgba(42,19,48,0.22); }
+.journey-text { position: relative; }
+.journey-step { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; color: var(--pink-main); background: var(--pink-pale); padding: 6px 14px; border-radius: 50px; margin-bottom: 16px; }
+.journey-text h3 { font-size: 1.7rem; font-weight: 700; color: var(--text-dark); margin-bottom: 14px; }
+.journey-text p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.7; }
+
+@media (max-width: 992px) {
+  .journey-path::before { left: 24px; }
+  .journey-stop, .journey-stop.reverse { grid-template-columns: 1fr; gap: 24px; padding-left: 60px; }
+  .journey-stop .journey-text, .journey-stop.reverse .journey-text { order: 0; }
+  .journey-stop .journey-img-col, .journey-stop.reverse .journey-img-col { order: 0; }
+  .journey-marker { left: 24px; top: 0; transform: translate(-50%, 0); }
+  .journey-img-col img { height: 220px; }
+}
+
+/* --- 04. DUAL CTA CARDS --- */
+.premium-dual-cta { display: flex; width: 100%; }
+.cta-card { width: 50%; min-height: 420px; padding: 80px 60px; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
+.cta-pink { background: linear-gradient(135deg, #D81B7A 0%, #F06292 100%); color: white; }
+.cta-bg-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.15; z-index: 1; }
+.cta-white {
+  background:
+    radial-gradient(circle, rgba(216,27,122,0.07) 1.5px, transparent 1.5px) 0 0/22px 22px,
+    white;
+  border-top: 5px solid var(--pink-main); color: var(--text-dark);
+}
+.cta-content { position: relative; z-index: 2; }
+.cta-icon-badge {
+  width: 64px; height: 64px; border-radius: 16px; display: flex; align-items: center; justify-content: center;
+  margin-bottom: 24px;
+}
+.cta-pink .cta-icon-badge { background: rgba(255,255,255,0.15); }
+.cta-white .cta-icon-badge { background: var(--pink-pale); }
+.cta-icon { width: 30px; height: 30px; }
+.cta-icon.white { stroke: white; }
+.cta-icon.pink { stroke: var(--pink-main); }
+.cta-card h2 { font-size: 2.2rem; font-weight: 800; margin-bottom: 16px; }
+.cta-pink h2 { color: white; }
+.cta-pink p { opacity: 0.92; margin-bottom: 30px; font-size: 1.1rem; }
+.cta-white p { color: var(--text-muted); margin-bottom: 30px; font-size: 1.1rem; }
+.btn-solid-white { background: white; color: var(--pink-main); }
+.btn-solid-white:hover { transform: translateY(-3px); box-shadow: 0 14px 28px rgba(0,0,0,0.18); }
+.btn-solid-pink { background: linear-gradient(135deg, #D81B7A 0%, #F06292 100%); color: white; }
+.btn-solid-pink:hover { transform: translateY(-3px); box-shadow: 0 14px 28px var(--shadow-pink); }
+
+@media (max-width: 992px) { .cta-card { width: 100%; } .premium-dual-cta { flex-direction: column; } }
+
+/* --- 05. BLOG SECTION — เลย์เอาต์แบบนิตยสาร (1 ข่าวเด่น + ลิสต์ 2 ข่าว) --- */
+.premium-blog { padding: 110px 0; }
+.pb-grid-v2 { display: grid; grid-template-columns: 1.3fr 1fr; gap: 32px; }
+
+.pb-feature { position: relative; border-radius: 18px; overflow: hidden; background: white; box-shadow: 0 4px 20px rgba(42,19,48,0.06); }
+.pb-feature-img-wrap { position: relative; height: 280px; overflow: hidden; }
+.pb-feature-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s var(--ease-out); }
+.pb-feature:hover .pb-feature-img-wrap img { transform: scale(1.07); }
+.pb-feature-img-wrap::after {
+  content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(0,0,0,0.45) 100%);
+}
+.pb-feature-img-wrap .pb-tag { position: absolute; left: 20px; bottom: 20px; z-index: 2; }
+.pb-feature-body { padding: 28px; }
+.pb-feature-body h3 { font-size: 1.4rem; font-weight: 700; color: var(--text-dark); margin-bottom: 12px; line-height: 1.4; }
+.pb-feature-body p { color: var(--text-muted); font-size: 0.97rem; line-height: 1.65; margin-bottom: 18px; }
+
+.pb-readmore { display: inline-flex; align-items: center; gap: 8px; color: var(--pink-main); font-weight: 700; font-size: 0.95rem; }
+.pb-readmore svg { width: 16px; height: 16px; transition: transform 0.25s var(--ease-out); }
+.pb-feature:hover .pb-readmore svg { transform: translateX(5px); }
+
+.pb-list { display: flex; flex-direction: column; gap: 22px; }
+.pb-list-item { display: flex; gap: 16px; align-items: flex-start; padding: 14px; border-radius: 14px; transition: background 0.25s var(--ease-out); }
+.pb-list-item:hover { background: var(--pink-pale); }
+.pb-list-img { width: 96px; height: 96px; flex-shrink: 0; border-radius: 12px; object-fit: cover; }
+.pb-list-body h4 { font-size: 1.02rem; font-weight: 700; color: var(--text-dark); line-height: 1.4; margin: 8px 0 0 0; }
+
+.pb-tag, .pb-tag-sm {
+  display: inline-block; background: var(--pink-pale); color: var(--pink-main);
+  padding: 6px 14px; border-radius: 50px; font-size: 12px; font-weight: 700;
+}
+.pb-feature-img-wrap .pb-tag { background: rgba(255,255,255,0.9); }
+.pb-tag-sm { padding: 4px 10px; font-size: 11px; }
+
+@media (max-width: 992px) {
+  .pb-grid-v2 { grid-template-columns: 1fr; }
+}
+
+/* --- RESPONSIVE ADJUSTMENTS --- */
+@media (max-width: 992px) {
+  .pa-grid { grid-template-columns: 1fr; gap: 40px; }
+  .pa-blob { display: none; }
+}
+@media (max-width: 768px) {
+  .ph-title { font-size: 2.4rem; }
+  .pa-stats { gap: 24px; flex-wrap: wrap; }
+}
