@@ -74,14 +74,320 @@ function icon(svgKey, { color = 'currentColor', size = null, style = '' } = {}) 
   return `<span class="svg-icon" aria-hidden="true" style="display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;${colorStyle}${sizeStyle}${style}">${svg}</span>`;
 }
 
+const GLOBAL_EXPLORER = {
+  usdThbRate: 35,
+  continents: [
+    {
+      id: 'asia', nameT: 'เอเชีย', nameE: 'Asia', pinX: '70%', pinY: '42%',
+      countries: [
+        { id: 'th', code: 'TH', flag: '🇹🇭', nameT: 'ไทย', nameE: 'Thailand', market: 1.00, note: 'ฐานข้อมูลตั้งต้น' },
+        { id: 'jp', code: 'JP', flag: '🇯🇵', nameT: 'ญี่ปุ่น', nameE: 'Japan', market: 1.75, note: 'ตลาดเทคโนโลยีและอุตสาหกรรมสูง' },
+        { id: 'sg', code: 'SG', flag: '🇸🇬', nameT: 'สิงคโปร์', nameE: 'Singapore', market: 2.65, note: 'ศูนย์กลางธุรกิจของภูมิภาค' },
+      ],
+    },
+    {
+      id: 'europe', nameT: 'ยุโรป', nameE: 'Europe', pinX: '51%', pinY: '33%',
+      countries: [
+        { id: 'de', code: 'DE', flag: '🇩🇪', nameT: 'เยอรมนี', nameE: 'Germany', market: 2.30, note: 'เด่นด้านวิศวกรรมและอุตสาหกรรม' },
+        { id: 'uk', code: 'UK', flag: '🇬🇧', nameT: 'สหราชอาณาจักร', nameE: 'United Kingdom', market: 2.20, note: 'ตลาดการเงิน การแพทย์ และดิจิทัล' },
+        { id: 'fr', code: 'FR', flag: '🇫🇷', nameT: 'ฝรั่งเศส', nameE: 'France', market: 2.00, note: 'เด่นด้านศิลปะ แฟชั่น และเทคโนโลยี' },
+      ],
+    },
+    {
+      id: 'north_america', nameT: 'อเมริกาเหนือ', nameE: 'North America', pinX: '25%', pinY: '39%',
+      countries: [
+        { id: 'us', code: 'US', flag: '🇺🇸', nameT: 'สหรัฐอเมริกา', nameE: 'United States', market: 3.60, note: 'ตลาดแรงงานขนาดใหญ่และค่าตอบแทนสูง' },
+        { id: 'ca', code: 'CA', flag: '🇨🇦', nameT: 'แคนาดา', nameE: 'Canada', market: 2.70, note: 'เด่นด้านสุขภาพ เทคโนโลยี และทรัพยากร' },
+        { id: 'mx', code: 'MX', flag: '🇲🇽', nameT: 'เม็กซิโก', nameE: 'Mexico', market: 1.15, note: 'ฐานการผลิตและโลจิสติกส์สำคัญ' },
+      ],
+    },
+    {
+      id: 'south_america', nameT: 'อเมริกาใต้', nameE: 'South America', pinX: '35%', pinY: '65%',
+      countries: [
+        { id: 'br', code: 'BR', flag: '🇧🇷', nameT: 'บราซิล', nameE: 'Brazil', market: 0.95, note: 'ตลาดใหญ่ด้านธุรกิจ เกษตร และพลังงาน' },
+        { id: 'cl', code: 'CL', flag: '🇨🇱', nameT: 'ชิลี', nameE: 'Chile', market: 1.05, note: 'เศรษฐกิจเปิดและเหมืองแร่เด่น' },
+        { id: 'ar', code: 'AR', flag: '🇦🇷', nameT: 'อาร์เจนตินา', nameE: 'Argentina', market: 0.70, note: 'เด่นด้านสร้างสรรค์และซอฟต์แวร์เอาต์ซอร์ส' },
+      ],
+    },
+    {
+      id: 'africa', nameT: 'แอฟริกา', nameE: 'Africa', pinX: '54%', pinY: '55%',
+      countries: [
+        { id: 'za', code: 'ZA', flag: '🇿🇦', nameT: 'แอฟริกาใต้', nameE: 'South Africa', market: 0.85, note: 'ศูนย์กลางธุรกิจและการเงินของภูมิภาค' },
+        { id: 'eg', code: 'EG', flag: '🇪🇬', nameT: 'อียิปต์', nameE: 'Egypt', market: 0.55, note: 'ตลาดการท่องเที่ยว วิศวกรรม และบริการ' },
+        { id: 'ng', code: 'NG', flag: '🇳🇬', nameT: 'ไนจีเรีย', nameE: 'Nigeria', market: 0.65, note: 'เศรษฐกิจดิจิทัลและพลังงานเติบโต' },
+      ],
+    },
+    {
+      id: 'oceania', nameT: 'โอเชียเนีย', nameE: 'Oceania', pinX: '76%', pinY: '69%',
+      countries: [
+        { id: 'au', code: 'AU', flag: '🇦🇺', nameT: 'ออสเตรเลีย', nameE: 'Australia', market: 2.50, note: 'เด่นด้านสุขภาพ วิศวกรรม และบริการ' },
+        { id: 'nz', code: 'NZ', flag: '🇳🇿', nameT: 'นิวซีแลนด์', nameE: 'New Zealand', market: 2.15, note: 'ตลาดคุณภาพชีวิตสูงและงานบริการ' },
+        { id: 'fj', code: 'FJ', flag: '🇫🇯', nameT: 'ฟิจิ', nameE: 'Fiji', market: 0.75, note: 'เด่นด้านท่องเที่ยวและบริการภูมิภาคแปซิฟิก' },
+      ],
+    },
+  ],
+};
+
+let globalSelectedContinentId = 'asia';
+let globalSelectedCountryId = 'th';
+let globalExploreMode = 'world';
+let globalGlobeReady = false;
+let globalRotX = -10;
+let globalRotY = -22;
+
+function getGlobalContinent(id = globalSelectedContinentId) {
+  return GLOBAL_EXPLORER.continents.find(c => c.id === id) || GLOBAL_EXPLORER.continents[0];
+}
+
+function flagCodeFor(code) {
+  const cc = String(code || '').toLowerCase();
+  if (cc === 'uk') return 'gb';
+  return cc;
+}
+function flagImg(code, nameT = '') {
+  const cc = flagCodeFor(code);
+  const alt = nameT ? `ธงชาติ${nameT}` : `ธงชาติ${(code || '').toUpperCase()}`;
+  return `<img src="https://flagcdn.com/w160/${cc}.png" srcset="https://flagcdn.com/w320/${cc}.png 2x" alt="${alt}" class="gx-flag-img" loading="lazy" onerror="this.onerror=null;this.style.display='none';">`;
+}
+function flagImgInline(code, nameT = '') {
+  const cc = flagCodeFor(code);
+  const alt = nameT ? `ธงชาติ${nameT}` : `ธงชาติ${(code || '').toUpperCase()}`;
+  return `<img src="https://flagcdn.com/w80/${cc}.png" srcset="https://flagcdn.com/w160/${cc}.png 2x" alt="${alt}" class="gx-flag-img-inline" loading="lazy" onerror="this.onerror=null;this.style.display='none';">`;
+}
+window.flagImg = flagImg;
+window.flagImgInline = flagImgInline;
+
+function getGlobalSelectedCountry() {
+  const continent = getGlobalContinent();
+  return continent.countries.find(c => c.id === globalSelectedCountryId) || continent.countries[0];
+}
+
+function parseSalaryValue(value) {
+  const cleaned = String(value ?? '').replace(/[^\d.]/g, '');
+  return Number(cleaned) || 0;
+}
+
+function formatMoneyNumber(value) {
+  return Math.round(value).toLocaleString('en-US');
+}
+
+function getGlobalSalary(job, level) {
+  const country = getGlobalSelectedCountry();
+  const base = parseSalaryValue(job?.salary?.[level]);
+  const thb = base * country.market;
+  return {
+    thb,
+    usd: thb / GLOBAL_EXPLORER.usdThbRate,
+    thbText: `฿${formatMoneyNumber(thb)}`,
+    usdText: `$${formatMoneyNumber(thb / GLOBAL_EXPLORER.usdThbRate)}`,
+  };
+}
+
+function getAverageGlobalSalary(level) {
+  if (!window.DATA?.categories) return { thbText: 'รอข้อมูล', usdText: 'รอข้อมูล' };
+  const values = DATA.categories
+    .flatMap(cat => cat.jobs || [])
+    .map(job => parseSalaryValue(job.salary?.[level]))
+    .filter(Boolean);
+  const avgBase = values.reduce((sum, value) => sum + value, 0) / Math.max(values.length, 1);
+  const country = getGlobalSelectedCountry();
+  const thb = avgBase * country.market;
+  return {
+    thbText: `฿${formatMoneyNumber(thb)}`,
+    usdText: `$${formatMoneyNumber(thb / GLOBAL_EXPLORER.usdThbRate)}`,
+  };
+}
+
+function setExploreMode(mode = 'world') {
+  globalExploreMode = mode === 'careers' ? 'careers' : 'world';
+  const worldView = document.getElementById('gxWorldView');
+  const careerView = document.getElementById('gxCareerView');
+  const worldTab = document.getElementById('gxWorldTab');
+  const careerTab = document.getElementById('gxCareerTab');
+
+  worldView?.classList.toggle('is-active', globalExploreMode === 'world');
+  careerView?.classList.toggle('is-active', globalExploreMode === 'careers');
+  worldTab?.classList.toggle('is-active', globalExploreMode === 'world');
+  careerTab?.classList.toggle('is-active', globalExploreMode === 'careers');
+  worldTab?.setAttribute('aria-selected', String(globalExploreMode === 'world'));
+  careerTab?.setAttribute('aria-selected', String(globalExploreMode === 'careers'));
+
+  if (globalExploreMode === 'careers') renderCategories();
+  renderGlobalExplorerUI();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+window.setExploreMode = setExploreMode;
+
+function setGlobalGlobeForContinent(continent) {
+  const globe = document.getElementById('globalGlobe');
+  if (!globe || !continent) return;
+  const rotationMap = {
+    asia: [-10, -24],
+    europe: [-8, 10],
+    north_america: [-12, 120],
+    south_america: [10, 86],
+    africa: [2, 8],
+    oceania: [12, -48],
+  };
+  const [rx, ry] = rotationMap[continent.id] || [-10, -22];
+  globalRotX = rx;
+  globalRotY = ry;
+  globe.style.setProperty('--gx-rx', `${globalRotX}deg`);
+  globe.style.setProperty('--gx-ry', `${globalRotY}deg`);
+}
+
+function renderGlobalExplorerUI() {
+  const continent = getGlobalContinent();
+  const country = getGlobalSelectedCountry();
+  const pins = document.getElementById('globalContinentPins');
+  const continentPanel = document.getElementById('continentPanel');
+  const countryPanel = document.getElementById('countryPanel');
+  const salaryPreview = document.getElementById('globalSalaryPreview');
+  const countrySummary = document.getElementById('globalCountrySummary');
+
+  if (pins) {
+    pins.innerHTML = GLOBAL_EXPLORER.continents.map(item => `
+      <button class="gx-continent-pin ${item.id === globalSelectedContinentId ? 'is-active' : ''}"
+        type="button"
+        style="--x:${item.pinX};--y:${item.pinY};"
+        onclick="selectGlobalContinent('${item.id}')">${item.nameT}</button>
+    `).join('');
+  }
+
+  if (continentPanel) {
+    continentPanel.innerHTML = GLOBAL_EXPLORER.continents.map(item => `
+      <div class="gx-continent-card ${item.id === globalSelectedContinentId ? 'is-active' : ''}"
+        role="button" tabindex="0"
+        onclick="selectGlobalContinent('${item.id}')"
+        onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectGlobalContinent('${item.id}');}">
+        <div class="gx-continent-name">${item.nameT}</div>
+        <div class="gx-continent-sub">${item.nameE} · ${item.countries.length} ประเทศ</div>
+      </div>
+    `).join('');
+  }
+
+  if (countryPanel) {
+    countryPanel.innerHTML = continent.countries.map(item => `
+      <div class="gx-country-card ${item.id === globalSelectedCountryId ? 'is-active' : ''}"
+        role="button" tabindex="0"
+        onclick="selectGlobalCountry('${item.id}')"
+        onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectGlobalCountry('${item.id}');}">
+        <div class="gx-country-flag" aria-hidden="true">${flagImg(item.code, item.nameT)}</div>
+        <div class="gx-country-code">${item.code}</div>
+        <div class="gx-country-name">${item.nameT}</div>
+        <div class="gx-country-en">${item.nameE}</div>
+        <div class="gx-country-rate">ตัวคูณ ${item.market.toFixed(2)}x</div>
+      </div>
+    `).join('');
+  }
+
+  if (salaryPreview) {
+    const entry = getAverageGlobalSalary('entry');
+    const mid = getAverageGlobalSalary('mid');
+    const senior = getAverageGlobalSalary('senior');
+    salaryPreview.innerHTML = `
+      <div class="gx-salary-context">
+        <div class="gx-salary-eyebrow">SALARY CONVERTER</div>
+        <h3><span class="gx-flag-chip" aria-hidden="true">${flagImgInline(country.code, country.nameT)}</span> ${country.nameT} · ${country.nameE}</h3>
+        <p>${country.note} ใช้ฐานเงินเดือนอาชีพเดิมในระบบ และแปลงเป็นค่าเงินบาทกับดอลลาร์สหรัฐแบบประมาณการ</p>
+        <button type="button" class="gx-next-btn" onclick="setExploreMode('careers')">ไปสำรวจสายงานในประเทศนี้</button>
+      </div>
+      <div class="gx-salary-stat">
+        <div class="gx-stat-label">Entry เฉลี่ย</div>
+        <div class="gx-stat-thb">${entry.thbText}</div>
+        <div class="gx-stat-usd">${entry.usdText}</div>
+      </div>
+      <div class="gx-salary-stat">
+        <div class="gx-stat-label">Mid เฉลี่ย</div>
+        <div class="gx-stat-thb">${mid.thbText}</div>
+        <div class="gx-stat-usd">${mid.usdText}</div>
+      </div>
+      <div class="gx-salary-stat">
+        <div class="gx-stat-label">Senior เฉลี่ย</div>
+        <div class="gx-stat-thb">${senior.thbText}</div>
+        <div class="gx-stat-usd">${senior.usdText}</div>
+      </div>
+    `;
+  }
+
+  if (countrySummary) {
+    countrySummary.innerHTML = `
+      <div class="gx-summary-flag" aria-hidden="true">${flagImg(country.code, country.nameT)}</div>
+      <div class="gx-summary-copy">
+        <div class="gx-summary-label">ประเทศที่เลือกตอนนี้</div>
+        <h3>${country.nameT} · ${country.nameE}</h3>
+        <p>${country.note} · เงินเดือนทุกอาชีพจะแสดงทั้ง THB และ USD</p>
+      </div>
+      <button type="button" class="gx-summary-btn" onclick="setExploreMode('world')">เปลี่ยนประเทศ</button>
+    `;
+  }
+}
+
+function initGlobalGlobeInteractions() {
+  const globe = document.getElementById('globalGlobe');
+  if (!globe || globalGlobeReady) return;
+  globalGlobeReady = true;
+  let dragging = false;
+  let startX = 0;
+  let startY = 0;
+  let startRx = globalRotX;
+  let startRy = globalRotY;
+
+  globe.style.setProperty('--gx-rx', `${globalRotX}deg`);
+  globe.style.setProperty('--gx-ry', `${globalRotY}deg`);
+
+  globe.addEventListener('pointerdown', (event) => {
+    if (event.target.closest('.gx-continent-pin')) return;
+    dragging = true;
+    startX = event.clientX;
+    startY = event.clientY;
+    startRx = globalRotX;
+    startRy = globalRotY;
+    globe.setPointerCapture(event.pointerId);
+  });
+
+  globe.addEventListener('pointermove', (event) => {
+    if (!dragging) return;
+    globalRotY = startRy + (event.clientX - startX) * 0.45;
+    globalRotX = Math.max(-35, Math.min(35, startRx - (event.clientY - startY) * 0.28));
+    globe.style.setProperty('--gx-rx', `${globalRotX}deg`);
+    globe.style.setProperty('--gx-ry', `${globalRotY}deg`);
+  });
+
+  globe.addEventListener('pointerup', () => { dragging = false; });
+  globe.addEventListener('pointercancel', () => { dragging = false; });
+}
+
+window.selectGlobalContinent = function (continentId) {
+  const continent = getGlobalContinent(continentId);
+  globalSelectedContinentId = continent.id;
+  globalSelectedCountryId = continent.countries[0].id;
+  setGlobalGlobeForContinent(continent);
+  renderGlobalExplorerUI();
+  renderCategories();
+};
+
+window.selectGlobalCountry = function (countryId) {
+  const continent = getGlobalContinent();
+  if (!continent.countries.some(country => country.id === countryId)) return;
+  globalSelectedCountryId = countryId;
+  renderGlobalExplorerUI();
+  renderCategories();
+};
+
 function renderCategories() {
   const catGrid = document.getElementById('catGrid');
   if (!catGrid) return;
 
+  initGlobalGlobeInteractions();
+  renderGlobalExplorerUI();
   catGrid.innerHTML = Array(14).fill(0).map(() => `<div class="cat-skeleton"></div>`).join('');
 
   loadAllCategories().then(() => {
+    renderGlobalExplorerUI();
     let html = '';
+    const country = getGlobalSelectedCountry();
     DATA.categories.forEach((cat, index) => {
       const img  = CAT_CONFIG.images[cat.id]    || '';
       const grad = CAT_CONFIG.gradients[cat.id] || 'linear-gradient(135deg, #be185d, #f472b6)';
@@ -93,6 +399,7 @@ function renderCategories() {
              onclick="showCategory('${cat.id}')"
              onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showCategory('${cat.id}');}"
              style="animation: fadeInUp 0.5s ease forwards; opacity: 0; animation-delay: ${0.2 + (index * 0.1)}s;">
+          <div class="cat-market-chip"><span aria-hidden="true">${flagImgInline(country.code, country.nameT)}</span>${country.nameT}</div>
           <div class="cat-card-bg" style="background-image: url('${img}');"></div>
           <div class="cat-card-overlay" style="background: ${grad};"></div>
           <div class="cat-card-content">
@@ -112,11 +419,14 @@ function renderCategories() {
 
 function createJobCard(job, cat) {
   const tagsHtml = job.tags.slice(0, 3).map(t => `<span class="jcn-tag">${t}</span>`).join('');
+  const country = getGlobalSelectedCountry();
+  const salaryEntry = getGlobalSalary(job, 'entry');
+  const salarySenior = getGlobalSalary(job, 'senior');
   return `
     <div class="jcn-card"
          role="button"
          tabindex="0"
-         aria-label="${job.nameT} — เงินเดือนเริ่มต้น ${job.salary.entry} บาท"
+         aria-label="${job.nameT} — เงินเดือนเริ่มต้นใน${country.nameT} ${salaryEntry.thbText} หรือ ${salaryEntry.usdText}"
          onclick="showJob('${job.id}', '${cat.id}')"
          onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showJob('${job.id}','${cat.id}');}">
       <div class="jcn-thumb">
@@ -136,15 +446,22 @@ function createJobCard(job, cat) {
           <div class="jcn-arrow" aria-hidden="true">${DETAIL_ICONS.arrowRight}</div>
         </div>
         <div class="jcn-tags">${tagsHtml}</div>
+        <div class="jcn-global-salary">
+          <div class="jcn-gs-country">เงินเดือนใน${country.nameT}</div>
+          <div class="jcn-gs-values">
+            <span>${salaryEntry.thbText}</span>
+            <span>${salaryEntry.usdText}</span>
+          </div>
+        </div>
         <div class="jcn-salary-footer">
           <div class="jcn-sf-item">
             <div class="jcn-sf-label">เริ่มต้น</div>
-            <div class="jcn-sf-value">${job.salary.entry} ฿</div>
+            <div class="jcn-sf-value">${salaryEntry.thbText}</div>
           </div>
           <div class="jcn-sf-divider"></div>
           <div class="jcn-sf-item">
             <div class="jcn-sf-label">ระดับสูง</div>
-            <div class="jcn-sf-value">${job.salary.senior} ฿</div>
+            <div class="jcn-sf-value">${salarySenior.thbText}</div>
           </div>
           <div class="jcn-sf-arrow-wrap" aria-hidden="true">${DETAIL_ICONS.arrowRightSm}</div>
         </div>
@@ -214,6 +531,10 @@ function showJob(jobId, catId) {
   const cat = DATA.categories.find(c => c.id === catId);
   const job = cat?.jobs.find(j => j.id === jobId);
   if (!cat || !job) return;
+  const country = getGlobalSelectedCountry();
+  const salaryEntry = getGlobalSalary(job, 'entry');
+  const salaryMid = getGlobalSalary(job, 'mid');
+  const salarySenior = getGlobalSalary(job, 'senior');
 
   document.getElementById('breadcat2').innerText = cat.nameT;
   document.getElementById('breadjob').innerText  = job.nameT;
@@ -279,9 +600,9 @@ function showJob(jobId, catId) {
       <div class="dss-divider"></div>
       <div class="dss-item">
         <div class="dss-icon" aria-hidden="true">${icon('wallet', { color: '#16a34a' })}</div>
-        <div class="dss-text">
-          <div class="dss-label">เงินเดือนเริ่มต้น</div>
-          <div class="dss-value">${job.salary.entry} ฿</div>
+          <div class="dss-text">
+            <div class="dss-label">เงินเดือนเริ่มต้น</div>
+          <div class="dss-value">${salaryEntry.thbText} · ${salaryEntry.usdText}</div>
         </div>
       </div>
       <div class="dss-divider"></div>
@@ -289,7 +610,7 @@ function showJob(jobId, catId) {
         <div class="dss-icon" aria-hidden="true">${icon('trophy', { color: '#b45309' })}</div>
         <div class="dss-text">
           <div class="dss-label">ระดับสูงสุด</div>
-          <div class="dss-value">${job.salary.senior} ฿</div>
+          <div class="dss-value">${salarySenior.thbText} · ${salarySenior.usdText}</div>
         </div>
       </div>
     </div>
@@ -355,21 +676,21 @@ function showJob(jobId, catId) {
         <!-- Salary Card -->
         <div class="salary-card-v2">
           <h2 class="scv2-title" style="margin:0;">
-            <span aria-hidden="true">${icon('barChart', { color: '#be185d', style: 'margin-right:6px;' })}</span> โครงสร้างเงินเดือน (โดยประมาณ)
+            <span aria-hidden="true">${icon('barChart', { color: '#be185d', style: 'margin-right:6px;' })}</span> โครงสร้างเงินเดือนใน${country.nameT}
           </h2>
           <div class="scv2-row">
-            <div class="scv2-header"><span class="scv2-level">เริ่มต้น (Entry)</span><span class="scv2-amount">${job.salary.entry} ฿</span></div>
-            <div class="scv2-bar-track" role="img" aria-label="เงินเดือนเริ่มต้น ${job.salary.entry} บาท"><div class="scv2-bar-fill entry" id="bar2-entry"></div></div>
+            <div class="scv2-header"><span class="scv2-level">เริ่มต้น (Entry)</span><span class="scv2-amount">${salaryEntry.thbText}<small>${salaryEntry.usdText}</small></span></div>
+            <div class="scv2-bar-track" role="img" aria-label="เงินเดือนเริ่มต้น ${salaryEntry.thbText} หรือ ${salaryEntry.usdText}"><div class="scv2-bar-fill entry" id="bar2-entry"></div></div>
           </div>
           <div class="scv2-row">
-            <div class="scv2-header"><span class="scv2-level">มีประสบการณ์ (Mid)</span><span class="scv2-amount">${job.salary.mid} ฿</span></div>
-            <div class="scv2-bar-track" role="img" aria-label="เงินเดือนระดับกลาง ${job.salary.mid} บาท"><div class="scv2-bar-fill mid" id="bar2-mid"></div></div>
+            <div class="scv2-header"><span class="scv2-level">มีประสบการณ์ (Mid)</span><span class="scv2-amount">${salaryMid.thbText}<small>${salaryMid.usdText}</small></span></div>
+            <div class="scv2-bar-track" role="img" aria-label="เงินเดือนระดับกลาง ${salaryMid.thbText} หรือ ${salaryMid.usdText}"><div class="scv2-bar-fill mid" id="bar2-mid"></div></div>
           </div>
           <div class="scv2-row">
-            <div class="scv2-header"><span class="scv2-level">ระดับสูง / ผู้เชี่ยวชาญ</span><span class="scv2-amount">${job.salary.senior} ฿</span></div>
-            <div class="scv2-bar-track" role="img" aria-label="เงินเดือนระดับสูง ${job.salary.senior} บาท"><div class="scv2-bar-fill senior" id="bar2-senior"></div></div>
+            <div class="scv2-header"><span class="scv2-level">ระดับสูง / ผู้เชี่ยวชาญ</span><span class="scv2-amount">${salarySenior.thbText}<small>${salarySenior.usdText}</small></span></div>
+            <div class="scv2-bar-track" role="img" aria-label="เงินเดือนระดับสูง ${salarySenior.thbText} หรือ ${salarySenior.usdText}"><div class="scv2-bar-fill senior" id="bar2-senior"></div></div>
           </div>
-          <div class="scv2-note"><span aria-hidden="true">${DETAIL_ICONS.info}</span> ข้อมูลอ้างอิงจากสถิติตลาดแรงงานไทย</div>
+          <div class="scv2-note"><span aria-hidden="true">${DETAIL_ICONS.info}</span> แปลงจากฐานข้อมูลเดิมด้วยตัวคูณตลาดแรงงาน${country.nameT} และอัตรา 1 USD ≈ ${GLOBAL_EXPLORER.usdThbRate} THB</div>
         </div>
 
         <!-- Growth Card -->

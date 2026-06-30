@@ -298,23 +298,105 @@
   ======================================================================== 
   -->
   <div id="page-explore" class="page">
-    <div class="container" id="cat-section" style="padding-top: 40px; padding-bottom: 80px;">
+    <section class="gx-page" id="cat-section">
+      <div class="container gx-container">
 
-      <div class="breadcrumb animate-up">
-        <span onclick="goHome()">หน้าหลัก</span>
-        <span class="sep">›</span>
-        <span class="current">สำรวจสายงาน</span>
+        <div class="breadcrumb animate-up gx-breadcrumb">
+          <span onclick="goHome()">หน้าหลัก</span>
+          <span class="sep">›</span>
+          <span class="current">สำรวจสายงานทั่วโลก</span>
+        </div>
+
+        <div class="gx-mode-switch animate-up" role="tablist" aria-label="เลือกมุมมองสำรวจสายงาน">
+          <button type="button" class="gx-mode-btn is-active" id="gxWorldTab" onclick="setExploreMode('world')" role="tab" aria-selected="true">
+            แผนที่โลก
+          </button>
+          <button type="button" class="gx-mode-btn" id="gxCareerTab" onclick="setExploreMode('careers')" role="tab" aria-selected="false">
+            สำรวจสายงาน
+          </button>
+        </div>
+
+        <div class="gx-mode-view is-active" id="gxWorldView">
+          <div class="gx-hero animate-up">
+            <div class="gx-copy">
+              <div class="gx-kicker">GLOBAL CAREER MAP</div>
+              <h2 class="gx-title">สำรวจอาชีพ</h2>
+              <p class="gx-desc">
+                เลือกทวีปและประเทศที่สนใจ แล้วระบบจะแปลงฐานเงินเดือนเดิมให้เห็นทั้งค่าเงินบาทและดอลลาร์สหรัฐตามตลาดแรงงานของประเทศนั้น
+              </p>
+              <div class="gx-meta-row">
+                <span>6 ทวีปที่มีคนอยู่อาศัย</span>
+                <span>3 ประเทศเด่นต่อทวีป</span>
+                <span>THB + USD</span>
+              </div>
+            </div>
+
+            <div class="gx-globe-card" aria-label="แผนที่ลูกโลกสำหรับเลือกทวีป">
+              <div class="gx-orbit gx-orbit-one"></div>
+              <div class="gx-orbit gx-orbit-two"></div>
+              <div class="gx-globe-wrap">
+                <div class="gx-globe" id="globalGlobe" role="application" aria-label="ลากเพื่อหมุนลูกโลก และเลือกทวีป">
+                  <div class="gx-sphere">
+                    <div class="gx-gridline gx-gridline-a"></div>
+                    <div class="gx-gridline gx-gridline-b"></div>
+                    <div class="gx-gridline gx-gridline-c"></div>
+                    <div class="gx-lat gx-lat-top"></div>
+                    <div class="gx-lat gx-lat-mid"></div>
+                    <div class="gx-lat gx-lat-low"></div>
+                    <div class="gx-land gx-land-asia"></div>
+                    <div class="gx-land gx-land-europe"></div>
+                    <div class="gx-land gx-land-africa"></div>
+                    <div class="gx-land gx-land-na"></div>
+                    <div class="gx-land gx-land-sa"></div>
+                    <div class="gx-land gx-land-oceania"></div>
+                  </div>
+                </div>
+                <div class="gx-pins-overlay" id="globalContinentPins"></div>
+              </div>
+              <div class="gx-globe-hint">ลากเพื่อหมุนแผนที่ แล้วเลือกทวีปที่ต้องการ</div>
+            </div>
+          </div>
+
+          <div class="gx-selection-grid animate-up" style="animation-delay:0.08s;">
+            <div class="gx-panel">
+              <div class="gx-panel-head">
+                <span class="gx-step">01</span>
+                <div>
+                  <h3>เลือกทวีป</h3>
+                  <p>เริ่มจากเอเชีย และสามารถสลับไปทวีปอื่นได้ทันที</p>
+                </div>
+              </div>
+              <div class="gx-continent-list" id="continentPanel"></div>
+            </div>
+
+            <div class="gx-panel gx-country-panel">
+              <div class="gx-panel-head">
+                <span class="gx-step">02</span>
+                <div>
+                  <h3>เลือกประเทศ</h3>
+                  <p>แต่ละทวีปมี 3 ประเทศเด่น พร้อมตัวคูณตลาดแรงงาน</p>
+                </div>
+              </div>
+              <div class="gx-country-list" id="countryPanel"></div>
+            </div>
+          </div>
+
+          <div class="gx-salary-preview animate-up" id="globalSalaryPreview" style="animation-delay:0.15s;"></div>
+        </div>
+
+        <div class="gx-mode-view" id="gxCareerView">
+          <div class="section-header animate-up gx-career-head" style="text-align: center; margin-top: 28px;">
+            <div class="section-tag-v3" style="margin: 0 auto 15px auto;">ALL CATEGORIES</div>
+            <h2 class="section-title-v3">สำรวจสายงานที่คุณสนใจ</h2>
+            <p class="section-desc-v3">คลิกที่หมวดหมู่เพื่อดูอาชีพทั้งหมด พร้อมเงินเดือนที่แปลงตามประเทศที่เลือก</p>
+          </div>
+
+          <div class="gx-country-summary" id="globalCountrySummary"></div>
+          <div class="cat-grid animate-up" id="catGrid" style="animation-delay:0.2s;"></div>
+        </div>
+
       </div>
-
-      <div class="section-header animate-up" style="text-align: center; margin-top: 20px;">
-        <div class="section-tag-v3" style="margin: 0 auto 15px auto;">ALL CATEGORIES</div>
-        <h2 class="section-title-v3">สำรวจสายงานที่คุณสนใจ</h2>
-        <p class="section-desc-v3">คลิกที่หมวดหมู่เพื่อดูอาชีพทั้งหมดในสายงานนั้น</p>
-      </div>
-
-      <div class="cat-grid animate-up" id="catGrid" style="animation-delay:0.2s;"></div>
-
-    </div>
+    </section>
   </div>
   <!-- /// จบหน้าสำรวจสายงาน (PAGE-EXPLORE) /// -->
 
@@ -1077,7 +1159,7 @@
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
                   GitHub
                 </a>
-                <a href="mailto:eshop.bowt2@gmail.com" class="dev-link-btn">
+                <a href="/cdn-cgi/l/email-protection#cfaabca7a0bfe1ada0b8bbfd8fa8a2aea6a3e1aca0a2" class="dev-link-btn">
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                   Email
                 </a>
@@ -1244,7 +1326,7 @@
             <div class="ft-ci-icon">✉️</div>
             <div>
               <div class="ft-ci-label">อีเมล</div>
-              <div class="ft-ci-value"><a href="mailto:eshop.bowt2@gmail.com">eshop.bowt2@gmail.com</a></div>
+              <div class="ft-ci-value"><a href="/cdn-cgi/l/email-protection#f297819a9d82dc909d8586c0b2959f939b9edc919d9f"><span class="__cf_email__" data-cfemail="1a7f6972756a3478756d6e285a7d777b737634797577">[email&#160;protected]</span></a></div>
             </div>
           </div>
         </div>
@@ -1289,7 +1371,7 @@
   ========================================================================
   ======================================================================== 
   -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/data-loader.js"></script>
   <script src="js/render.js"></script>
   <script src="js/router.js"></script>
