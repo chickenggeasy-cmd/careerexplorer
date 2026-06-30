@@ -1,0 +1,580 @@
+/* ==========================================================================
+   CAREER EXPLORER — PAGE-EXPLORE (Global 3D Globe Edition)
+   1. EXPLORE LAYOUT & STAGES
+   2. 3D GLOBE CONTAINER
+   3. CONTINENT / COUNTRY PANELS
+   4. COUNTRY JOB GRID & DUAL-CURRENCY CARDS
+   5. FX TOGGLE + UTILITY
+   6. RESPONSIVE
+   ========================================================================== */
+
+/* ==========================================================================
+   1. EXPLORE LAYOUT & STAGES
+   ========================================================================== */
+#page-explore .container { max-width: 1240px; }
+
+.gx-stage { display: none; animation: fadeInUp 0.45s ease both; }
+.gx-stage.active { display: block; }
+
+.gx-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(244,114,182,0.16), rgba(190,24,93,0.10));
+  color: var(--primary);
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  border: 1px solid rgba(244,114,182,0.35);
+}
+.gx-eyebrow .gx-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 0 0 4px rgba(244,114,182,0.25);
+}
+
+.gx-hero-title {
+  font-size: 42px;
+  font-weight: 800;
+  color: var(--primary-deep);
+  letter-spacing: -0.4px;
+  margin: 14px 0 10px;
+  line-height: 1.15;
+}
+.gx-hero-title .pink-accent {
+  background: linear-gradient(135deg, var(--primary-light), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.gx-hero-sub {
+  font-size: 16px;
+  color: #9d1454;
+  max-width: 620px;
+  line-height: 1.65;
+  margin-bottom: 26px;
+}
+
+.gx-breadtrail {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
+  font-size: 13px; color: #be185d; font-weight: 600;
+  margin: 6px 0 22px;
+}
+.gx-breadtrail .gx-step {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--border);
+  color: #db2777;
+  display: inline-flex; align-items: center; gap: 6px;
+  transition: all 0.25s ease;
+}
+.gx-breadtrail .gx-step.active {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 6px 18px rgba(190,24,93,0.22);
+}
+.gx-breadtrail .gx-step.done {
+  background: #fff;
+  color: var(--primary);
+  border-color: rgba(190,24,93,0.35);
+  cursor: pointer;
+}
+.gx-breadtrail .gx-sep { color: #f9a8d4; font-weight: 700; }
+
+.gx-back-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 9px 16px;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--primary);
+  border-radius: 999px;
+  font-weight: 600; font-size: 13px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.gx-back-pill:hover {
+  background: var(--primary);
+  color: #fff;
+  border-color: transparent;
+  transform: translateX(-2px);
+}
+
+/* ==========================================================================
+   2. 3D GLOBE CONTAINER
+   ========================================================================== */
+.gx-globe-wrap {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 50px;
+  align-items: center;
+  margin-top: 14px;
+}
+
+.gx-globe-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  max-width: 580px;
+  margin: 0 auto;
+}
+.gx-globe-stage::before {
+  content: '';
+  position: absolute; inset: 6%;
+  background: radial-gradient(closest-side, rgba(244,114,182,0.38), rgba(244,114,182,0) 70%);
+  filter: blur(28px);
+  border-radius: 50%;
+  z-index: 0;
+}
+.gx-globe-stage::after {
+  content: '';
+  position: absolute;
+  left: 8%; right: 8%;
+  bottom: -2%;
+  height: 30px;
+  background: radial-gradient(closest-side, rgba(190,24,93,0.32), rgba(190,24,93,0) 70%);
+  filter: blur(14px);
+  z-index: 0;
+}
+
+#globeCanvasHost {
+  position: relative;
+  width: 100%; height: 100%;
+  z-index: 1;
+  border-radius: 50%;
+  cursor: grab;
+}
+#globeCanvasHost.dragging { cursor: grabbing; }
+#globeCanvasHost canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+.gx-globe-hint {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--border);
+  font-size: 12px; font-weight: 600; color: var(--primary);
+  box-shadow: 0 8px 24px rgba(190,24,93,0.12);
+  white-space: nowrap;
+  z-index: 2;
+}
+.gx-globe-hint svg { stroke: var(--primary); }
+
+/* Floating continent label tooltip (HTML overlay over canvas) */
+.gx-globe-tip {
+  position: absolute;
+  pointer-events: none;
+  transform: translate(-50%, -130%);
+  padding: 6px 12px;
+  background: var(--primary-deep);
+  color: #fff;
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 0.4px;
+  border-radius: 8px;
+  white-space: nowrap;
+  box-shadow: 0 8px 20px rgba(131,24,67,0.4);
+  opacity: 0;
+  transition: opacity 0.18s ease;
+  z-index: 5;
+}
+.gx-globe-tip.show { opacity: 1; }
+.gx-globe-tip::after {
+  content: '';
+  position: absolute;
+  top: 100%; left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--primary-deep);
+}
+
+/* Continent legend (right side) */
+.gx-globe-aside {
+  padding-left: 6px;
+}
+.gx-continent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 18px;
+}
+.gx-continent-pill {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 16px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  cursor: pointer;
+  transition: all 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+  text-align: left;
+  width: 100%;
+  font-family: inherit;
+}
+.gx-continent-pill:hover {
+  transform: translateX(4px);
+  border-color: var(--primary-light);
+  box-shadow: 0 10px 24px rgba(190,24,93,0.12);
+}
+.gx-continent-pill .gx-cp-dot {
+  width: 38px; height: 38px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 800; color: #fff;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+  box-shadow: 0 6px 14px rgba(190,24,93,0.25);
+}
+.gx-continent-pill .gx-cp-text { flex: 1; min-width: 0; }
+.gx-continent-pill .gx-cp-th {
+  font-size: 15px; font-weight: 700; color: var(--text);
+  line-height: 1.2;
+}
+.gx-continent-pill .gx-cp-en {
+  font-size: 11px; color: var(--text-muted);
+  letter-spacing: 1px; text-transform: uppercase;
+  margin-top: 2px;
+}
+.gx-continent-pill .gx-cp-count {
+  font-size: 11px; color: var(--primary); font-weight: 700;
+  padding: 3px 9px;
+  background: rgba(244,114,182,0.16);
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   3. CONTINENT / COUNTRY PANELS
+   ========================================================================== */
+.gx-section-head {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  flex-wrap: wrap; gap: 18px;
+  margin: 6px 0 28px;
+}
+.gx-section-head .gx-sh-title {
+  font-size: 28px; font-weight: 800; color: var(--primary-deep);
+  letter-spacing: -0.2px;
+  line-height: 1.2;
+}
+.gx-section-head .gx-sh-sub {
+  margin-top: 4px;
+  font-size: 14px; color: var(--text-muted);
+}
+
+.gx-country-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 22px;
+}
+
+.gx-country-card {
+  position: relative;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 26px 24px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  text-align: left;
+  font-family: inherit;
+}
+.gx-country-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(244,114,182,0.10), rgba(255,255,255,0));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.gx-country-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--primary-light);
+  box-shadow: 0 22px 50px rgba(190,24,93,0.18);
+}
+.gx-country-card:hover::before { opacity: 1; }
+
+.gx-country-card .gx-cc-top {
+  display: flex; align-items: center; gap: 16px;
+  position: relative; z-index: 1;
+}
+.gx-country-flag {
+  width: 64px; height: 48px;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  background: #fce7f3;
+  box-shadow: 0 6px 14px rgba(131,24,67,0.18);
+  flex-shrink: 0;
+}
+.gx-country-flag svg { width: 100%; height: 100%; display: block; }
+.gx-country-name {
+  font-size: 20px; font-weight: 800; color: var(--text);
+  line-height: 1.2;
+}
+.gx-country-name-en {
+  font-size: 12px; color: var(--text-muted);
+  letter-spacing: 0.5px;
+  margin-top: 3px;
+}
+
+.gx-country-card .gx-cc-meta {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 20px;
+  position: relative; z-index: 1;
+}
+.gx-country-card .gx-cc-meta-item {
+  background: #fff5f8;
+  border-radius: 12px;
+  padding: 10px 12px;
+  border: 1px solid #fbe1ec;
+}
+.gx-country-card .gx-cc-meta-label {
+  font-size: 10px; font-weight: 700;
+  color: #c63a78;
+  letter-spacing: 1px; text-transform: uppercase;
+}
+.gx-country-card .gx-cc-meta-value {
+  font-size: 14px; font-weight: 700;
+  color: var(--primary-deep);
+  margin-top: 3px;
+}
+
+.gx-country-card .gx-cc-foot {
+  margin-top: 18px;
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 13px; font-weight: 700; color: var(--primary);
+  position: relative; z-index: 1;
+}
+.gx-country-card .gx-cc-foot svg {
+  transition: transform 0.3s ease;
+}
+.gx-country-card:hover .gx-cc-foot svg { transform: translateX(5px); }
+
+/* ==========================================================================
+   4. COUNTRY JOB GRID & DUAL-CURRENCY CARDS
+   ========================================================================== */
+.gx-country-banner {
+  display: flex; align-items: center; gap: 22px;
+  padding: 24px 28px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, #fff5f8, #fce7f3);
+  border: 1px solid var(--border);
+  margin-bottom: 26px;
+  position: relative;
+  overflow: hidden;
+}
+.gx-country-banner::after {
+  content: '';
+  position: absolute;
+  right: -40px; top: -40px;
+  width: 220px; height: 220px;
+  background: radial-gradient(closest-side, rgba(244,114,182,0.35), rgba(244,114,182,0));
+  border-radius: 50%;
+}
+.gx-country-banner .gx-country-flag {
+  width: 76px; height: 56px;
+  position: relative; z-index: 1;
+}
+.gx-country-banner .gx-cb-text { flex: 1; position: relative; z-index: 1; }
+.gx-country-banner .gx-cb-eyebrow {
+  font-size: 11px; font-weight: 700; color: var(--primary);
+  letter-spacing: 2px; text-transform: uppercase;
+}
+.gx-country-banner .gx-cb-name {
+  font-size: 26px; font-weight: 800; color: var(--primary-deep);
+  margin-top: 4px;
+}
+.gx-country-banner .gx-cb-meta {
+  margin-top: 8px;
+  font-size: 13px; color: #9d1454;
+  display: flex; gap: 18px; flex-wrap: wrap;
+}
+.gx-country-banner .gx-cb-meta span strong {
+  color: var(--primary-deep);
+  font-weight: 700;
+}
+
+/* Currency toggle */
+.gx-fx-toggle {
+  display: inline-flex;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px;
+  gap: 2px;
+  position: relative; z-index: 1;
+  box-shadow: 0 4px 14px rgba(190,24,93,0.10);
+}
+.gx-fx-toggle button {
+  border: none;
+  background: transparent;
+  padding: 8px 16px;
+  font-family: inherit;
+  font-size: 13px; font-weight: 700;
+  color: var(--text-muted);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  letter-spacing: 0.5px;
+}
+.gx-fx-toggle button.active {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(190,24,93,0.28);
+}
+
+/* Category filter chips */
+.gx-cat-chips {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-bottom: 26px;
+}
+.gx-cat-chip {
+  font-family: inherit;
+  padding: 8px 16px;
+  font-size: 13px; font-weight: 600;
+  color: var(--text-muted);
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.22s ease;
+}
+.gx-cat-chip:hover {
+  border-color: var(--primary-light);
+  color: var(--primary);
+}
+.gx-cat-chip.active {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 6px 14px rgba(190,24,93,0.25);
+}
+
+/* Job grid for country view */
+.gx-job-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 22px;
+}
+.gx-job-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 22px 22px 18px;
+  display: flex; flex-direction: column;
+  transition: all 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
+  cursor: default;
+  position: relative;
+  overflow: hidden;
+}
+.gx-job-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--primary-light);
+  box-shadow: 0 18px 38px rgba(190,24,93,0.14);
+}
+.gx-job-card .gx-jc-cat {
+  font-size: 10px; font-weight: 700;
+  color: var(--primary);
+  letter-spacing: 1.5px; text-transform: uppercase;
+}
+.gx-job-card .gx-jc-title {
+  font-size: 17px; font-weight: 800;
+  color: var(--text);
+  margin-top: 4px;
+  line-height: 1.3;
+}
+.gx-job-card .gx-jc-title-en {
+  font-size: 12px; color: var(--text-muted);
+  margin-top: 2px;
+}
+.gx-job-card .gx-jc-salary-block {
+  margin-top: 16px;
+  padding: 14px;
+  background: linear-gradient(135deg, #fff5f8, #fce7f3);
+  border-radius: 14px;
+  border: 1px solid #fbe1ec;
+}
+.gx-job-card .gx-jc-sal-row {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 13px;
+}
+.gx-job-card .gx-jc-sal-row + .gx-jc-sal-row { margin-top: 8px; }
+.gx-job-card .gx-jc-sal-label {
+  color: #9d1454; font-weight: 600;
+}
+.gx-job-card .gx-jc-sal-value {
+  color: var(--primary-deep); font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.gx-job-card .gx-jc-sal-value .gx-fx-sub {
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 11px;
+  margin-left: 4px;
+  letter-spacing: 0.2px;
+}
+.gx-job-card .gx-jc-foot {
+  margin-top: 14px;
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 12px; color: var(--text-muted);
+}
+.gx-job-card .gx-jc-tag {
+  font-size: 11px; font-weight: 600;
+  color: var(--primary);
+  background: rgba(244,114,182,0.16);
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.gx-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+.gx-loading {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 80px 20px;
+  color: var(--primary);
+  font-weight: 600; font-size: 14px;
+}
+.gx-loading .gx-spin {
+  width: 18px; height: 18px;
+  border: 2px solid #fce7f3;
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: gx-spin 0.8s linear infinite;
+}
+@keyframes gx-spin { to { transform: rotate(360deg); } }
+
+/* ==========================================================================
+   6. RESPONSIVE
+   ========================================================================== */
+@media (max-width: 980px) {
+  .gx-globe-wrap {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  .gx-globe-stage { max-width: 460px; }
+  .gx-hero-title { font-size: 32px; }
+}
+@media (max-width: 600px) {
+  .gx-hero-title { font-size: 26px; }
+  .gx-country-banner {
+    flex-direction: column; align-items: flex-start;
+    padding: 20px;
+  }
+  .gx-country-banner .gx-cb-name { font-size: 22px; }
+  .gx-fx-toggle { align-self: stretch; justify-content: center; }
+  .gx-section-head .gx-sh-title { font-size: 22px; }
+}
