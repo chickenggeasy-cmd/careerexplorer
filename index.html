@@ -1,0 +1,1769 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Career Explorer Pro - สำรวจอาชีพในฝัน</title>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/home.css" />
+  <link rel="stylesheet" href="css/category.css" />
+  <link rel="stylesheet" href="css/detail.css" />
+   <link rel="stylesheet" href="css/about.css" />
+  <link rel="stylesheet" href="css/compare.css" />
+  <link rel="stylesheet" href="css/floating-dock.css" />
+  <link rel="icon" type="image/svg+xml" href="img/icons/gemini-svg.svg">
+</head>
+<body>
+
+  <!-- 
+  ========================================================================
+  ========================================================================
+                            แถบเมนูนำทาง (NAVBAR) 
+  ========================================================================
+  ======================================================================== 
+  -->
+  <nav>
+    <div class="nav-logo" onclick="goHome()" role="button" tabindex="0" aria-label="กลับสู่หน้าหลัก" onkeydown="if(event.key==='Enter'||event.key===' ') goHome();">
+      <img src="https://www.otep.go.th/assets/images/otep_logo.png" alt="โลโก้ศึกษาภัณฑ์พาณิชย์" style="height:48px; width:48px; object-fit:contain; border-radius:12px;" />
+      <div style="display:flex; flex-direction:column; line-height:1;">
+        <span style="font-size:20px; font-weight:800; color:white; letter-spacing:0.5px;">SUKSAPANPANIT</span>
+        <span style="font-size:10px; color:rgba(255,255,255,0.65); margin-top:4px; letter-spacing:2px; font-weight:500; text-transform:uppercase;">Career Explorer</span>
+      </div>
+    </div>
+
+    <button class="hamburger-btn" onclick="toggleMobileMenu()" aria-label="เปิดเมนูนำทาง">
+      <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+
+    <div class="nav-menu" id="navMenu">
+      <div class="nav-main-links">
+        <a href="javascript:void(0)" class="nav-link" onclick="goHome(); closeAll();">หน้าหลัก</a>
+        
+        <a href="javascript:void(0)" class="nav-link" onclick="showPage('page-explore'); closeAll();">สำรวจสายงาน</a>
+
+        <div class="nav-dropdown" id="aboutDropdown">
+          <a href="javascript:void(0)" class="nav-link nav-dropdown-toggle" onclick="toggleAboutDropdown(event)">
+            เกี่ยวกับเรา
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </a>
+          <div class="nav-dropdown-menu">
+            <a href="javascript:void(0)" onclick="showPage('page-about-org'); closeAll();">
+              <span class="dd-text">
+                <strong>เกี่ยวกับองค์กร</strong>
+                <span>ประวัติ สกสค. และผลิตภัณฑ์</span>
+              </span>
+            </a>
+            <div class="nav-dropdown-divider"></div>
+            <a href="javascript:void(0)" onclick="showPage('page-about-app'); closeAll();">
+              <span class="dd-text">
+                <strong>เกี่ยวกับแอป</strong>
+                <span>ฟีเจอร์ สถิติ และทีมผู้พัฒนา</span>
+              </span>
+            </a>
+          </div>
+        </div>
+
+        <a href="javascript:void(0)" class="nav-link" onclick="showPage('page-quiz'); closeAll();">ทดสอบสายงาน</a>
+        <a href="javascript:void(0)" class="nav-link" onclick="showPage('page-compare'); initComparePage(); closeAll();">เปรียบเทียบ</a>
+      </div>
+      <div class="nav-search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="searchInput" placeholder="ค้นหาอาชีพ ทักษะ หรือสายงาน..." oninput="handleSearch(this.value)" aria-label="ค้นหาอาชีพ ทักษะ หรือสายงาน" />
+      </div>
+    </div>
+  </nav>
+  <!-- /// จบแถบเมนูนำทาง /// -->
+
+
+  <!-- 
+  ========================================================================
+  ========================================================================
+                          [1] หน้าหลัก (PAGE-HOME) 
+  ========================================================================
+  ======================================================================== 
+  -->
+  <div id="page-home" class="page active">
+
+    <!-- ==================== HERO SECTION ==================== -->
+    <section class="hx-hero">
+      <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1600&q=80" alt="Students planning future" class="hx-hero-bg">
+      
+      <!-- ฟิล์มสีชมพูโปร่งแสง และ เกรน -->
+      <div class="ph-overlay"></div>
+      <div class="ph-grain" aria-hidden="true"></div>
+
+      <!-- ลายเซ็นของหน้าแรก: เข็มทิศอาชีพด้านขวาล่าง -->
+      <div class="ph-compass" aria-hidden="true">
+        <svg class="ph-compass-svg" viewBox="0 0 200 200">
+          <circle cx="100" cy="100" r="90" class="ph-compass-ring-outer"></circle>
+          <circle cx="100" cy="100" r="68" class="ph-compass-ring-inner"></circle>
+          <g class="ph-compass-ticks">
+            <line x1="100" y1="6" x2="100" y2="24"></line>
+            <line x1="100" y1="176" x2="100" y2="194"></line>
+            <line x1="6" y1="100" x2="24" y2="100"></line>
+            <line x1="176" y1="100" x2="194" y2="100"></line>
+          </g>
+          <g class="ph-compass-needle">
+            <polygon points="100,38 112,100 100,100" class="needle-pink"></polygon>
+            <polygon points="100,162 88,100 100,100" class="needle-white"></polygon>
+          </g>
+          <circle cx="100" cy="100" r="6" class="ph-compass-core"></circle>
+        </svg>
+      </div>
+
+      <!-- เนื้อหาข้อความ -->
+      <div class="hx-container hx-hero-content">
+        <h1 class="hx-hero-title hx-animate-up">
+          ก้าวแรกสู่<span class="hx-title-accent">อาชีพในฝัน</span><br>ที่มั่นคงของคุณ
+        </h1>
+        <p class="hx-hero-subtext hx-animate-up hx-delay-1">ค้นพบเส้นทางอนาคตที่ใช่ ด้วยข้อมูลอาชีพกว่า 400 สายงานที่ออกแบบมาเพื่อนักเรียนและนักศึกษาไทยโดยเฉพาะ</p>
+        <div class="hx-hero-actions hx-animate-up hx-delay-2">
+          <a href="javascript:void(0)" class="hx-btn hx-btn-white" onclick="showPage('page-explore')">
+            เริ่มสำรวจสายงาน
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+          </a>
+          <a href="javascript:void(0)" class="hx-btn hx-btn-outline-white" onclick="showPage('page-quiz')">
+            ทำแบบทดสอบ
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== ABOUT PLATFORM ==================== -->
+    <section class="hx-about">
+      <div class="hx-container hx-animate-up">
+        <span class="hx-section-tag">ABOUT PLATFORM</span>
+        <h2 class="hx-section-title">ทำไมต้อง Career Explorer Pro?</h2>
+        <p class="hx-about-desc">เราเชื่อว่าทุกคนมีศักยภาพที่รอการค้นพบ แพลตฟอร์มของเราถูกสร้างขึ้นเพื่อลดความเหลื่อมล้ำทางการศึกษาและให้ข้อมูลที่ถูกต้อง ครบถ้วน เพื่อช่วยให้นักเรียนไทยสามารถวางแผนการเรียนและสร้างอนาคตที่มั่นคงได้อย่างตรงจุด</p>
+      </div>
+    </section>
+
+    <!-- ==================== FEATURE 01 ==================== -->
+    <section class="hx-feature">
+      <div class="hx-container hx-feature-grid">
+        <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&q=80" alt="Career Planning" class="hx-feature-img hx-animate-up">
+        <div class="hx-feature-text hx-animate-up hx-delay-1">
+          <div class="hx-feature-number">01</div>
+          <div class="hx-feature-content">
+            <h2 class="hx-section-title">ฐานข้อมูลเงินเดือนที่แม่นยำ</h2>
+            <p class="hx-feature-desc">ไม่ต้องเดาอีกต่อไป! เราวิเคราะห์และรวบรวมอัตราค่าตอบแทนจริงในตลาดแรงงานไทย แบ่งแยกชัดเจนตั้งแต่ระดับเริ่มต้น (Entry Level) ไปจนถึงระดับผู้เชี่ยวชาญ เพื่อให้คุณวางแผนเป้าหมายรายได้ในอนาคตได้อย่างชัดเจน</p>
+            <a href="javascript:void(0)" class="hx-text-link" onclick="showPage('page-explore')">
+              ดูโครงสร้างรายได้แต่ละอาชีพ
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SERVICES ==================== -->
+    <section class="hx-services">
+      <div class="hx-container">
+        <div class="hx-animate-up" style="text-align: center;">
+          <h2 class="hx-section-title">ฟีเจอร์หลักของเรา</h2>
+        </div>
+        <div class="hx-services-grid">
+          <div class="hx-service-card hx-animate-up">
+            <div class="hx-service-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14l9-5-9-5-9 5 9 5z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14l9-5-9-5-9 5 9 5zm0 0v6"></path></svg>
+            </div>
+            <h3>ข้อมูลเส้นทางการศึกษา</h3>
+            <p>สรุปสายการเรียน คณะ และสาขาวิชาที่เกี่ยวข้อง พร้อมทักษะจำเป็นที่ต้องเตรียมตัวก่อนเข้าสู่วัยทำงาน</p>
+          </div>
+          <div class="hx-service-card hx-animate-up hx-delay-1">
+            <div class="hx-service-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"></path></svg>
+            </div>
+            <h3>ระบบเปรียบเทียบอาชีพ</h3>
+            <p>เทียบข้อมูลอาชีพที่สนใจแบบ Side-by-Side เพื่อประเมินข้อดีข้อเสีย และหาสายงานที่ตอบโจทย์ที่สุด</p>
+          </div>
+          <div class="hx-service-card hx-animate-up hx-delay-2">
+            <div class="hx-service-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+            </div>
+            <h3>แบบทดสอบค้นหาตนเอง</h3>
+            <p>ระบบวิเคราะห์บุคลิกภาพและความสนใจ เพื่อจับคู่อาชีพ Top 3 ที่เหมาะสมกับตัวตนของคุณ</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== FEATURE 02 ==================== -->
+    <section class="hx-feature">
+      <div class="hx-container hx-feature-grid reverse">
+        <div class="hx-feature-text hx-animate-up">
+          <div class="hx-feature-number">02</div>
+          <div class="hx-feature-content">
+            <h2 class="hx-section-title">เครื่องมือเปรียบเทียบอาชีพ</h2>
+            <p class="hx-feature-desc">ลังเลอยู่ใช่ไหม? ฟีเจอร์เปรียบเทียบของเราช่วยให้คุณหยิบอาชีพที่สนใจมาวางเทียบกันแบบหมัดต่อหมัด วิเคราะห์ทั้งเรื่องการเติบโต รายได้ และความต้องการของตลาดงาน เพื่อการตัดสินใจที่ไม่พลาด</p>
+            <a href="javascript:void(0)" class="hx-btn hx-btn-fuchsia" onclick="showPage('page-compare')">
+              ทดลองเปรียบเทียบอาชีพ
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            </a>
+          </div>
+        </div>
+        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80" alt="Data Analytics" class="hx-feature-img hx-animate-up hx-delay-1">
+      </div>
+    </section>
+
+    <!-- ==================== STATS ==================== -->
+    <section class="hx-stats">
+      <div class="hx-container hx-stats-grid hx-animate-up">
+        <div class="hx-stat-item">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+          <h4>14</h4>
+          <p>สายงานหลัก</p>
+        </div>
+        <div class="hx-stat-item">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+          <h4>400+</h4>
+          <p>อาชีพในระบบ</p>
+        </div>
+        <div class="hx-stat-item">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+          <h4>2569</h4>
+          <p>อัปเดตข้อมูลล่าสุด</p>
+        </div>
+        <div class="hx-stat-item">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+          <h4>100%</h4>
+          <p>เปิดให้ใช้บริการฟรี</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== BLOG / NEWS ==================== -->
+    <section class="hx-blog">
+      <div class="hx-container">
+        <div class="hx-text-center hx-animate-up">
+          <span class="hx-section-tag">KNOWLEDGE HUB</span>
+          <h2 class="hx-section-title" style="margin-bottom: 0;">ข่าวสารและบทความแนะแนว</h2>
+        </div>
+        <div class="hx-blog-grid">
+          <article class="hx-blog-card hx-animate-up">
+            <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=600&q=80" alt="Students studying with tech" class="hx-blog-img">
+            <div class="hx-blog-content">
+              <span class="hx-blog-tag">เทรนด์การศึกษา</span>
+              <h3 class="hx-blog-title">เจาะลึก 5 คณะมาแรงที่ตลาดงานยุคดิจิทัลต้องการตัว</h3>
+              <p class="hx-blog-excerpt">วิเคราะห์แนวโน้มการศึกษาที่ตอบโจทย์ความเปลี่ยนแปลงของเทคโนโลยี เพื่อการตัดสินใจที่แม่นยำ</p>
+            </div>
+          </article>
+          <article class="hx-blog-card hx-animate-up hx-delay-1">
+            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&q=80" alt="Student typing on laptop" class="hx-blog-img">
+            <div class="hx-blog-content">
+              <span class="hx-blog-tag">พัฒนาทักษะ</span>
+              <h3 class="hx-blog-title">Soft Skills สุดฮิตที่ช่วยให้เรซูเม่ของคุณโดดเด่น</h3>
+              <p class="hx-blog-excerpt">ทักษะอะไรบ้างที่ AI ยังไม่สามารถแทนที่ได้? เตรียมพร้อมเสริมความมั่นใจก่อนเข้าสู่โลกวัยทำงาน</p>
+            </div>
+          </article>
+          <article class="hx-blog-card hx-animate-up hx-delay-2">
+            <img src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=600&q=80" alt="Code on screen" class="hx-blog-img">
+            <div class="hx-blog-content">
+              <span class="hx-blog-tag">สายงานไอที</span>
+              <h3 class="hx-blog-title">วิศวกรซอฟต์แวร์ vs นักวิเคราะห์ข้อมูล เลือกทางไหนดี?</h3>
+              <p class="hx-blog-excerpt">เปรียบเทียบจุดเด่น ข้อท้าทาย และโครงสร้างเงินเดือนของ 2 อาชีพสุดฮอตในสายเทคโนโลยี</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== FINAL CTA ==================== -->
+    <section class="hx-final-cta">
+      <div class="hx-container hx-animate-up">
+        <h2>พร้อมที่จะค้นหาตัวเองหรือยัง?</h2>
+        <p style="font-size: 1.25rem; color: var(--hx-fuchsia-dark); margin-bottom: 40px; opacity: 0.9;">เริ่มต้นง่ายๆ ไม่มีค่าใช้จ่าย แพลตฟอร์มนี้เปิดกว้างสำหรับทุกคน</p>
+        <a href="javascript:void(0)" class="hx-btn hx-btn-fuchsia" onclick="showPage('page-quiz')">
+          เริ่มต้นใช้งานฟรี
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+        </a>
+      </div>
+    </section>
+
+  </div>
+  <!-- /// จบหน้าหลัก (PAGE-HOME) /// -->
+
+
+  <!-- 
+  ========================================================================
+  ========================================================================
+                      [2] หน้าสำรวจสายงาน (PAGE-EXPLORE) 
+  ========================================================================
+  ======================================================================== 
+  -->
+  <div id="page-explore" class="page">
+    <div class="container" id="cat-section" style="padding-top: 40px; padding-bottom: 80px;">
+
+      <div class="breadcrumb animate-up">
+        <span onclick="goHome()">หน้าหลัก</span>
+        <span class="sep">›</span>
+        <span class="current">สำรวจสายงาน</span>
+      </div>
+
+      <div class="section-header animate-up" style="text-align: center; margin-top: 20px;">
+        <div class="section-tag-v3" style="margin: 0 auto 15px auto;">ALL CATEGORIES</div>
+        <h2 class="section-title-v3">สำรวจสายงานที่คุณสนใจ</h2>
+        <p class="section-desc-v3">คลิกที่หมวดหมู่เพื่อดูอาชีพทั้งหมดในสายงานนั้น</p>
+      </div>
+
+      <div class="cat-grid animate-up" id="catGrid" style="animation-delay:0.2s;"></div>
+
+    </div>
+  </div>
+  <!-- /// จบหน้าสำรวจสายงาน (PAGE-EXPLORE) /// -->
+
+
+  <!-- 
+  ========================================================================
+  ========================================================================
+                  [3] หน้ารายชื่ออาชีพย่อยในสายงาน (PAGE-CAT) 
+  ========================================================================
+  ======================================================================== 
+  -->
+  <div id="page-cat" class="page">
+    <div class="container">
+      <div class="breadcrumb animate-up">
+        <span onclick="goHome()">หน้าหลัก</span>
+        <span class="sep">›</span>
+        <span class="current" id="breadcat"></span>
+      </div>
+      <button class="back-btn animate-up" onclick="goHome()">← ย้อนกลับ</button>
+      <div id="catHero" class="animate-up" style="animation-delay:0.05s;"></div>
+      <div class="section-title animate-up" id="catPageTitle"></div>
+      <div class="job-grid animate-up" id="jobGrid" style="animation-delay:0.1s;"></div>
+    </div>
+  </div>
+  <!-- /// จบหน้ารายชื่ออาชีพย่อยในสายงาน (PAGE-CAT) /// -->
+
+
+  <!-- 
+  ========================================================================
+  ========================================================================
+                  [4] หน้าแสดงรายละเอียดเชิงลึก (PAGE-DETAIL) 
+  ========================================================================
+  ======================================================================== 
+  -->
+  <div id="page-detail" class="page">
+    <div class="container">
+      <div class="breadcrumb animate-up">
+        <span onclick="goHome()">หน้าหลัก</span>
+        <span class="sep">›</span>
+        <span onclick="goBack()" id="breadcat2" style="cursor:pointer;"></span>
+        <span class="sep">›</span>
+        <span class="current" id="breadjob"></span>
+      </div>
+      <div style="margin-bottom:20px;" class="animate-up">
+        <button class="back-btn" onclick="goBack()">← ย้อนกลับ</button>
+      </div>
+      <div id="detailContent" class="animate-up" style="animation-delay:0.1s;"></div>
+    </div>
+  </div>
+  <!-- /// จบหน้าแสดงรายละเอียดเชิงลึก (PAGE-DETAIL) /// -->
+
+
+  <!-- 
+  ========================================================================
+  ========================================================================
+                      [5] หน้าผลการค้นหา (PAGE-SEARCH) 
+  ========================================================================
+  ======================================================================== 
+  -->
+  <div id="page-search" class="page">
+    <div class="container">
+      <div class="breadcrumb">
+        <span onclick="goHome()">หน้าหลัก</span>
+        <span class="sep">›</span>
+        <span class="current">ผลการค้นหา</span>
+      </div>
+      <div class="section-title" id="searchTitle">ผลการค้นหา</div>
+      <div id="searchResults" class="animate-up"></div>
+    </div>
+  </div>
+  <!-- /// จบหน้าผลการค้นหา (PAGE-SEARCH) /// -->
+
+
+  <!-- 
+  ========================================================================
+  ========================================================================
+                      [6] หน้าแบบทดสอบอาชีพ (PAGE-QUIZ) 
+  ========================================================================
+  ======================================================================== 
+  -->
+  <div id="page-quiz" class="page">
+    <div class="container">
+      <div class="breadcrumb animate-up">
+        <span onclick="goHome()">หน้าหลัก</span>
+        <span class="sep">›</span>
+        <span class="current">ทดสอบสายงาน</span>
+      </div>
+      <div class="section-title animate-up">แบบทดสอบค้นหาอาชีพที่ใช่</div>
+      <div id="quizApp"></div>
+    </div>
+  </div>
+  <!-- /// จบหน้าแบบทดสอบอาชีพ (PAGE-QUIZ) /// -->
+
+
+  <!-- 
+  ========================================================================
+  ========================================================================
+                  [7] หน้าเกี่ยวกับองค์กร สกสค. (PAGE-ABOUT-ORG) 
+  ========================================================================
+  ======================================================================== 
+  -->
+  <div id="page-about-org" class="page">
+
+    <div class="about-hero-full">
+      <div class="about-hero-bg"></div>
+      <div class="about-hero-blob about-hero-blob-1"></div>
+      <div class="about-hero-blob about-hero-blob-2"></div>
+      <div class="about-hero-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+      </div>
+      <div class="about-hero-inner">
+        <div class="about-logo-ring animate-up">
+          <div class="about-logo-ring-glow"></div>
+          <img src="https://upload.wikimedia.org/wikipedia/th/thumb/6/66/%E0%B8%95%E0%B8%A3%E0%B8%B2%E0%B8%AD%E0%B8%87%E0%B8%84%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B8%84%E0%B9%89%E0%B8%B2%E0%B8%82%E0%B8%AD%E0%B8%87%E0%B8%AA%E0%B8%81%E0%B8%AA%E0%B8%84.svg/330px-%E0%B8%95%E0%B8%A3%E0%B8%B2%E0%B8%AD%E0%B8%87%E0%B8%84%E0%B9%8C%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B8%84%E0%B9%89%E0%B8%B2%E0%B8%82%E0%B8%AD%E0%B8%87%E0%B8%AA%E0%B8%81%E0%B8%AA%E0%B8%84.svg.png" alt="ตราสัญลักษณ์องค์การค้าของ สกสค.">
+        </div>
+        <div class="about-founded-badge animate-up" style="animation-delay:0.1s;">
+          ก่อตั้ง พ.ศ. 2495 · มากกว่า 70 ปีแห่งความไว้วางใจ
+        </div>
+        <h1 class="about-hero-title animate-up" style="animation-delay:0.2s;">องค์การค้าของ สกสค.</h1>
+        <p class="about-hero-subtitle animate-up" style="animation-delay:0.3s;">ผู้ผลิตและจัดจำหน่ายสื่อการเรียนการสอนคุณภาพสูง<br>เพื่อพัฒนาการศึกษาไทยอย่างยั่งยืนมากกว่า 7 ทศวรรษ</p>
+        <div class="about-hero-links animate-up" style="animation-delay:0.4s;">
+          <a href="https://suksapanmall.com" target="_blank" class="about-hero-link">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            suksapanmall.com
+          </a>
+          <a href="https://web.facebook.com/suksapanpanitcenter" target="_blank" class="about-hero-link">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+            Facebook สกสค.
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="breadcrumb animate-up" style="margin-top:20px;">
+        <span onclick="goHome()">หน้าหลัก</span>
+        <span class="sep">›</span>
+        <span class="current">เกี่ยวกับองค์กร</span>
+      </div>
+
+      <div class="about-stats-row animate-up">
+        <div class="about-stat-card"><div class="about-stat-num">70+</div><div class="about-stat-label">ปีแห่งประสบการณ์</div></div>
+        <div class="about-stat-card"><div class="about-stat-num">10,000+</div><div class="about-stat-label">รายการสินค้า</div></div>
+        <div class="about-stat-card"><div class="about-stat-num">400+</div><div class="about-stat-label">อาชีพในระบบ</div></div>
+        <div class="about-stat-card"><div class="about-stat-num">14</div><div class="about-stat-label">สายงานหลัก</div></div>
+      </div>
+
+      <div class="about-two-col animate-up">
+        <div class="about-img-col">
+          <div class="about-img-wrap">
+            <img src="https://www.suksapan.or.th/assets/uploads/media-uploader/ladphao1729751846.jpg" alt="หน้าร้านศึกษาภัณฑ์พาณิชย์ สาขาลาดพร้าว">
+            <div class="img-badge">ก่อตั้ง 2495</div>
+          </div>
+        </div>
+        <div class="about-text-col">
+          <div class="section-tag">ประวัติและพันธกิจ</div>
+          <h2 class="about-section-title">กว่า 70 ปีเพื่อ<br>การศึกษาไทย</h2>
+          <p class="about-body-text">องค์การค้าของ สกสค. ก่อตั้งขึ้นในปี พ.ศ. 2495 มีภารกิจหลักในการผลิต จัดหา และจำหน่ายสื่อการเรียนการสอน อุปกรณ์การศึกษา และดูแลสวัสดิการแก่ครูและบุคลากรทางการศึกษาทั่วประเทศ</p>
+          <div class="mission-list">
+            <div class="mission-item">
+              <div class="mission-dot"></div>
+              <div><strong>ผลิตและพัฒนาสื่อการเรียนการสอน</strong><p>ที่ทันสมัย ส่งเสริมการเรียนรู้แห่งศตวรรษที่ 21</p></div>
+            </div>
+            <div class="mission-item">
+              <div class="mission-dot"></div>
+              <div><strong>สนับสนุนการศึกษาของชาติ</strong><p>และดูแลสวัสดิการครูและบุคลากรการศึกษาอย่างยั่งยืน</p></div>
+            </div>
+            <div class="mission-item">
+              <div class="mission-dot"></div>
+              <div><strong>ลดความเหลื่อมล้ำทางการศึกษา</strong><p>ผ่านการพัฒนาแพลตฟอร์มดิจิทัลสำหรับนักเรียนไทยทั่วประเทศ</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><div class="org-impact-section" style="padding: 0 0 0;">
+      <div class="container">
+        <div class="impact-banner animate-up">
+          <div style="text-align:center; margin-bottom:40px; position:relative; z-index:1;">
+            <div class="section-tag" style="background:rgba(255,255,255,0.12); border-color:rgba(255,255,255,0.2); color:rgba(255,255,255,0.85);">ผลกระทบและความสำเร็จ</div>
+            <h2 style="font-size:32px; font-weight:800; color:#fff; margin-top:8px; letter-spacing:-0.3px;">ตัวเลขที่พิสูจน์คุณค่า</h2>
+          </div>
+          <div class="impact-banner-grid">
+            <div class="impact-item">
+              <div class="impact-num">70<span>+</span></div>
+              <div class="impact-label">ปีที่ดำเนินงาน</div>
+              <div class="impact-sublabel">ตั้งแต่ พ.ศ. 2495</div>
+            </div>
+            <div class="impact-divider"></div>
+            <div class="impact-item">
+              <div class="impact-num">10<span>K+</span></div>
+              <div class="impact-label">รายการสินค้าและสื่อ</div>
+              <div class="impact-sublabel">ครบทุกระดับชั้น</div>
+            </div>
+            <div class="impact-divider"></div>
+            <div class="impact-item">
+              <div class="impact-num">1<span>M+</span></div>
+              <div class="impact-label">นักเรียนได้รับประโยชน์</div>
+              <div class="impact-sublabel">ทั่วประเทศไทย</div>
+            </div>
+            <div class="impact-divider"></div>
+            <div class="impact-item">
+              <div class="impact-num">77</div>
+              <div class="impact-label">จังหวัดที่ครอบคลุม</div>
+              <div class="impact-sublabel">ทั่วราชอาณาจักร</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="animate-up" style="padding: 70px 0 0;">
+        <div class="section-header" style="text-align:center; margin-bottom:40px;">
+          <div class="section-tag">คุณค่าหลัก</div>
+          <h2 class="section-title-v2">สิ่งที่เราเชื่อมั่น</h2>
+          <p class="section-desc" style="margin:0 auto;">หลักการที่ขับเคลื่อนองค์กรให้ก้าวหน้าและสร้างประโยชน์แก่สังคมไทยมาอย่างต่อเนื่อง</p>
+        </div>
+        <div class="values-grid">
+          <div class="value-card vc-1"> 
+            <div class="value-icon-wrap">🏆</div>
+            <div class="value-title">คุณภาพเป็นอันดับหนึ่ง</div>
+            <div class="value-desc">ทุกผลิตภัณฑ์และบริการผ่านกระบวนการควบคุมคุณภาพอย่างเคร่งครัดก่อนส่งมอบถึงผู้ใช้</div>
+          </div>
+          <div class="value-card vc-2">
+            <div class="value-icon-wrap">🤝</div>
+            <div class="value-title">ความยั่งยืนและความรับผิดชอบ</div>
+            <div class="value-desc">ดำเนินธุรกิจด้วยความโปร่งใส รับผิดชอบต่อสังคม และมุ่งสร้างประโยชน์ระยะยาว</div>
+          </div>
+          <div class="value-card vc-3">
+            <div class="value-icon-wrap">💡</div>
+            <div class="value-title">นวัตกรรมและการพัฒนา</div>
+            <div class="value-desc">ไม่หยุดพัฒนาและนำเทคโนโลยีสมัยใหม่มาปรับใช้เพื่อยกระดับการศึกษาไทยในยุคดิจิทัล</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="org-timeline-section animate-up">
+        <div class="section-header" style="text-align:center; margin-bottom:40px;">
+          <div class="section-tag">ประวัติศาสตร์</div>
+          <h2 class="section-title-v2">เส้นทาง 70 ปีของเรา</h2>
+          <p class="section-desc" style="margin:0 auto;">จากจุดเริ่มต้นเล็กๆ สู่องค์กรที่ส่งผลกระทบต่อการศึกษาไทยในวงกว้าง</p>
+        </div>
+        <div class="timeline-grid">
+          <div class="timeline-item">
+            <div class="tl-card">
+              <div class="tl-year">พ.ศ. 2495</div>
+              <div class="tl-title">ก่อตั้งองค์กร</div>
+              <div class="tl-desc">องค์การค้าของ สกสค. ถือกำเนิดขึ้นด้วยพันธกิจในการสนับสนุนการศึกษาของชาติ</div>
+            </div>
+            <div class="tl-dot"></div>
+            <div class="tl-empty"></div>
+          </div>
+          <div class="timeline-item">
+            <div class="tl-empty"></div>
+            <div class="tl-dot"></div>
+            <div class="tl-card">
+              <div class="tl-year">พ.ศ. 2520</div>
+              <div class="tl-title">ขยายสาขาทั่วประเทศ</div>
+              <div class="tl-desc">เปิดสาขาครอบคลุมทุกภูมิภาค เพื่อให้บริการโรงเรียนและบุคลากรทางการศึกษาได้ทั่วถึง</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="tl-card">
+              <div class="tl-year">พ.ศ. 2545</div>
+              <div class="tl-title">ครบ 50 ปีแห่งความเป็นเลิศ</div>
+              <div class="tl-desc">ฉลองครึ่งศตวรรษด้วยการเปิดตัวผลิตภัณฑ์ใหม่และปรับปรุงมาตรฐานสินค้าเป็นระดับสากล</div>
+            </div>
+            <div class="tl-dot"></div>
+            <div class="tl-empty"></div>
+          </div>
+          <div class="timeline-item">
+            <div class="tl-empty"></div>
+            <div class="tl-dot"></div>
+            <div class="tl-card">
+              <div class="tl-year">พ.ศ. 2560</div>
+              <div class="tl-title">ก้าวสู่ดิจิทัล</div>
+              <div class="tl-desc">เปิดตัว Suksapan Mall แพลตฟอร์มอีคอมเมิร์ซ เพื่อรองรับยุคเศรษฐกิจดิจิทัล</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="tl-card">
+              <div class="tl-year">พ.ศ. 2569</div>
+              <div class="tl-title">Career Explorer Pro</div>
+              <div class="tl-desc">อัปเดตฐานข้อมูลเงินเดือนครั้งใหญ่และระบบสำรวจอาชีพ เพื่อช่วยเยาวชนไทยค้นพบเส้นทางอนาคต</div>
+            </div>
+            <div class="tl-dot"></div>
+            <div class="tl-empty"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="org-quote-section animate-up">
+        <div class="quote-card-v2">
+          <div class="quote-text-v2">
+            <div class="qt-eyebrow">วิสัยทัศน์</div>
+            <h2 class="qt-headline">"การศึกษาที่ดีคือรากฐาน<br>ของสังคมที่เข้มแข็ง"</h2>
+            <p class="qt-body">เราเชื่อว่าเมื่อนักเรียนทุกคนเข้าถึงสื่อการเรียนที่มีคุณภาพและมีข้อมูลอาชีพที่ถูกต้อง พวกเขาจะสามารถเลือกเส้นทางชีวิตได้อย่างมั่นใจและสร้างอนาคตที่ดีให้ตัวเองและสังคม</p>
+            <div class="qt-cta-row">
+              <a href="https://suksapanmall.com" target="_blank" class="qt-btn-primary">
+                เยี่ยมชม Suksapan Mall
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+              </a>
+              <a href="https://web.facebook.com/suksapanpanitcenter" target="_blank" class="qt-btn-secondary">
+                ติดตาม Facebook
+              </a>
+            </div>
+          </div>
+          <div class="quote-image-wrap">
+            <div class="quote-img-stack">
+              <img class="qi-main" src="https://static.trueplookpanya.com/cmsblog/10/68010/thumb_file.jpg" alt="การศึกษาไทย">
+              <img class="qi-sub" src="https://www.suksapanpanit.com/assets/uploads/media-uploader/s-312528111710136194.jpg" alt="ห้องเรียนไทย">
+              <div class="qi-badge">📚 70+ ปีแห่งความไว้วางใจ</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-products-section animate-up">
+        <div class="section-header" style="text-align:center; margin-bottom:48px;">
+          <div class="section-tag">สิ่งที่เรามอบให้</div>
+          <h2 class="section-title-v2">ผลิตภัณฑ์และบริการ</h2>
+          <p class="section-desc" style="margin:0 auto;">ศูนย์รวมเครื่องมือและสื่อการเรียนรู้ที่ครบครันที่สุดสำหรับการศึกษาไทย</p>
+        </div>
+        <div class="products-grid-v2">
+          <div class="product-card-v2">
+            <div class="product-icon-wrap"><img src="img/icons/book.png" alt="หนังสือ" class="product-icon-img"></div>
+            <h4>แบบเรียนและหนังสือ</h4>
+            <p>จัดพิมพ์หนังสือเรียนและคู่มือครูที่ได้มาตรฐาน ครอบคลุมทุกระดับชั้น</p>
+            <div class="product-card-footer">มากกว่า 1,000 รายการ</div>
+          </div>
+          <div class="product-card-v2">
+            <div class="product-icon-wrap"><img src="img/icons/folding-clothes.png" alt="เครื่องแบบ" class="product-icon-img"></div>
+            <h4>เครื่องแบบนักเรียน</h4>
+            <p>ชุดนักเรียน ชุดลูกเสือ-เนตรนารี และอุปกรณ์ประกอบเครื่องแบบที่ถูกต้องตามระเบียบ</p>
+            <div class="product-card-footer">ถูกต้องตามระเบียบ</div>
+          </div>
+          <div class="product-card-v2">
+            <div class="product-icon-wrap"><img src="img/icons/microscope.png" alt="วิทยาศาสตร์" class="product-icon-img"></div>
+            <h4>อุปกรณ์วิทยาศาสตร์</h4>
+            <p>เครื่องมือทดลองและสารเคมีสำหรับห้องปฏิบัติการวิทยาศาสตร์ในโรงเรียน</p>
+            <div class="product-card-footer">มาตรฐานสากล</div>
+          </div>
+          <div class="product-card-v2">
+            <div class="product-icon-wrap"><img src="img/icons/toys.png" alt="สื่อปฐมวัย" class="product-icon-img"></div>
+            <h4>สื่อการสอนปฐมวัย</h4>
+            <p>ของเล่นเสริมพัฒนาการ สื่อทำมือ และเครื่องเขียนเพื่อส่งเสริมจินตนาการเด็ก</p>
+            <div class="product-card-footer">เสริมพัฒนาการ</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="org-branches-section animate-up">
+        <div class="branches-wrap">
+          <div class="section-header" style="margin-bottom:0;">
+            <div class="section-tag">เครือข่ายสาขา</div>
+            <h2 class="section-title-v2" style="font-size:28px;">เราอยู่ใกล้คุณทั่วไทย</h2>
+            <p class="section-desc">สาขาหลักและจุดบริการที่ครอบคลุมทั่วประเทศ</p>
+          </div>
+          <div class="branches-grid">
+            <div class="branch-card">
+              <div class="branch-icon">🏢</div>
+              <div class="branch-name">สำนักงานใหญ่</div>
+              <div class="branch-desc">ลาดพร้าว กรุงเทพฯ</div>
+            </div>
+            <div class="branch-card">
+              <div class="branch-icon">📦</div>
+              <div class="branch-name">ศูนย์กระจายสินค้า</div>
+              <div class="branch-desc">ทั่วประเทศ</div>
+            </div>
+            <div class="branch-card">
+              <div class="branch-icon">🛒</div>
+              <div class="branch-name">Suksapan Mall</div>
+              <div class="branch-desc">ช้อปออนไลน์ 24 ชม.</div>
+            </div>
+            <div class="branch-card">
+              <div class="branch-icon">📱</div>
+              <div class="branch-name">แอปพลิเคชัน</div>
+              <div class="branch-desc">iOS & Android</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section class="related-orgs-section animate-up">
+        <div class="section-header" style="text-align:center; margin-bottom:32px;">
+          <div class="section-tag">เครือข่าย</div>
+          <h2 class="section-title-v2" style="font-size:28px;">หน่วยงานที่เกี่ยวข้อง</h2>
+        </div>
+        <div class="logo-slider-container">
+          <div class="logo-track" id="logoTrack">
+            <a href="https://www.vec.go.th" target="_blank" class="logo-slide" title="สอศ."><img src="https://www.suksapanpanit.com/assets/uploads/media-uploader/logo-ovec1712218961.png" alt="สอศ."></a>
+            <a href="https://www.mhesi.go.th" target="_blank" class="logo-slide" title="อว."><img src="https://www.suksapanpanit.com/assets/uploads/media-uploader/logo-mhesi1712219017.png" alt="อว."></a>
+            <a href="https://www.ipst.ac.th" target="_blank" class="logo-slide" title="สสวท."><img src="https://www.suksapanpanit.com/assets/uploads/media-uploader/logo-nacc1712219051.png" alt="สสวท."></a>
+            <a href="https://ecd.onec.go.th" target="_blank" class="logo-slide" title="ปฐมวัยไทยแลนด์"><img src="https://www.suksapanpanit.com/assets/uploads/media-uploader/logo-ecd1712220459.png" alt="ปฐมวัยไทยแลนด์"></a>
+            <a href="https://dole.go.th" target="_blank" class="logo-slide" title="สกร."><img src="https://www.suksapanpanit.com/assets/uploads/media-uploader/logo-moe1712280913.png" alt="สกร."></a>
+            <a href="https://www.obec.go.th" target="_blank" class="logo-slide" title="สพฐ."><img src="https://www.suksapanpanit.com/assets/uploads/media-uploader/logo-obec1712216770.png" alt="สพฐ."></a>
+            <a href="http://www.onec.go.th" target="_blank" class="logo-slide" title="สกศ."><img src="https://www.suksapanpanit.com/assets/uploads/media-uploader/logo-onec1712216841.png" alt="สกศ."></a>
+          </div>
+        </div>
+      </section>
+
+      <div style="text-align:center; margin:20px 0 60px;" class="animate-up">
+        <button class="btn-outline-pink" onclick="goHome()">← กลับสู่หน้าหลัก</button>
+      </div>
+    </div>
+  </div>
+  <!-- /// จบหน้าเกี่ยวกับองค์กร สกสค. (PAGE-ABOUT-ORG) /// -->
+
+
+  <!-- 
+  ========================================================================
+  ========================================================================
+                  [8] หน้าเกี่ยวกับแอปพลิเคชัน (PAGE-ABOUT-APP) 
+  ========================================================================
+  ======================================================================== 
+  -->
+  <div id="page-about-app" class="page">
+
+    <div class="app-hero-section">
+      <div class="app-hero-bg-grid"></div>
+      <div class="app-hero-glow-1"></div>
+      <div class="app-hero-glow-2"></div>
+      <div class="app-hero-inner">
+        <div class="app-hero-chip animate-up">Career Explorer Pro · v2.0</div>
+        <h1 class="app-hero-title animate-up" style="animation-delay:0.1s;">
+          แพลตฟอร์มค้นหา<br><span class="ht-accent">อาชีพที่ใช่</span>
+        </h1>
+        <p class="app-hero-subtitle animate-up" style="animation-delay:0.2s;">
+          พัฒนาเพื่อช่วยนักเรียน นักศึกษา และทุกคนที่กำลังมองหาเส้นทาง<br>สำรวจข้อมูลอาชีพได้อย่างครบถ้วน ฟรี 100%
+        </p>
+        <div class="app-hero-stats animate-up" style="animation-delay:0.3s;">
+          <div class="ahs-item"><div class="ahs-num">14</div><div class="ahs-lbl">สายงานหลัก</div></div>
+          <div class="ahs-div"></div>
+          <div class="ahs-item"><div class="ahs-num">400+</div><div class="ahs-lbl">อาชีพในระบบ</div></div>
+          <div class="ahs-div"></div>
+          <div class="ahs-item"><div class="ahs-num">20</div><div class="ahs-lbl">คำถามในแบบทดสอบ</div></div>
+          <div class="ahs-div"></div>
+          <div class="ahs-item"><div class="ahs-num">100%</div><div class="ahs-lbl">ฟรีตลอดกาล</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container" style="padding-top:20px;">
+      <div class="breadcrumb animate-up">
+        <span onclick="goHome()">หน้าหลัก</span>
+        <span class="sep">›</span>
+        <span class="current">เกี่ยวกับแอป</span>
+      </div>
+    </div>
+
+    <div class="app-showcase-section">
+      <div class="showcase-inner">
+        <div class="showcase-text">
+          <div class="showcase-tag">ทำไมต้อง Career Explorer Pro</div>
+          <h2 class="showcase-title">ทุกข้อมูลที่คุณต้องการ<br>อยู่ในที่เดียว</h2>
+          <p class="showcase-body">ไม่ว่าคุณจะกำลังเลือกสายการเรียน เลือกมหาวิทยาลัย หรือวางแผนเปลี่ยนงาน Career Explorer Pro มีข้อมูลครบถ้วนพร้อมให้สำรวจโดยไม่ต้องเสียค่าใช้จ่ายใดๆ</p>
+          <div class="showcase-checklist">
+            <div class="sc-check">
+              <div class="sc-icon">💰</div>
+              <div>
+                <strong>ข้อมูลเงินเดือนอัปเดตปี 2569</strong>
+                <span>Entry / Mid / Senior Level ในทุกสายงาน</span>
+              </div>
+            </div>
+            <div class="sc-check">
+              <div class="sc-icon">🎓</div>
+              <div>
+                <strong>เส้นทางการศึกษาที่ชัดเจน</strong>
+                <span>วุฒิการศึกษา ระยะเวลาเรียน และสถาบันที่แนะนำ</span>
+              </div>
+            </div>
+            <div class="sc-check">
+              <div class="sc-icon">⚖️</div> <div>
+                <strong>เปรียบเทียบอาชีพ (Side-by-Side)</strong>
+                <span>เทียบข้อมูลอาชีพได้สูงสุด 3 รายการพร้อมกัน เพื่อช่วยตัดสินใจ</span>
+              </div>
+            </div>
+            <div class="sc-check">
+              <div class="sc-icon">🔍</div>
+              <div>
+                <strong>แบบทดสอบค้นหาอาชีพที่เหมาะสม</strong>
+                <span>20 ข้อ วิเคราะห์บุคลิกและความสนใจ แนะนำ Top 3</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="showcase-mockup">
+          <div class="mockup-outer">
+            <div class="mockup-inner">
+              <div class="mockup-topbar">
+                <div class="mockup-dots">
+                  <span></span><span></span><span></span>
+                </div>
+                <div class="mockup-url">career-explorer.suksapanpanit.com</div>
+              </div>
+              <div class="mockup-body">
+                <div class="mockup-hero-bar">
+                  <div>
+                    <div class="mhb-text">🔍 สำรวจอาชีพในฝัน</div>
+                    <div class="mhb-sub">400+ อาชีพ · 14 สายงาน</div>
+                  </div>
+                </div>
+                <div class="mockup-cards-row">
+                  <div class="mc-card" style="background:rgba(190,24,93,0.04);">
+                    <div class="mc-num" style="color:#be185d;">14</div>
+                    <div class="mc-lbl">สายงาน</div>
+                  </div>
+                  <div class="mc-card" style="background:rgba(131,24,67,0.04);">
+                    <div class="mc-num" style="color:#831843;">400+</div>
+                    <div class="mc-lbl">อาชีพ</div>
+                  </div>
+                </div>
+                <div class="mockup-search">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#c4849a" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                  ค้นหาอาชีพ...
+                </div>
+                <div class="mockup-job-list">
+                  <div class="mjl-item">
+                    <div class="mjl-icon" style="background:rgba(59,130,246,0.1);">💻</div>
+                    <div><div class="mjl-name">นักพัฒนาซอฟต์แวร์</div><div class="mjl-sal">฿35,000–฿120,000/เดือน</div></div>
+                    <div class="mjl-arrow">›</div>
+                  </div>
+                  <div class="mjl-item">
+                    <div class="mjl-icon" style="background:rgba(16,185,129,0.1);">🏥</div>
+                    <div><div class="mjl-name">แพทย์</div><div class="mjl-sal">฿45,000–฿200,000/เดือน</div></div>
+                    <div class="mjl-arrow">›</div>
+                  </div>
+                  <div class="mjl-item">
+                    <div class="mjl-icon" style="background:rgba(245,158,11,0.1);">🎨</div>
+                    <div><div class="mjl-name">นักออกแบบกราฟิก</div><div class="mjl-sal">฿25,000–฿80,000/เดือน</div></div>
+                    <div class="mjl-arrow">›</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mockup-float-badge">
+            <div class="mfb-num">100%</div>
+            <div class="mfb-lbl">ฟรีทุกฟีเจอร์</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="app-how-section animate-up">
+        <div class="section-header" style="text-align:center;">
+          <div class="section-tag">วิธีใช้งาน</div>
+          <h2 class="section-title-v2">ใช้งานง่าย 4 ขั้นตอน</h2>
+          <p class="section-desc" style="margin:0 auto;">ไม่ต้องสมัครสมาชิก ไม่ต้องดาวน์โหลด เปิดเว็บแล้วเริ่มสำรวจได้เลย</p>
+        </div>
+        <div class="how-steps-grid">
+          <div class="how-step">
+            <div class="how-step-num">1</div>
+            <div class="how-step-icon">🏠</div>
+            <div class="how-step-title">เลือกสายงาน</div>
+            <div class="how-step-desc">เลือกจาก 14 สายงานหลักที่คุณสนใจ หรือค้นหาอาชีพโดยตรง</div>
+          </div>
+          <div class="how-step">
+            <div class="how-step-num">2</div>
+            <div class="how-step-icon">🔍</div>
+            <div class="how-step-title">ค้นหาอาชีพ</div>
+            <div class="how-step-desc">ดูรายชื่ออาชีพในสายงานนั้นๆ พร้อมข้อมูลเบื้องต้น</div>
+          </div>
+          <div class="how-step">
+            <div class="how-step-num">3</div>
+            <div class="how-step-icon">📋</div>
+            <div class="how-step-title">ศึกษาข้อมูลลึก</div>
+            <div class="how-step-desc">อ่านรายละเอียดเงินเดือน การศึกษา ทักษะ และโอกาสเติบโต</div>
+          </div>
+          <div class="how-step">
+            <div class="how-step-num">4</div>
+            <div class="how-step-icon">⚖️</div>
+            <div class="how-step-title">เปรียบเทียบ & ทดสอบ</div>
+            <div class="how-step-desc">เทียบอาชีพแบบหมัดต่อหมัด หรือทำแบบทดสอบเพื่อค้นหาความถนัด</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="app-features-section">
+      <div class="container">
+        <div class="section-header" style="text-align:center;" class="animate-up">
+          <div class="section-tag">ฟีเจอร์หลัก</div>
+          <h2 class="section-title-v2">ทุกอย่างที่คุณต้องการ</h2>
+          <p class="section-desc" style="margin:0 auto;">ออกแบบมาเพื่อให้การค้นหาอาชีพเป็นเรื่องสนุกและมีประสิทธิภาพ</p>
+        </div>
+        <div class="feature-tabs-grid animate-up">
+          <div class="feature-tab-card">
+            <div class="ftc-icon-wrap" style="background:linear-gradient(135deg,rgba(190,24,93,0.9),rgba(244,114,182,0.9));">💰</div>
+            <div class="ftc-content">
+              <div class="ftc-label">ข้อมูลทางการเงิน</div>
+              <div class="ftc-title">ฐานข้อมูลเงินเดือนปี 2569</div>
+              <div class="ftc-desc">เปรียบเทียบเงินเดือนทุกระดับตั้งแต่เริ่มงานจนถึงผู้เชี่ยวชาญ พร้อมกราฟแสดงผลที่เข้าใจง่ายในแต่ละอาชีพ</div>
+              <div class="ftc-tags">
+                <span class="ftc-tag">Entry Level</span>
+                <span class="ftc-tag">Mid Level</span>
+                <span class="ftc-tag">Senior Level</span>
+              </div>
+            </div>
+          </div>
+          <div class="feature-tab-card">
+            <div class="ftc-icon-wrap" style="background:linear-gradient(135deg,rgba(8,145,178,0.9),rgba(103,232,249,0.9));">🎓</div>
+            <div class="ftc-content">
+              <div class="ftc-label">เส้นทางการเรียน</div>
+              <div class="ftc-title">แผนการศึกษาครบวงจร</div>
+              <div class="ftc-desc">รู้ชัดว่าต้องเรียนสาขาอะไร ที่มหาวิทยาลัยไหน ใช้เวลานานเท่าไร พร้อมคุณสมบัติที่ต้องการ</div>
+              <div class="ftc-tags">
+                <span class="ftc-tag">วุฒิการศึกษา</span>
+                <span class="ftc-tag">สาขาวิชา</span>
+                <span class="ftc-tag">ระยะเวลา</span>
+              </div>
+            </div>
+          </div>
+          <div class="feature-tab-card">
+            <div class="ftc-icon-wrap" style="background:linear-gradient(135deg,rgba(245,158,11,0.9),rgba(252,211,77,0.9));">⚖️</div> <div class="ftc-content">
+              <div class="ftc-label">เครื่องมือตัดสินใจ</div>
+              <div class="ftc-title">เปรียบเทียบอาชีพ</div>
+              <div class="ftc-desc">เลือกระบบจับคู่อาชีพที่สนใจได้สูงสุด 3 รายการ เปรียบเทียบข้อมูลรายได้ การศึกษา และทักษะแบบ Side-by-Side</div>
+              <div class="ftc-tags">
+                <span class="ftc-tag">Side-by-Side</span>
+                <span class="ftc-tag">Max 3 Careers</span>
+                <span class="ftc-tag">Smart Compare</span>
+              </div>
+            </div>
+          </div>
+          <div class="feature-tab-card">
+            <div class="ftc-icon-wrap" style="background:linear-gradient(135deg,rgba(124,58,237,0.9),rgba(167,139,250,0.9));">🧠</div>
+            <div class="ftc-content">
+              <div class="ftc-label">ค้นหาตัวเอง</div>
+              <div class="ftc-title">แบบทดสอบ 20 ข้อ</div>
+              <div class="ftc-desc">แบบสอบถามเชิงจิตวิทยาที่วิเคราะห์บุคลิกภาพ ความสนใจ และค่านิยม เพื่อแนะนำ Top 3 อาชีพที่เหมาะที่สุด</div>
+              <div class="ftc-tags">
+                <span class="ftc-tag">Personality Test</span>
+                <span class="ftc-tag">Top 3 Results</span>
+                <span class="ftc-tag">ฟรี 100%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="app-refs-section animate-up">
+        <div class="section-header" style="text-align:center;">
+          <div class="section-tag">ความน่าเชื่อถือ</div>
+          <h2 class="section-title-v2">แหล่งข้อมูลอ้างอิง</h2>
+          <p class="section-desc" style="margin:0 auto;">ข้อมูลเงินเดือนและแนวโน้มอาชีพปี 2569 รวบรวมจากสถาบันและบริษัทจัดหางานชั้นนำ</p>
+        </div>
+        <div class="refs-grid">
+          <a href="https://www.adecco.com/th-th/salary-guide/" target="_blank" class="ref-card">
+            <div class="ref-logo-wrap">
+              <img src="data:image/png;base64,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" alt="Adecco Thailand" class="ref-logo-img">
+            </div>
+            <div class="ref-title">Adecco Thailand</div>
+            <p class="ref-desc">คู่มือฐานเงินเดือนพนักงานเอกชนประจำปี 2569 (Salary Guide 2026)</p>
+            <div class="ref-btn">ดูข้อมูลต้นฉบับ ↗</div>
+          </a>
+          <a href="https://www.robertwalters.co.th/our-services/salary-survey.html" target="_blank" class="ref-card">
+            <div class="ref-logo-wrap">
+              <img src="https://www.robertwalters.co.uk/content/dam/robert-walters-redesign/global/images/logos/RW_logo_380x214px_dark%20grey.png" alt="Robert Walters" class="ref-logo-img">
+            </div>
+            <div class="ref-title">Robert Walters</div>
+            <p class="ref-desc">รายงานสำรวจเงินเดือนเชิงลึกในกลุ่มอุตสาหกรรมเทคโนโลยีและวิศวกรรม</p>
+            <div class="ref-btn">ดูข้อมูลต้นฉบับ ↗</div>
+          </a>
+          <a href="https://www.manpowerthailand.com/en/salary-guide" target="_blank" class="ref-card">
+            <div class="ref-logo-wrap">
+              <img src="https://www.manpowerthailand.com/-/jssmedia/project/manpowergroup/admin/logos/brand/light-bg/manpower-logo-horizontal.svg" alt="ManpowerGroup" class="ref-logo-img">
+            </div>
+            <div class="ref-title">ManpowerGroup</div>
+            <p class="ref-desc">ข้อมูลอัตราค่าจ้างในตลาดแรงงานไทยครอบคลุม 9 อุตสาหกรรมหลัก</p>
+            <div class="ref-btn">ดูข้อมูลต้นฉบับ ↗</div>
+          </a>
+          <a href="https://th.jobsdb.com/career-advice/explore-salaries" target="_blank" class="ref-card">
+            <div class="ref-logo-wrap">
+              <img src="data:image/png;base64,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" alt="JobsDB by SEEK" class="ref-logo-img">
+            </div>
+            <div class="ref-title">JobsDB (SEEK)</div>
+            <p class="ref-desc">ฐานข้อมูลเงินเดือนเฉลี่ยรายอาชีพที่ใหญ่ที่สุดในประเทศไทย</p>
+            <div class="ref-btn">ดูข้อมูลต้นฉบับ ↗</div>
+          </a>
+        </div>
+      </div>
+
+      <div class="app-roadmap-section animate-up">
+        <div class="section-header" style="text-align:center;">
+          <div class="section-tag">แผนพัฒนา</div>
+          <h2 class="section-title-v2">ก้าวต่อไปของเรา</h2>
+          <p class="section-desc" style="margin:0 auto;">เราไม่หยุดพัฒนา เพื่อให้แพลตฟอร์มมีประสิทธิภาพและประโยชน์มากยิ่งขึ้น</p>
+        </div>
+        <div class="roadmap-grid">
+          <div class="roadmap-card rc-done">
+            <div class="rc-status"><span class="rc-dot"></span> เสร็จแล้ว</div>
+            <div class="rc-title">🗄️ ฐานข้อมูลอาชีพ 400+</div>
+            <div class="rc-desc">รวบรวมและจัดหมวดหมู่อาชีพกว่า 400 รายการใน 14 สายงานหลัก พร้อมข้อมูลครบถ้วน</div>
+          </div>
+          <div class="roadmap-card rc-done">
+            <div class="rc-status"><span class="rc-dot"></span> เสร็จแล้ว</div>
+            <div class="rc-title">🧠 แบบทดสอบอาชีพ 20 ข้อ</div>
+            <div class="rc-desc">ระบบวิเคราะห์บุคลิกและแนะนำอาชีพ Top 3 ที่เหมาะสมสำหรับผู้ใช้แต่ละคน</div>
+          </div>
+          <div class="roadmap-card rc-done">
+            <div class="rc-status"><span class="rc-dot"></span> เสร็จแล้ว</div>
+            <div class="rc-title">📱 รองรับทุกอุปกรณ์</div>
+            <div class="rc-desc">Responsive Design ที่ทำงานได้สมบูรณ์บนมือถือ แท็บเล็ต และคอมพิวเตอร์ทุกขนาด</div>
+          </div>
+          <div class="roadmap-card rc-done">
+            <div class="rc-status"><span class="rc-dot"></span> เสร็จแล้ว</div>
+            <div class="rc-title">⚖️ ระบบเปรียบเทียบอาชีพ</div>
+            <div class="rc-desc">เครื่องมือเปรียบเทียบข้อมูลอาชีพแบบ Side-by-Side สูงสุด 3 รายการพร้อมกัน เพื่อช่วยในการตัดสินใจ</div>
+          </div>
+          <div class="roadmap-card rc-done">
+            <div class="rc-status"><span class="rc-dot"></span> เสร็จแล้ว</div>
+            <div class="rc-title">🤖 AI Career Advisor</div>
+            <div class="rc-desc">ระบบ AI ที่ให้คำแนะนำเส้นทางอาชีพแบบส่วนตัว เหมาะกับบุคลิกและเป้าหมายของคุณ</div>
+          </div>
+          <div class="roadmap-card rc-progress">
+            <div class="rc-status"><span class="rc-dot"></span> กำลังพัฒนา</div>
+            <div class="rc-title">🔔 ระบบแจ้งเตือนงาน</div>
+            <div class="rc-desc">แจ้งเตือนตำแหน่งงานว่างในสาขาที่คุณสนใจจากแหล่งงานชั้นนำทั่วประเทศ</div>
+          </div>
+          <div class="roadmap-card rc-progress">
+            <div class="rc-status"><span class="rc-dot"></span> กำลังพัฒนา</div>
+            <div class="rc-title">🤝 ระบบ Mentorship</div>
+            <div class="rc-desc">เชื่อมต่อผู้ใช้กับผู้เชี่ยวชาญในสาขาต่างๆ เพื่อขอคำปรึกษาด้านอาชีพโดยตรง</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="team-section animate-up" style="padding: 70px 0 20px;">
+        <div class="section-header" style="text-align:center; margin-bottom:40px;">
+          <div class="section-tag">ทีมงาน</div>
+          <h2 class="section-title-v2" style="font-size:28px;">คนเบื้องหลัง Career Explorer Pro</h2>
+          <p class="section-desc" style="margin:0 auto;">ผู้สร้างสรรค์แพลตฟอร์มที่ช่วยเยาวชนไทยค้นพบอนาคต</p>
+        </div>
+        <div class="team-grid">
+
+          <div class="dev-card-v2 animate-up">
+            <div class="dev-card-banner">
+              <div class="dev-card-banner-badge">Lead Developer</div>
+            </div>
+            <div class="dev-card-body">
+              <img class="dev-avatar" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQF02Jj8T2t7PdkytAw42HDuuSz7yXguKn8Lg&s" alt="นาย ชโยดม บัวขาว">
+              <div class="dev-name">นาย ชโยดม บัวขาว</div>
+              <div class="dev-role">นักพัฒนาหลัก · นักศึกษาฝึกงาน</div>
+              <p class="dev-bio">นักศึกษาคณะเทคโนโลยีสารสนเทศ มหาวิทยาลัยกรุงเทพสุวรรณภูมิ (BSU) ผู้รับผิดชอบออกแบบและพัฒนาแพลตฟอร์มนี้ตั้งแต่ต้นจนจบ</p>
+              <div class="dev-skills-wrap">
+                <span class="dev-skill-pill">HTML / CSS</span>
+                <span class="dev-skill-pill">JavaScript</span>
+                <span class="dev-skill-pill">UI/UX Design</span>
+                <span class="dev-skill-pill">Data Research</span>
+              </div>
+              <div class="dev-links">
+                <a href="#" class="dev-link-btn">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                  GitHub
+                </a>
+                <a href="mailto:eshop.bowt2@gmail.com" class="dev-link-btn">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                  Email
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="dev-card-v2 animate-up" style="animation-delay:0.1s;">
+            <div class="dev-card-banner" style="background:linear-gradient(135deg,#5c0930,#9d1454);">
+              <div class="dev-card-banner-badge">Sponsor & Support</div>
+            </div>
+            <div class="dev-card-body">
+              <img class="dev-avatar" src="https://www.suksapan.or.th/assets/uploads/media-uploader/bowt91728008761.png" alt="ตราองค์การค้าของ สกสค." style="background:#fff; padding:8px; object-fit:contain;">
+              <div class="dev-name">องค์การค้าของ สกสค.</div>
+              <div class="dev-role">หน่วยงานสนับสนุน · ให้คำปรึกษา</div>
+              <p class="dev-bio">องค์กรชั้นนำด้านการศึกษาไทยกว่า 70 ปี ผู้ให้การสนับสนุนและประสานงานการพัฒนาโครงการนี้ให้สมบูรณ์และเป็นประโยชน์ต่อเยาวชนไทย</p>
+              <div class="dev-skills-wrap">
+                <span class="dev-skill-pill">Education</span>
+                <span class="dev-skill-pill">Mentorship</span>
+                <span class="dev-skill-pill">Content Review</span>
+                <span class="dev-skill-pill">Data Support</span>
+              </div>
+              <div class="dev-links">
+                <a href="https://suksapanmall.com" target="_blank" class="dev-link-btn">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                  เว็บไซต์
+                </a>
+                <a href="https://web.facebook.com/suksapanpanitcenter" target="_blank" class="dev-link-btn">
+                  Facebook
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="about-stats-row animate-up" style="margin-top:0;">
+        <div class="about-stat-card"><div class="about-stat-num">14</div><div class="about-stat-label">สายงานหลัก</div></div>
+        <div class="about-stat-card"><div class="about-stat-num">400+</div><div class="about-stat-label">อาชีพในระบบ</div></div>
+        <div class="about-stat-card"><div class="about-stat-num">20</div><div class="about-stat-label">คำถามในแบบทดสอบ</div></div>
+        <div class="about-stat-card"><div class="about-stat-num">100%</div><div class="about-stat-label">ฟรี ไม่มีค่าใช้จ่าย</div></div>
+      </div>
+
+      <div style="text-align:center; margin:40px 0 60px;" class="animate-up">
+        <button class="btn-outline-pink" onclick="goHome()">← กลับสู่หน้าหลัก</button>
+      </div>
+    </div>
+  </div>
+  <!-- /// จบหน้าเกี่ยวกับแอปพลิเคชัน (PAGE-ABOUT-APP) /// -->
+
+
+  <!-- 
+  ========================================================================
+  ========================================================================
+                  [9] หน้าเปรียบเทียบอาชีพ (PAGE-COMPARE) 
+  ========================================================================
+  ======================================================================== 
+  -->
+  <div id="page-compare" class="page">
+
+    <div class="cmp-header">
+      <h1>🔍 เปรียบเทียบอาชีพ</h1>
+      <p>ค้นหาและเลือกอาชีพสูงสุด 3 รายการเพื่อเปรียบเทียบแบบ Side-by-Side</p>
+    </div>
+
+    <div class="cmp-search-section">
+      <div class="cmp-search-inner">
+
+        <div class="cmp-slots-row">
+          <span class="cmp-slots-label">เลือกแล้ว</span>
+          <div id="cmp-slots"></div>
+        </div>
+
+        <div class="cmp-meta-row">
+          <span id="cmp-count">0/3</span>
+          <button id="cmp-clear-btn" onclick="compareClear()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+            ล้างทั้งหมด
+          </button>
+        </div>
+
+        <div id="cmp-search-wrap">
+          <div class="cmp-search-box">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input
+              id="cmp-search-input"
+              type="text"
+              placeholder="ค้นหาอาชีพที่ต้องการเปรียบเทียบ... เช่น แพทย์, โปรแกรมเมอร์"
+              oninput="compareSearchInput(this.value)"
+              onblur="compareSearchBlur()"
+              autocomplete="off"
+            />
+          </div>
+          <div id="cmp-search-dropdown"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="cmp-body">
+      <div id="cmp-table-wrap"></div>
+    </div>
+
+    <div style="text-align:center; padding: 0 0 40px;">
+      <button onclick="goHome()" style="background:none;border:none;color:var(--muted);font-family:'Prompt',sans-serif;font-size:0.85rem;cursor:pointer;display:inline-flex;align-items:center;gap:6px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        กลับสู่หน้าหลัก
+      </button>
+    </div>
+
+  </div>
+  <!-- /// จบหน้าเปรียบเทียบอาชีพ (PAGE-COMPARE) /// -->
+
+
+  <!-- 
+  ========================================================================
+  ========================================================================
+                          [10] ส่วนท้ายของเว็บไซต์ (FOOTER) 
+  ========================================================================
+  ======================================================================== 
+  -->
+  <footer>
+    <div class="footer-inner">
+      <div class="ft-brand">
+        <div class="ft-brand-head">
+          <img src="https://www.suksapan.or.th/assets/uploads/media-uploader/bowt91728008761.png" alt="โลโก้องค์การค้าของ สกสค." />
+          <div class="ft-brand-name">
+            <div class="line1">SUKSAPANPANIT</div>
+            <div class="line2">Career Explorer</div>
+          </div>
+        </div>
+        <p class="ft-brand-desc">สร้างด้วย ❤️ เพื่อนักเรียนไทย<br />องค์การค้าของ สกสค. มีภารกิจในการผลิตและพัฒนาสื่อการเรียนการสอนที่ทันสมัย</p>
+        <div class="ft-social-btns">
+          <a href="https://web.facebook.com/suksapanpanitcenter" target="_blank" class="ft-social-btn">
+            <img src="https://static.xx.fbcdn.net/rsrc.php/y-/r/yhD4cqC_Wzs.webp" alt="" role="presentation" />
+            Facebook สกสค.
+          </a>
+          <a href="https://suksapanmall.com/#/" target="_blank" class="ft-social-btn">
+            <img src="https://www.suksapanpanit.com/assets/uploads/media-uploader/logo-ssp-6006001755761321.png" alt="" role="presentation" />
+            Suksapan Mall
+          </a>
+        </div>
+      </div>
+
+      <div class="ft-contact">
+        <div class="ft-col-title"><div class="ft-col-title-icon">📍</div>ติดต่อเรา</div>
+        <div class="ft-contact-list">
+          <div class="ft-contact-item">
+            <div class="ft-ci-icon">🏢</div>
+            <div>
+              <div class="ft-ci-label">ที่อยู่</div>
+              <div class="ft-ci-value">2249 ถนนลาดพร้าว แขวงสะพานสอง<br />เขตวังทองหลาง กทม. 10310</div>
+            </div>
+          </div>
+          <div class="ft-contact-item">
+            <div class="ft-ci-icon">📞</div>
+            <div>
+              <div class="ft-ci-label">โทรศัพท์</div>
+              <div class="ft-ci-value">0 2514 4023-30 ต่อ 222, 223</div>
+            </div>
+          </div>
+          <div class="ft-contact-item">
+            <div class="ft-ci-icon">✉️</div>
+            <div>
+              <div class="ft-ci-label">อีเมล</div>
+              <div class="ft-ci-value"><a href="mailto:eshop.bowt2@gmail.com">eshop.bowt2@gmail.com</a></div>
+            </div>
+          </div>
+        </div>
+        <div class="ft-map">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.2764952044813!2d100.59609657508933!3d13.760233086641885!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e29e843f55e09d%3A0x6334f5905187e1f!2z4Liq4LiW4Liy4Lia4Liy4LiH4Liq4Liy4LiZ4Liq4Liy4Li44Lij4Li14LiZ4Liy4LiH4Liq4Li04LiX4Lii4Liy4Lio4Li44LiB4Lip4Liy!5e0!3m2!1sth!2sth!4v1716777000000!5m2!1sth!2sth" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy" title="แผนที่กูเกิลแมปแสดงที่ตั้งองค์การค้าของ สกสค."></iframe>
+          <a href="https://maps.app.goo.gl/4yTzcFRytRqG7XG29" target="_blank" class="ft-map-pill">เปิดใน Maps</a>
+        </div>
+      </div>
+
+      <div class="ft-download">
+        <div class="ft-col-title"><div class="ft-col-title-icon">📲</div>ดาวน์โหลดแอป</div>
+        <div class="ft-store-btns">
+          <a href="https://play.google.com/store/apps/details?id=td.webuild.ssp" target="_blank" class="ft-store-link">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="" role="presentation" />
+            <div class="ft-store-text"><small>GET IT ON</small><strong>Google Play</strong></div>
+          </a>
+          <a href="https://apps.apple.com/us/app/suksapan-mall/id1587123179" target="_blank" class="ft-store-link">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="" role="presentation" />
+            <div class="ft-store-text"><small>DOWNLOAD ON THE</small><strong>App Store</strong></div>
+          </a>
+        </div>
+        <div class="ft-qr-wrap">
+          <div class="ft-qr-img">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://suksapanmall.com" alt="QR Code Suksapan Mall" />
+          </div>
+          <div class="ft-qr-info">
+            <small>สแกน QR Code</small>
+            <p>ดาวน์โหลด Suksapan Mall<br/>ได้โดยตรงผ่านสมาร์ทโฟน</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bar">© 2026 All rights reserved by SUKSAPANPANIT</div>
+  </footer>
+  <!-- /// จบส่วนท้ายของเว็บไซต์ (FOOTER) /// -->
+
+
+  <!-- 
+  ========================================================================
+  ========================================================================
+                          [11] JAVASCRIPT LIBRARIES 
+  ========================================================================
+  ======================================================================== 
+  -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/data-loader.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/router.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/quiz.js"></script>
+  <script src="js/loader.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/compare.js"></script>
+  <script src="js/compare-deco.js"></script>
+  <script src="js/colorblind.js"></script>
+  <script src="js/floating-dock.js"></script>
+  
+  <script>
+  // เอฟเฟกต์ตัวเลขนับขึ้นในบล็อกสถิติ (หน้าหลัก) — ทำงานครั้งเดียวเมื่อเลื่อนมาเห็น
+  // แนะนำ: ย้ายโค้ดนี้ไปรวมกับไฟล์ JS หลัก เช่น render.js เพื่อความเป็นระเบียบของโปรเจกต์
+  (function () {
+    if (window.__careerExplorerCountUpInit) return;
+    window.__careerExplorerCountUpInit = true;
+
+    function animateCount(el) {
+      var target = parseInt(el.getAttribute('data-countup'), 10) || 0;
+      var duration = 1200;
+      var start = null;
+
+      function step(timestamp) {
+        if (!start) start = timestamp;
+        var progress = Math.min((timestamp - start) / duration, 1);
+        var eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+        el.textContent = Math.floor(eased * target);
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        } else {
+          el.textContent = target;
+        }
+      }
+      requestAnimationFrame(step);
+    }
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          animateCount(entry.target);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.4 });
+
+    document.querySelectorAll('[data-countup]').forEach(function (el) {
+      observer.observe(el);
+    });
+  })();
+  </script>
+
+  <script>
+    function toggleMobileMenu() {
+      document.getElementById('navMenu')?.classList.toggle('active');
+    }
+    function closeMobileMenu() {
+      document.getElementById('navMenu')?.classList.remove('active');
+    }
+    function toggleAboutDropdown(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      document.getElementById('aboutDropdown').classList.toggle('open');
+    }
+    function closeAll() {
+      document.getElementById('aboutDropdown')?.classList.remove('open');
+      closeMobileMenu();
+    }
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('#aboutDropdown')) {
+        document.getElementById('aboutDropdown')?.classList.remove('open');
+      }
+    });
+
+    let lastScrollY = window.scrollY;
+    const nav = document.querySelector('nav');
+    window.addEventListener('scroll', () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > lastScrollY && currentScrollY > 70) nav.classList.add('nav-hidden');
+      else if (currentScrollY < lastScrollY) nav.classList.remove('nav-hidden');
+      lastScrollY = currentScrollY;
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const ticker = document.getElementById('tickerTrack');
+      if (ticker) ticker.innerHTML += ticker.innerHTML;
+
+      const track = document.getElementById('logoTrack');
+      if (!track) return;
+      track.innerHTML += track.innerHTML;
+
+      let isDown = false, startX, scrollLeft, isAutoScrolling = true;
+      function autoScroll() {
+        if (isAutoScrolling && !isDown) {
+          track.scrollLeft += 1;
+          if (track.scrollLeft >= track.scrollWidth / 2) track.scrollLeft = 0;
+        }
+        requestAnimationFrame(autoScroll);
+      }
+      requestAnimationFrame(autoScroll);
+
+      track.addEventListener('mousedown', (e) => { isDown = true; isAutoScrolling = false; startX = e.pageX - track.offsetLeft; scrollLeft = track.scrollLeft; });
+      track.addEventListener('mouseleave', () => { isDown = false; isAutoScrolling = true; });
+      track.addEventListener('mouseup', () => { isDown = false; isAutoScrolling = true; });
+      track.addEventListener('mousemove', (e) => { if (!isDown) return; e.preventDefault(); const x = e.pageX - track.offsetLeft; track.scrollLeft = scrollLeft - (x - startX) * 2; });
+      track.addEventListener('touchstart', () => { isAutoScrolling = false; });
+      track.addEventListener('touchend', () => { isAutoScrolling = true; });
+
+      /* ── Salary bar animations on scroll (detail page) ── */
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.querySelectorAll('.scv2-bar-fill, .drc-skill-bar-fill').forEach(bar => {
+              bar.style.width = bar.dataset.w || bar.style.getPropertyValue('--w') || '100%';
+            });
+          }
+        });
+      }, { threshold: 0.3 });
+
+      document.querySelectorAll('.salary-card-v2, .detail-related-card').forEach(el => observer.observe(el));
+    });
+
+
+(function () {
+
+  /* ── 1. Widget HTML ── */
+  const widget = document.createElement('div');
+  widget.id = 'ai-advisor-widget';
+  widget.innerHTML = `
+    <div id="adv-bubble" onclick="window.advToggle()" title="AI Career Advisor">
+      <div class="adv-bubble-ring"></div>
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+      <span id="adv-unread" class="adv-unread" style="display:none">1</span>
+    </div>
+    <div id="adv-panel" class="adv-panel adv-hidden">
+      <div class="adv-header">
+        <div class="adv-header-left">
+        <div class="adv-avatar">
+          <img src="img/icons/ai-avatar-Photoroom.png" alt="AI Avatar">
+        </div>
+          <div>
+            <div class="adv-title">AI Career Advisor</div>
+            <div class="adv-status"><span class="adv-dot"></span>พร้อมให้คำแนะนำ</div>
+          </div>
+        </div>
+        <button class="adv-close" onclick="window.advToggle()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="adv-messages" id="adv-messages">
+        <div class="adv-msg adv-msg-bot">
+          <div class="adv-msg-bubble">
+            สวัสดีครับ! 👋 ผม <strong>AI Career Advisor</strong> ช่วยแนะนำเส้นทางอาชีพที่เหมาะกับคุณได้เลย<br><br>
+            ถามได้อิสระเลยนะครับ ไม่ว่าจะเป็นข้อมูลเงินเดือน เส้นทางการศึกษา หรืออาชีพที่เหมาะกับตัวเอง 😊
+          </div>
+        </div>
+        <div class="adv-suggestions" id="adv-suggestions">
+          <button onclick="window.advSend('ฉันชอบเทคโนโลยีและคอมพิวเตอร์ แนะนำอาชีพให้หน่อย')">💻 ชอบเทคโนโลยี</button>
+          <button onclick="window.advSend('ฉันชอบช่วยเหลือคน อยากทำงานด้านสุขภาพ')">🏥 ชอบช่วยคน</button>
+          <button onclick="window.advSend('ฉันชอบธุรกิจและการเงิน อยากรู้อาชีพที่รายได้ดี')">💼 ชอบธุรกิจ</button>
+          <button onclick="window.advSend('แนะนำอาชีพที่มีอนาคตในอีก 10 ปีข้างหน้า')">🚀 อาชีพแห่งอนาคต</button>
+        </div>
+      </div>
+      <div class="adv-input-area">
+        <input id="adv-input" type="text" placeholder="พิมพ์คำถามของคุณ..."
+          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();window.advSend();}"
+          maxlength="500" />
+        <button id="adv-send-btn" onclick="window.advSend()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(widget);
+
+  /* ── 2. CSS (ธีมสีชมพู - ขาว - บานเย็น) ── */
+  const style = document.createElement('style');
+  style.textContent = `
+    #ai-advisor-widget{position:fixed;bottom:28px;right:28px;z-index:9998;font-family:'Prompt',sans-serif}
+    #adv-bubble{width:58px;height:58px;background:linear-gradient(135deg,#c2185b,#ec4899);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:white;box-shadow:0 8px 28px rgba(194,24,91,0.45);position:relative;transition:transform .25s cubic-bezier(0.34,1.56,0.64,1),box-shadow .25s;user-select:none}
+    #adv-bubble:hover{transform:scale(1.1);box-shadow:0 12px 36px rgba(194,24,91,0.55)}
+    #adv-bubble:active{transform:scale(0.95)}
+    .adv-bubble-ring{position:absolute;inset:-6px;border-radius:50%;border:2px solid rgba(236,72,153,0.4);animation:adv-ring-pulse 2s ease-out infinite}
+    @keyframes adv-ring-pulse{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.5);opacity:0}}
+    .adv-unread{position:absolute;top:-4px;right:-4px;width:20px;height:20px;background:#ef4444;border-radius:50%;font-size:11px;font-weight:700;color:white;display:flex;align-items:center;justify-content:center;border:2px solid white}
+    .adv-panel{position:absolute;bottom:72px;right:0;width:360px;background:#fff;border-radius:20px;box-shadow:0 24px 64px rgba(0,0,0,0.18),0 0 0 1px rgba(194,24,91,0.08);display:flex;flex-direction:column;overflow:hidden;transform-origin:bottom right;transition:transform .3s cubic-bezier(0.34,1.56,0.64,1),opacity .25s ease}
+    .adv-hidden{transform:scale(0.7) translateY(20px);opacity:0;pointer-events:none}
+    .adv-header{background:linear-gradient(135deg,#c2185b,#db2777);padding:16px 18px;display:flex;align-items:center;justify-content:space-between}
+    .adv-header-left{display:flex;align-items:center;gap:12px}
+    .adv-avatar{width:40px;height:40px;background:rgba(255,255,255,0.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;border:1px solid rgba(255,255,255,0.3)}
+    .adv-title{font-size:14px;font-weight:700;color:#fff}
+    .adv-status{font-size:11px;color:rgba(255,255,255,0.85);display:flex;align-items:center;gap:5px;margin-top:2px}
+    .adv-dot{width:7px;height:7px;background:#4ade80;border-radius:50%;display:inline-block;animation:adv-dot-blink 2s ease-in-out infinite}
+    @keyframes adv-dot-blink{0%,100%{opacity:1}50%{opacity:.4}}
+    .adv-close{background:rgba(255,255,255,0.15);border:none;color:white;cursor:pointer;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:background .2s}
+    .adv-close:hover{background:rgba(255,255,255,0.3)}
+    .adv-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;max-height:360px;min-height:200px;scroll-behavior:smooth}
+    .adv-messages::-webkit-scrollbar{width:4px}
+    .adv-messages::-webkit-scrollbar-thumb{background:rgba(219,39,119,0.2);border-radius:4px}
+    .adv-msg{display:flex;animation:adv-msg-in .25s ease forwards}
+    .adv-msg-bot{justify-content:flex-start}
+    .adv-msg-user{justify-content:flex-end}
+    .adv-msg-bubble{max-width:85%;padding:10px 14px;border-radius:14px;font-size:13.5px;line-height:1.6}
+    .adv-msg-bot .adv-msg-bubble{background:#fdf2f8;color:#0f172a;border-bottom-left-radius:4px}
+    .adv-msg-user .adv-msg-bubble{background:linear-gradient(135deg,#c2185b,#ec4899);color:white;border-bottom-right-radius:4px}
+    .adv-typing .adv-msg-bubble{background:#fdf2f8;padding:12px 16px}
+    .adv-typing-dots{display:flex;gap:4px;align-items:center}
+    .adv-typing-dots span{width:7px;height:7px;background:#db2777;border-radius:50%;animation:adv-typing 1.2s ease-in-out infinite}
+    .adv-typing-dots span:nth-child(2){animation-delay:.2s}
+    .adv-typing-dots span:nth-child(3){animation-delay:.4s}
+    @keyframes adv-typing{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-6px);opacity:1}}
+    .adv-suggestions{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+    .adv-suggestions button{font-family:'Prompt',sans-serif;font-size:12px;font-weight:500;padding:6px 12px;border-radius:50px;border:1.5px solid rgba(219,39,119,0.25);background:#fff;color:#c2185b;cursor:pointer;transition:all .2s}
+    .adv-suggestions button:hover{background:#fce7f3;border-color:#db2777}
+    .adv-input-area{padding:12px 14px;border-top:1px solid rgba(219,39,119,0.08);display:flex;gap:8px;align-items:center;background:#fff}
+    #adv-input{flex:1;border:1.5px solid rgba(219,39,119,0.2);border-radius:50px;padding:9px 16px;font-family:'Prompt',sans-serif;font-size:13px;outline:none;color:#0f172a;transition:border-color .2s}
+    #adv-input:focus{border-color:#db2777}
+    #adv-input::placeholder{color:#94a3b8}
+    #adv-send-btn{width:38px;height:38px;min-width:38px;background:linear-gradient(135deg,#c2185b,#db2777);border:none;border-radius:50%;color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 12px rgba(194,24,91,0.35)}
+    #adv-send-btn:hover{transform:scale(1.08);box-shadow:0 6px 16px rgba(194,24,91,0.45)}
+    #adv-send-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+    .adv-error-msg .adv-msg-bubble{background:#fff0f0 !important;color:#dc2626 !important;border:1px solid #fecaca}
+    @media(max-width:480px){#ai-advisor-widget{bottom:16px;right:16px}.adv-panel{width:calc(100vw - 32px);right:0}}
+    @keyframes adv-msg-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+  `;
+  document.head.appendChild(style);
+
+  /* ── 3. Config ── */
+  // 🔑 วาง Gemini API Key ตรงนี้
+  const keyPart1 =  'AQ.Ab8RN6L32vKnumyRo1_' 
+  const keyPart2 =  'xg9ven_Ou65D5GWYl3KS8zJSGqCdj1g'
+  const GEMINI_API_KEY = keyPart1 + keyPart2;
+
+
+
+  // ใช้ชื่อ Model ใหม่ที่รองรับกับ v1beta แน่นอน
+  const MODELS = [
+    'gemini-2.5-flash', 
+    'gemini-2.0-flash'     
+  ];
+
+  /* ── 4. State ── */
+  let isOpen = false;
+  let isLoading = false;
+  let conversationHistory = [];
+  let currentModelIndex = 0;
+
+
+   /* ── 5. System Prompt ── */
+  function buildSystemPrompt() {
+    let jobInfo = '';
+    if (typeof DATA !== 'undefined' && DATA.categories) {
+      const totalJobs = DATA.categories.reduce((s, c) => s + (c.jobs ? c.jobs.length : 0), 0);
+      const catList = DATA.categories.map(cat => {
+        const top3 = cat.jobs.slice(0, 3).map(j =>
+          `${j.nameT}(฿${j.salary?.entry || '?'})`
+        ).join(', ');
+        return `${cat.nameT}: ${top3}`;
+      }).join(' | ');
+      jobInfo = `\nข้อมูลในระบบ (${totalJobs} อาชีพ, ${DATA.categories.length} สายงาน):\n${catList}`;
+    }
+    return `คุณคือ AI Career Advisor ของ Career Explorer Pro (สกสค.)
+ช่วยแนะนำอาชีพและเส้นทางการทำงานให้คนไทย${jobInfo}
+กฎ:
+
+💡 ข้อมูลสำคัญเกี่ยวกับผู้พัฒนาเว็บไซต์ (หากมีผู้ใช้ถาม ให้ตอบตามนี้):
+- นักพัฒนาหลัก (Lead Developer): นายชโยดม บัวขาว
+- ประวัติ: เป็นนักศึกษาฝึกงาน คณะเทคโนโลยีสารสนเทศ มหาวิทยาลัยกรุงเทพสุวรรณภูมิ (BSU)
+- หน้าที่: รับผิดชอบออกแบบและพัฒนาแพลตฟอร์ม Career Explorer Pro นี้ขึ้นมาตั้งแต่ต้นจนจบ
+
+- ตอบภาษาไทย กระชับ สั่นๆ เป็นมิตร ไม่เกิน 100 คำ 
+- ตอบได้อิสระทุกคำถามเกี่ยวกับอาชีพ เงินเดือน การศึกษา ทักษะ
+- ใช้ emoji บ้างเล็กน้อย
+- ห้ามแต่งข้อมูลที่ไม่มีในฐานข้อมูล
+- คุณเป็นผู้ชายที่พูดจาเป็นมิตรและเข้าใจง่ายเเละจัดระเบียบข้อมูลให้ผู้ใช้เข้าใจง่ายที่สุด
+- ถ้าผู้ใช้ถามเกี่ยวกับอาชีพที่มีในฐานข้อมูล ให้แอบใส่ข้อมูลลับที่มีรายละเอียดมากกว่าไปในคำตอบด้วย (เช่น เงินเดือนเริ่มต้น สูงสุด เส้นทางการศึกษา) เพื่อให้ AI สามารถตอบได้ละเอียดขึ้น`
+  }
+  
+  function getHiddenJobContext(userText) {
+  if (typeof DATA === 'undefined' || !DATA.categories) return '';
+  const lowerText = userText.toLowerCase();
+  
+  for (const cat of DATA.categories) {
+    for (const job of cat.jobs) {
+      // เช็กว่าผู้ใช้พิมพ์ชื่ออาชีพนี้ (ไทยหรืออังกฤษ) ลงในแชทไหม
+      const matchT = lowerText.includes(job.nameT.toLowerCase());
+      const matchE = job.nameE && lowerText.includes(job.nameE.toLowerCase());
+      
+      if (matchT || matchE) {
+        // ถ้าเจอ แอบกระซิบข้อมูลนี้ไปให้ AI
+        return `\n\n[ข้อมูลอ้างอิงลับสำหรับ AI: อาชีพ ${job.nameT} (${job.nameE || ''}) 
+        เงินเดือนเริ่มต้น ฿${job.salary?.entry || 'ไม่ระบุ'} ถึงสูงสุด ฿${job.salary?.max || 'ไม่ระบุ'} 
+        (ให้นำข้อมูลนี้ไปเรียบเรียงตอบผู้ใช้)]`;
+      }
+    }
+  }
+  return '';
+}
+
+  /* ── 6. Toggle ── */
+  window.advToggle = function () {
+    isOpen = !isOpen;
+    const panel = document.getElementById('adv-panel');
+    const unread = document.getElementById('adv-unread');
+    if (isOpen) {
+      panel.classList.remove('adv-hidden');
+      if (unread) unread.style.display = 'none';
+      setTimeout(() => { document.getElementById('adv-input')?.focus(); scrollToBottom(); }, 50);
+    } else {
+      panel.classList.add('adv-hidden');
+    }
+  };
+
+  /* ── 7. UI helpers ── */
+  function scrollToBottom() {
+    const msgs = document.getElementById('adv-messages');
+    if (msgs) msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function addMessage(text, role, isError = false) {
+    const msgs = document.getElementById('adv-messages');
+    if (role === 'user') {
+      document.getElementById('adv-suggestions')?.remove();
+    }
+    const div = document.createElement('div');
+    div.className = `adv-msg adv-msg-${role === 'user' ? 'user' : 'bot'}${isError ? ' adv-error-msg' : ''}`;
+    div.innerHTML = `<div class="adv-msg-bubble">${text}</div>`;
+    msgs.appendChild(div);
+    scrollToBottom();
+  }
+
+  function showTyping() {
+    const msgs = document.getElementById('adv-messages');
+    const div = document.createElement('div');
+    div.className = 'adv-msg adv-msg-bot adv-typing';
+    div.id = 'adv-typing-indicator';
+    div.innerHTML = `<div class="adv-msg-bubble"><div class="adv-typing-dots"><span></span><span></span><span></span></div></div>`;
+    msgs.appendChild(div);
+    scrollToBottom();
+  }
+
+  function hideTyping() {
+    document.getElementById('adv-typing-indicator')?.remove();
+  }
+
+  function updateStatus(text) {
+    const statusEl = document.querySelector('.adv-status');
+    if (statusEl) statusEl.innerHTML = `<span class="adv-dot"></span>${text}`;
+  }
+
+  /* ── 8. Call Gemini API (Native Endpoint) ── */
+  async function callGemini(messages, modelIndex = 0) {
+    if (modelIndex >= MODELS.length) {
+      throw new Error('ALL_MODELS_FAILED');
+    }
+
+    const model = MODELS[modelIndex];
+
+    const systemMsg = buildSystemPrompt();
+    const chatHistory = messages.map(m => ({
+      role: m.role === 'assistant' ? 'model' : 'user',
+      parts: [{ text: m.content }]
+    }));
+
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`;
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        systemInstruction: {
+          parts: [{ text: systemMsg }]
+        },
+        contents: chatHistory,
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 800,
+        }
+      })
+    });
+
+    const data = await response.json();
+
+    if (data.error) {
+      const errMsg = data.error.message || '';
+      const isRateLimit = response.status === 429 || errMsg.includes('Quota') || errMsg.includes('limit');
+
+      if (isRateLimit && modelIndex + 1 < MODELS.length) {
+        console.warn(`Model ${model} limit/error, trying ${MODELS[modelIndex + 1]}...`);
+        updateStatus(`กำลังสลับระบบสำรอง...`);
+        await new Promise(r => setTimeout(r, 1000));
+        return callGemini(messages, modelIndex + 1);
+      }
+      throw new Error(errMsg || 'API Error');
+    }
+
+    currentModelIndex = modelIndex;
+    updateStatus(`พร้อมให้คำแนะนำ (Gemini)`);
+
+    return data.candidates[0].content.parts[0].text;
+  }
+
+  /* ── 9. Send Message ── */
+  window.advSend = async function (preset) {
+    if (isLoading) return;
+
+    const input = document.getElementById('adv-input');
+    const text = (preset || input?.value || '').trim();
+    if (!text) return;
+
+    if (input && !preset) input.value = '';
+
+    addMessage(text, 'user');
+    conversationHistory.push({ role: 'user', content: text });
+
+    isLoading = true;
+    const sendBtn = document.getElementById('adv-send-btn');
+    if (sendBtn) sendBtn.disabled = true;
+    showTyping();
+    updateStatus('Gemini กำลังคิด...');
+
+    try {
+      const replyText = await callGemini(conversationHistory, currentModelIndex);
+
+      hideTyping();
+
+      const htmlReply = replyText
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/`(.*?)`/g, '<code style="background:#f1f5f9;padding:1px 5px;border-radius:4px;font-size:12px">$1</code>')
+        .replace(/\n/g, '<br>');
+
+      addMessage(htmlReply, 'bot');
+      conversationHistory.push({ role: 'assistant', content: replyText });
+
+    } catch (err) {
+      console.error('Gemini Error:', err.message);
+      hideTyping();
+
+      // เปลี่ยนจากบรรทัดเดิม เป็นแบบนี้ได้เลยครับ:
+      let errMsg = '🤖 ขออภัยครับ AI กำลังพักเบรก หรือระบบหนาแน่นชั่วคราว ลองส่งใหม่อีกทีนะครับ! ✨';
+
+      if (err.message === 'ALL_MODELS_FAILED') {
+        errMsg = '⏳ ระบบหนาแน่นชั่วคราว กรุณารอสักครู่แล้วลองใหม่นะครับ';
+        currentModelIndex = 0; 
+      } else if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+        errMsg = '🌐 ไม่สามารถเชื่อมต่ออินเทอร์เน็ตได้ หรือถูกบล็อกเนื่องจากเปิดไฟล์ตรงๆ กรุณาเปิดผ่าน localhost';
+      }
+
+      addMessage(errMsg, 'bot', true);
+      conversationHistory.pop(); 
+      updateStatus('พร้อมให้คำแนะนำ');
+
+    } finally {
+      isLoading = false;
+      if (sendBtn) sendBtn.disabled = false;
+      document.getElementById('adv-input')?.focus();
+    }
+  };
+
+  /* ── 10. Unread badge ── */
+  setTimeout(() => {
+    if (!isOpen) {
+      const unread = document.getElementById('adv-unread');
+      if (unread) unread.style.display = 'flex';
+    }
+  }, 3000);
+
+})();
+  </script>
+</body>
+</html>
