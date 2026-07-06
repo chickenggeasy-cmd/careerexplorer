@@ -64,7 +64,7 @@ career-explorer/
 │       ├── data-sports.js        (54 อาชีพ)     ├── data-food.js          (33 อาชีพ)
 │       ├── data-aviation.js      (24 อาชีพ)     ├── data-construction.js (33 อาชีพ)
 │       ├── data-agriculture.js   (34 อาชีพ)     ├── data-logistics.js    (27 อาชีพ)
-│       └── data-factory.js       (15 อาชีพ)     └── data-lifestyle.js    (30 อาชีพ)
+│       └── data-factory.js       (15 อาชีพ)     └── data-lifestyle.js    (30 อาชีพ) เเละอื่นๆ... ทั้งหมด 14 สาย
 │
 └── img/
     ├── icons/   — ไอคอนสายงาน (PNG) + ไอคอนทั่วไป (การศึกษา, เงิน ฯลฯ) + โลโก้ + avatar ของ AI + favicon (26 ไฟล์)
