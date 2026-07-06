@@ -1121,54 +1121,6 @@ const DATA_MEDICAL = {
         "คณะสถิติประยุกต์ สถาบันบัณฑิตพัฒนบริหารศาสตร์ (NIDA)",
         "คณะวิทยาศาสตร์ จุฬาลงกรณ์มหาวิทยาลัย"
       ]
-    },
-    {
-      "id": "telemedicine_coordinator",
-      "nameT": "ผู้ประสานงานการแพทย์ทางไกล",
-      "nameE": "Telemedicine Coordinator",
-      "icon": "💻",
-      "img": "https://media.licdn.com/dms/image/v2/D4D12AQGrXw51khY6oA/article-cover_image-shrink_600_2000/article-cover_image-shrink_600_2000/0/1726309282356?e=2147483647&v=beta&t=m_vctgmB5hK_PU5Lhq--1kBifkvi4F3jsK-Z7gFeH_Q",
-      "salary": {
-        "entry": "19,000",
-        "mid": "33,000",
-        "senior": "55,000+"
-      },
-      "salaryBar": {
-        "entry": 35,
-        "mid": 60,
-        "senior": 92
-      },
-      "education": "สาธารณสุข / การจัดการสุขภาพ / IT",
-      "degree": "ปริญญาตรี",
-      "years": "4 ปี",
-      "skills": [
-        "ประสานงาน",
-        "Healthcare Systems",
-        "การสื่อสาร",
-        "เทคโนโลยี"
-      ],
-      "description": "ผู้ดูแลและประสานงานบริการพบแพทย์ออนไลน์ รวมถึงระบบการแพทย์ทางไกล",
-      "pros": [
-        "เกี่ยวข้องกับเทคโนโลยีสุขภาพ",
-        "สายงานใหม่",
-        "ช่วยให้เข้าถึงการรักษาง่ายขึ้น"
-      ],
-      "cons": [
-        "ต้องจัดการหลายฝ่าย",
-        "ระบบบางครั้งซับซ้อน",
-        "ต้องแก้ปัญหาเฉพาะหน้า"
-      ],
-      "growth": "Digital Health Manager / Telehealth Specialist",
-      "tags": [
-        "Telemedicine",
-        "สุขภาพ",
-        "ออนไลน์"
-      ],
-      "universities": [
-        "คณะสาธารณสุขศาสตร์ มหาวิทยาลัยมหิดล",
-        "คณะแพทยศาสตร์โรงพยาบาลรามาธิบดี มหาวิทยาลัยมหิดล",
-        "วิทยาลัยวิทยาศาสตร์สาธารณสุข จุฬาลงกรณ์มหาวิทยาลัย"
-      ]
     }
   ]
 };
