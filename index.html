@@ -331,29 +331,50 @@
               </div>
             </div>
 
-            <div class="gx-globe-card" aria-label="แผนที่ลูกโลกสำหรับเลือกทวีป">
+            <div class="gx-globe-card" aria-label="แผนที่โลกแบบแบนสำหรับเลือกทวีป">
               <div class="gx-orbit gx-orbit-one"></div>
               <div class="gx-orbit gx-orbit-two"></div>
               <div class="gx-globe-wrap">
-                <div class="gx-globe" id="globalGlobe" role="application" aria-label="ลากเพื่อหมุนลูกโลก และเลือกทวีป">
-                  <div class="gx-sphere">
-                    <div class="gx-gridline gx-gridline-a"></div>
-                    <div class="gx-gridline gx-gridline-b"></div>
-                    <div class="gx-gridline gx-gridline-c"></div>
-                    <div class="gx-lat gx-lat-top"></div>
-                    <div class="gx-lat gx-lat-mid"></div>
-                    <div class="gx-lat gx-lat-low"></div>
-                    <div class="gx-land gx-land-asia"></div>
-                    <div class="gx-land gx-land-europe"></div>
-                    <div class="gx-land gx-land-africa"></div>
-                    <div class="gx-land gx-land-na"></div>
-                    <div class="gx-land gx-land-sa"></div>
-                    <div class="gx-land gx-land-oceania"></div>
+                <!-- แผนที่โลก 2D — SVG path จริงตามภูมิศาสตร์ (Natural Earth 110m) -->
+                <!-- id ยังเป็น globalGlobe เพื่อรองรับโค้ดเดิมที่อ้างอิงอยู่ -->
+                <div class="gx-worldmap" id="globalGlobe" role="application"
+                     aria-label="แผนที่โลกแบบแบน ลากเพื่อเลื่อนดู แล้วเลือกทวีป">
+                  <div class="gx-worldmap-inner" id="gxWorldmapInner">
+                    <svg class="gx-worldmap-svg"
+                         viewBox="0 0 1000 560"
+                         preserveAspectRatio="xMidYMid meet"
+                         aria-hidden="true">
+                      <defs>
+                        <linearGradient id="gxOcean" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%"  stop-color="#FFF8FB"/>
+                          <stop offset="100%" stop-color="#FDE2ED"/>
+                        </linearGradient>
+                        <!-- soft white halo around every landmass -->
+                        <filter id="gxCoastGlow" x="-10%" y="-10%" width="120%" height="120%">
+                          <feGaussianBlur in="SourceAlpha" stdDeviation="1.6" result="b"/>
+                          <feFlood flood-color="#ffffff" flood-opacity="0.9"/>
+                          <feComposite in2="b" operator="in" result="glow"/>
+                          <feMerge>
+                            <feMergeNode in="glow"/>
+                            <feMergeNode in="SourceGraphic"/>
+                          </feMerge>
+                        </filter>
+                      </defs>
+                      <rect x="0" y="0" width="1000" height="560" fill="url(#gxOcean)"/>
+                      <!-- flight-path arcs injected by world-map.js -->
+                      <g class="gx-flightpaths" id="gxFlightPaths"></g>
+                      <!-- continent paths injected by world-map.js -->
+                      <g class="gx-lands" id="gxLandsGroup" filter="url(#gxCoastGlow)"></g>
+                      <!-- sparkle particles injected by world-map.js -->
+                      <g class="gx-sparkles" id="gxSparkles"></g>
+                      <!-- ripple ที่สร้างเมื่อคลิกเลือกทวีป (dynamic) -->
+                      <g class="gx-ripples" id="gxRippleLayer"></g>
+                    </svg>
+                    <div class="gx-pins-overlay" id="globalContinentPins"></div>
                   </div>
                 </div>
-                <div class="gx-pins-overlay" id="globalContinentPins"></div>
               </div>
-              <div class="gx-globe-hint">ลากเพื่อหมุนแผนที่ แล้วเลือกทวีปที่ต้องการ</div>
+              <div class="gx-globe-hint">คลิกที่ทวีปหรือ pin เพื่อดูค่าเงินเดือนเทียบ</div>
             </div>
           </div>
 
@@ -1373,6 +1394,7 @@
   -->
   <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/data-loader.js"></script>
+  <script src="js/world-map-data.js"></script>
   <script src="js/render.js"></script>
   <script src="js/router.js"></script>
   <script src="js/search.js"></script>

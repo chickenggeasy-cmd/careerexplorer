@@ -78,7 +78,9 @@ const GLOBAL_EXPLORER = {
   usdThbRate: 35,
   continents: [
     {
-      id: 'asia', nameT: 'เอเชีย', nameE: 'Asia', pinX: '70%', pinY: '42%',
+      // pinX/pinY = ตำแหน่งบนแผนที่แบน 2D (Equirectangular ที่ครอบ lat 84..-56)
+      // เลือกจากค่าเซ็นทรอยด์คร่าวๆ ของทวีป — วาง marker ให้ตกกลางแผ่นดินพอดี
+      id: 'asia', nameT: 'เอเชีย', nameE: 'Asia', pinX: '74%', pinY: '33%',
       countries: [
         { id: 'th', code: 'TH', flag: '🇹🇭', nameT: 'ไทย', nameE: 'Thailand', market: 1.00, note: 'ฐานข้อมูลตั้งต้น' },
         { id: 'jp', code: 'JP', flag: '🇯🇵', nameT: 'ญี่ปุ่น', nameE: 'Japan', market: 1.75, note: 'ตลาดเทคโนโลยีและอุตสาหกรรมสูง' },
@@ -86,7 +88,7 @@ const GLOBAL_EXPLORER = {
       ],
     },
     {
-      id: 'europe', nameT: 'ยุโรป', nameE: 'Europe', pinX: '51%', pinY: '33%',
+      id: 'europe', nameT: 'ยุโรป', nameE: 'Europe', pinX: '52%', pinY: '24%',
       countries: [
         { id: 'de', code: 'DE', flag: '🇩🇪', nameT: 'เยอรมนี', nameE: 'Germany', market: 2.30, note: 'เด่นด้านวิศวกรรมและอุตสาหกรรม' },
         { id: 'uk', code: 'UK', flag: '🇬🇧', nameT: 'สหราชอาณาจักร', nameE: 'United Kingdom', market: 2.20, note: 'ตลาดการเงิน การแพทย์ และดิจิทัล' },
@@ -94,7 +96,7 @@ const GLOBAL_EXPLORER = {
       ],
     },
     {
-      id: 'north_america', nameT: 'อเมริกาเหนือ', nameE: 'North America', pinX: '25%', pinY: '39%',
+      id: 'north_america', nameT: 'อเมริกาเหนือ', nameE: 'North America', pinX: '22%', pinY: '32%',
       countries: [
         { id: 'us', code: 'US', flag: '🇺🇸', nameT: 'สหรัฐอเมริกา', nameE: 'United States', market: 3.60, note: 'ตลาดแรงงานขนาดใหญ่และค่าตอบแทนสูง' },
         { id: 'ca', code: 'CA', flag: '🇨🇦', nameT: 'แคนาดา', nameE: 'Canada', market: 2.70, note: 'เด่นด้านสุขภาพ เทคโนโลยี และทรัพยากร' },
@@ -102,7 +104,7 @@ const GLOBAL_EXPLORER = {
       ],
     },
     {
-      id: 'south_america', nameT: 'อเมริกาใต้', nameE: 'South America', pinX: '35%', pinY: '65%',
+      id: 'south_america', nameT: 'อเมริกาใต้', nameE: 'South America', pinX: '32%', pinY: '70%',
       countries: [
         { id: 'br', code: 'BR', flag: '🇧🇷', nameT: 'บราซิล', nameE: 'Brazil', market: 0.95, note: 'ตลาดใหญ่ด้านธุรกิจ เกษตร และพลังงาน' },
         { id: 'cl', code: 'CL', flag: '🇨🇱', nameT: 'ชิลี', nameE: 'Chile', market: 1.05, note: 'เศรษฐกิจเปิดและเหมืองแร่เด่น' },
@@ -110,7 +112,7 @@ const GLOBAL_EXPLORER = {
       ],
     },
     {
-      id: 'africa', nameT: 'แอฟริกา', nameE: 'Africa', pinX: '54%', pinY: '55%',
+      id: 'africa', nameT: 'แอฟริกา', nameE: 'Africa', pinX: '55%', pinY: '58%',
       countries: [
         { id: 'za', code: 'ZA', flag: '🇿🇦', nameT: 'แอฟริกาใต้', nameE: 'South Africa', market: 0.85, note: 'ศูนย์กลางธุรกิจและการเงินของภูมิภาค' },
         { id: 'eg', code: 'EG', flag: '🇪🇬', nameT: 'อียิปต์', nameE: 'Egypt', market: 0.55, note: 'ตลาดการท่องเที่ยว วิศวกรรม และบริการ' },
@@ -118,7 +120,7 @@ const GLOBAL_EXPLORER = {
       ],
     },
     {
-      id: 'oceania', nameT: 'โอเชียเนีย', nameE: 'Oceania', pinX: '76%', pinY: '69%',
+      id: 'oceania', nameT: 'โอเชียเนีย', nameE: 'Oceania', pinX: '86%', pinY: '76%',
       countries: [
         { id: 'au', code: 'AU', flag: '🇦🇺', nameT: 'ออสเตรเลีย', nameE: 'Australia', market: 2.50, note: 'เด่นด้านสุขภาพ วิศวกรรม และบริการ' },
         { id: 'nz', code: 'NZ', flag: '🇳🇿', nameT: 'นิวซีแลนด์', nameE: 'New Zealand', market: 2.15, note: 'ตลาดคุณภาพชีวิตสูงและงานบริการ' },
@@ -132,8 +134,10 @@ let globalSelectedContinentId = 'asia';
 let globalSelectedCountryId = 'th';
 let globalExploreMode = 'world';
 let globalGlobeReady = false;
-let globalRotX = -10;
-let globalRotY = -22;
+// Pan offsets (% of container). Drag adjusts these; setGlobalGlobeForContinent
+// centers the map softly on the selected continent.
+let globalPanX = 0;
+let globalPanY = 0;
 
 function getGlobalContinent(id = globalSelectedContinentId) {
   return GLOBAL_EXPLORER.continents.find(c => c.id === id) || GLOBAL_EXPLORER.continents[0];
@@ -219,22 +223,117 @@ function setExploreMode(mode = 'world') {
 
 window.setExploreMode = setExploreMode;
 
-function setGlobalGlobeForContinent(continent) {
-  const globe = document.getElementById('globalGlobe');
-  if (!globe || !continent) return;
-  const rotationMap = {
-    asia: [-10, -24],
-    europe: [-8, 10],
-    north_america: [-12, 120],
-    south_america: [10, 86],
-    africa: [2, 8],
-    oceania: [12, -48],
+/* ─────────────────────────────────────────────────────────────
+   FLAT WORLD-MAP HELPERS
+   ────────────────────────────────────────────────────────────
+   แผนที่โลกใช้ SVG path จริงจาก Natural Earth 110m (ผ่านสคริปต์
+   สร้าง WORLD_MAP_PATHS ในไฟล์ js/world-map-data.js). สีของแต่ละ
+   ทวีปควบคุมด้วย CSS class `gx-land-<id>` เท่านั้น เพื่อให้
+   เปลี่ยนธีม/dark mode ในอนาคตได้ง่าย
+────────────────────────────────────────────────────────────── */
+
+const WORLD_MAP_VIEW = { w: 1000, h: 560 };
+
+// พิกัดโดยประมาณของทวีปแต่ละใน viewBox (ใช้วาดเส้น flight path)
+const WORLD_MAP_PIN_XY = {
+  asia:          { x: 740, y: 185 },
+  europe:        { x: 520, y: 135 },
+  north_america: { x: 220, y: 180 },
+  south_america: { x: 320, y: 395 },
+  africa:        { x: 550, y: 325 },
+  oceania:       { x: 860, y: 425 },
+};
+
+/** วาด <path> ของทวีปทั้งหมดลงใน #gxLandsGroup ครั้งเดียว */
+function renderWorldMapLands() {
+  const group = document.getElementById('gxLandsGroup');
+  if (!group || group.dataset.ready === '1') return;
+  if (typeof WORLD_MAP_PATHS === 'undefined') return; // data file ยังไม่โหลด
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const frag = document.createDocumentFragment();
+  GLOBAL_EXPLORER.continents.forEach(cont => {
+    const d = WORLD_MAP_PATHS[cont.id];
+    if (!d) return;
+    const p = document.createElementNS(svgNS, 'path');
+    p.setAttribute('d', d);
+    p.setAttribute('class', `gx-land gx-land-${cont.id}`);
+    p.setAttribute('data-continent', cont.id);
+    // คลิกที่แผ่นดินให้เลือกทวีปด้วย (นอกเหนือจาก pin) — เพิ่ม UX
+    p.addEventListener('click', () => window.selectGlobalContinent(cont.id));
+    frag.appendChild(p);
+  });
+  group.appendChild(frag);
+  group.dataset.ready = '1';
+}
+
+/** ลากเส้นประโค้ง flight-path เชื่อมทวีปเบา ๆ 3 เส้น */
+function renderWorldMapFlightPaths() {
+  const g = document.getElementById('gxFlightPaths');
+  if (!g || g.dataset.ready === '1') return;
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const routes = [
+    ['north_america', 'europe'],
+    ['europe', 'asia'],
+    ['asia', 'oceania'],
+    ['south_america', 'africa'],
+  ];
+  routes.forEach(([a, b]) => {
+    const p1 = WORLD_MAP_PIN_XY[a];
+    const p2 = WORLD_MAP_PIN_XY[b];
+    if (!p1 || !p2) return;
+    // เส้นโค้งควอดราติก: ยกจุดกลางขึ้นเล็กน้อย
+    const mx = (p1.x + p2.x) / 2;
+    const my = Math.min(p1.y, p2.y) - Math.abs(p2.x - p1.x) * 0.18;
+    const path = document.createElementNS(svgNS, 'path');
+    path.setAttribute('d', `M${p1.x},${p1.y} Q${mx.toFixed(1)},${my.toFixed(1)} ${p2.x},${p2.y}`);
+    path.setAttribute('class', 'gx-flightpath');
+    g.appendChild(path);
+  });
+  g.dataset.ready = '1';
+}
+
+/** โปรยจุดประกาย (sparkle) รอบขอบแผนที่ */
+function renderWorldMapSparkles(count = 14) {
+  const g = document.getElementById('gxSparkles');
+  if (!g || g.dataset.ready === '1') return;
+  const svgNS = 'http://www.w3.org/2000/svg';
+  // seed แบบตายตัวเพื่อให้ตำแหน่งคงที่ไม่กระตุกเวลา re-render
+  const seeded = (i) => {
+    const s = Math.sin(i * 12.9898) * 43758.5453;
+    return s - Math.floor(s);
   };
-  const [rx, ry] = rotationMap[continent.id] || [-10, -22];
-  globalRotX = rx;
-  globalRotY = ry;
-  globe.style.setProperty('--gx-rx', `${globalRotX}deg`);
-  globe.style.setProperty('--gx-ry', `${globalRotY}deg`);
+  for (let i = 0; i < count; i++) {
+    const angle = (seeded(i) * Math.PI * 2);
+    const r = 220 + seeded(i + 99) * 60; // ระยะจากจุดกลาง (viewBox 1000×560 → กลาง 500,280)
+    const x = 500 + Math.cos(angle) * r * 1.6;
+    const y = 280 + Math.sin(angle) * r * 0.85;
+    if (x < 20 || x > 980 || y < 20 || y > 540) continue;
+    const c = document.createElementNS(svgNS, 'circle');
+    c.setAttribute('cx', x.toFixed(1));
+    c.setAttribute('cy', y.toFixed(1));
+    c.setAttribute('r', (1.2 + seeded(i + 7) * 1.8).toFixed(2));
+    c.setAttribute('class', 'gx-sparkle');
+    c.style.animationDelay = `${(seeded(i + 3) * 4).toFixed(2)}s`;
+    g.appendChild(c);
+  }
+  g.dataset.ready = '1';
+}
+
+/** อัปเดต CSS transform สำหรับ pan */
+function applyGlobalMapTransform() {
+  const inner = document.getElementById('gxWorldmapInner');
+  if (!inner) return;
+  inner.style.setProperty('--gx-tx', `${globalPanX}%`);
+  inner.style.setProperty('--gx-ty', `${globalPanY}%`);
+}
+
+function setGlobalGlobeForContinent(continent) {
+  if (!continent) return;
+  // ตามที่ผู้ใช้ขอ: ไม่ต้อง auto-pan แผนที่เมื่อคลิกเลือกทวีปแล้ว
+  // แค่ไฮไลต์แผ่นดินของทวีปที่ถูกเลือกก็พอ (แผนที่จะอยู่นิ่ง)
+  document.querySelectorAll('.gx-land').forEach(el => {
+    el.classList.toggle('is-active', el.dataset.continent === continent.id);
+  });
 }
 
 function renderGlobalExplorerUI() {
@@ -247,11 +346,15 @@ function renderGlobalExplorerUI() {
   const countrySummary = document.getElementById('globalCountrySummary');
 
   if (pins) {
+    // ปุ่ม pin ทวีป: มี aria-label ภาษาไทย, focusable (tab ได้)
+    // ตำแหน่งใช้ CSS var --x/--y จาก pinX/pinY (% ของกล่องแผนที่)
     pins.innerHTML = GLOBAL_EXPLORER.continents.map(item => `
       <button class="gx-continent-pin ${item.id === globalSelectedContinentId ? 'is-active' : ''}"
         type="button"
         style="--x:${item.pinX};--y:${item.pinY};"
-        onclick="selectGlobalContinent('${item.id}')">${item.nameT}</button>
+        aria-label="เลือกทวีป${item.nameT} เพื่อดูค่าเงินเดือนเทียบ"
+        aria-pressed="${item.id === globalSelectedContinentId ? 'true' : 'false'}"
+        onclick="selectGlobalContinent('${item.id}')"><span class="gx-pin-dot" aria-hidden="true"></span><span class="gx-pin-label">${item.nameT}</span></button>
     `).join('');
   }
 
@@ -325,44 +428,94 @@ function renderGlobalExplorerUI() {
 }
 
 function initGlobalGlobeInteractions() {
-  const globe = document.getElementById('globalGlobe');
-  if (!globe || globalGlobeReady) return;
+  const map = document.getElementById('globalGlobe');
+  if (!map || globalGlobeReady) return;
   globalGlobeReady = true;
-  let dragging = false;
-  let startX = 0;
-  let startY = 0;
-  let startRx = globalRotX;
-  let startRy = globalRotY;
 
-  globe.style.setProperty('--gx-rx', `${globalRotX}deg`);
-  globe.style.setProperty('--gx-ry', `${globalRotY}deg`);
+  // 1) ฉีด path ทวีป, flight paths, sparkle, ripple, plane เข้า SVG (ครั้งเดียว)
+  renderWorldMapLands();
+  renderWorldMapFlightPaths();
+  renderWorldMapSparkles();
+  renderWorldMapPlane();
 
-  globe.addEventListener('pointerdown', (event) => {
-    if (event.target.closest('.gx-continent-pin')) return;
-    dragging = true;
-    startX = event.clientX;
-    startY = event.clientY;
-    startRx = globalRotX;
-    startRy = globalRotY;
-    globe.setPointerCapture(event.pointerId);
+  // 2) โฟกัสทวีปเริ่มต้น (ไฮไลต์แผ่นดินอย่างเดียว — ไม่มี pan)
+  setGlobalGlobeForContinent(getGlobalContinent());
+
+  // 3) ไม่ผูก drag/pan อีกต่อไป — แผนที่จะอยู่นิ่งตามคำขอ
+  // การ interactive มีแค่: คลิก pin, คลิกที่แผ่นดิน (เพิ่ม ripple), hover เห็นทวีปโป่ง
+  map.style.cursor = 'default';
+}
+
+/**
+ * ripple: ปล่อยวงแหวนขยายออกจากตำแหน่งที่คลิกทวีป
+ * เรียกจาก selectGlobalContinent เพื่อให้ทุกวิธีการเลือกทวีป (pin/card/แผ่นดิน)
+ * ได้ feedback แบบเดียวกัน
+ */
+function spawnContinentRipple(continentId) {
+  const g = document.getElementById('gxFlightPaths')?.parentNode; // ใช้ svg เดียวกัน
+  const overlay = document.getElementById('gxRippleLayer');
+  if (!overlay) return;
+  const xy = WORLD_MAP_PIN_XY[continentId];
+  if (!xy) return;
+  const svgNS = 'http://www.w3.org/2000/svg';
+  // สร้างวงกลม 2 วง — วงในเข้ม, วงนอกจาง — หมุนออกจากศูนย์กลาง
+  [1, 2].forEach((n) => {
+    const c = document.createElementNS(svgNS, 'circle');
+    c.setAttribute('cx', xy.x);
+    c.setAttribute('cy', xy.y);
+    c.setAttribute('r', 4);
+    c.setAttribute('class', `gx-ripple gx-ripple-${n}`);
+    overlay.appendChild(c);
+    // ลบทิ้งหลัง animation จบ (1.4s + delay)
+    setTimeout(() => c.remove(), 1600);
   });
+}
 
-  globe.addEventListener('pointermove', (event) => {
-    if (!dragging) return;
-    globalRotY = startRy + (event.clientX - startX) * 0.45;
-    globalRotX = Math.max(-35, Math.min(35, startRx - (event.clientY - startY) * 0.28));
-    globe.style.setProperty('--gx-rx', `${globalRotX}deg`);
-    globe.style.setProperty('--gx-ry', `${globalRotY}deg`);
+/**
+ * เครื่องบินการ์ตูนบินตามเส้น flight-path เพียงลำเดียว — สร้าง <animateMotion>
+ * ที่วิ่งวนซ้ำเรื่อยๆ เปลี่ยนเส้นทางทุกครั้งเมื่อวนครบ
+ */
+function renderWorldMapPlane() {
+  const svg = document.querySelector('.gx-worldmap-svg');
+  const paths = document.querySelectorAll('#gxFlightPaths .gx-flightpath');
+  if (!svg || !paths.length) return;
+  const svgNS = 'http://www.w3.org/2000/svg';
+  // สร้าง group ที่มีสัญลักษณ์เครื่องบิน (path รูป ✈ แบบ vector)
+  const plane = document.createElementNS(svgNS, 'g');
+  plane.setAttribute('class', 'gx-plane');
+  plane.innerHTML = `
+    <circle r="6" fill="rgba(255,255,255,0.9)"/>
+    <path d="M-4,-1 L4,-1 L6,0 L4,1 L-4,1 L-6,3 L-4,0 L-6,-3 Z"
+          fill="#be185d" stroke="#fff" stroke-width="0.6" stroke-linejoin="round"/>
+  `;
+  svg.appendChild(plane);
+  // แต่ละเส้น flight-path มี id? — เพิ่ม id แล้วสร้าง <animateMotion> อ้างถึง
+  paths.forEach((p, i) => { p.id = `gxFlight${i}`; });
+  const anim = document.createElementNS(svgNS, 'animateMotion');
+  anim.setAttribute('dur', '9s');
+  anim.setAttribute('repeatCount', 'indefinite');
+  anim.setAttribute('rotate', 'auto');
+  const mpath = document.createElementNS(svgNS, 'mpath');
+  mpath.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `#gxFlight0`);
+  anim.appendChild(mpath);
+  plane.appendChild(anim);
+
+  // สลับเส้นทางทุกครั้งที่จบรอบ (ให้เครื่องบินบินไปยังคู่ทวีปใหม่)
+  let idx = 0;
+  anim.addEventListener('endEvent', () => {
+    idx = (idx + 1) % paths.length;
+    mpath.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `#gxFlight${idx}`);
+    // restart animation manually
+    anim.beginElement?.();
   });
-
-  globe.addEventListener('pointerup', () => { dragging = false; });
-  globe.addEventListener('pointercancel', () => { dragging = false; });
 }
 
 window.selectGlobalContinent = function (continentId) {
   const continent = getGlobalContinent(continentId);
   globalSelectedContinentId = continent.id;
   globalSelectedCountryId = continent.countries[0].id;
+  // เพิ่ม ripple feedback บริเวณกึ่งกลางทวีป — สนุกกว่าเลือกเฉยๆ
+  spawnContinentRipple(continent.id);
   setGlobalGlobeForContinent(continent);
   renderGlobalExplorerUI();
   renderCategories();
