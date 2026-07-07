@@ -5,6 +5,7 @@
    3. JOB CARD — NEW STYLE (JCN)
    4. SKELETON LOADING
    5. RESPONSIVE FOR CATEGORY PAGE
+   6. GLOBAL EXPLORE PAGE — HOLOGRAPHIC WORLD MAP & UI
    ========================================================================== */
 
 /* ==========================================================================
@@ -16,7 +17,6 @@
   gap: 22px;
 }
 
-/* Classic job card (used on home/search pages occasionally) */
 .job-card {
   background: var(--card-bg);
   border-radius: var(--radius);
@@ -87,7 +87,6 @@
   opacity: 0.82;
   transition: opacity 0.4s;
 }
-/* Noise texture on overlay */
 .cph-overlay::after {
   content: '';
   position: absolute;
@@ -182,7 +181,6 @@
   border-color: rgba(190,24,93,0.22);
 }
 
-/* Thumbnail */
 .jcn-thumb { position: relative; height: 180px; overflow: hidden; }
 .jcn-thumb img {
   width: 100%; height: 100%;
@@ -198,7 +196,6 @@
 }
 .jcn-color-strip { position: absolute; bottom: 0; left: 0; right: 0; height: 3px; opacity: 0.9; }
 
-/* Salary badge on thumbnail */
 .jcn-salary-badge {
   position: absolute;
   top: 12px; right: 12px;
@@ -223,10 +220,8 @@
   font-size: 10px; font-weight: 800;
 }
 
-/* Card body */
 .jcn-body { padding: 20px 22px 22px; flex: 1; display: flex; flex-direction: column; gap: 14px; }
 
-/* Header row */
 .jcn-header { display: flex; align-items: center; gap: 13px; }
 .jcn-icon {
   width: 48px; height: 48px; min-width: 48px;
@@ -251,7 +246,6 @@
 }
 .jcn-card:hover .jcn-arrow { color: var(--primary); transform: translateX(4px); }
 
-/* Tags */
 .jcn-tags { display: flex; flex-wrap: wrap; gap: 6px; }
 .jcn-tag {
   font-size: 11.5px; font-weight: 600;
@@ -264,7 +258,6 @@
 }
 .jcn-card:hover .jcn-tag { background: rgba(190,24,93,0.11); border-color: rgba(190,24,93,0.25); }
 
-/* Salary footer row */
 .jcn-salary-footer {
   display: flex;
   align-items: center;
@@ -316,8 +309,7 @@
 }
 
 /* ==========================================================================
-   6. GLOBAL EXPLORE PAGE — 3D GLOBE / CONTINENT / COUNTRY SELECTOR
-   Scoped to #page-explore only.
+   6. GLOBAL EXPLORE PAGE — HOLOGRAPHIC WORLD MAP & UI
    ========================================================================== */
 #page-explore {
   background:
@@ -382,8 +374,7 @@
   display: block;
   animation: fadeIn 0.35s ease forwards;
 }
-/* Desktop layout: ข้อความอยู่ด้านบน, แผนที่แผ่กว้างเต็มความกว้างด้านล่าง
-   (เปลี่ยนจาก side-by-side 2 คอลัมน์ เป็น single-column stacked) */
+
 .gx-hero {
   display: grid;
   grid-template-columns: 1fr;
@@ -492,31 +483,32 @@
 }
 
 /* ─────────────────────────────────────────────
-   FLAT WORLD MAP (แทนที่ทรงกลม 3D เดิม)
-   viewBox ของ SVG = 1000×560 (~16:9) เพื่อให้ pin (%) วางตรงพอดี
+   [UPGRADED] HOLOGRAPHIC FLAT WORLD MAP
    ────────────────────────────────────────── */
 .gx-worldmap {
   position: relative;
   width: min(1180px, 94%);
   aspect-ratio: 1000 / 560;
   border-radius: 26px;
-  /* ไม่ให้ลากได้อีก — คงไว้แค่ pointer ปกติ */
   cursor: default;
   user-select: none;
   overflow: hidden;
-  /* halo เรืองแสงหลังแผนที่ + drop shadow อ่อนใต้แผนที่ */
-  background:
-    radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.9), rgba(253,226,237,0) 65%);
-  box-shadow: 0 24px 60px rgba(190,24,93,0.18);
+  /* พื้นหลังลายตาราง (Radar Grid) ให้ดูเป็น Tech Dashboard */
+  background: 
+    linear-gradient(rgba(244,114,182,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(244,114,182,0.05) 1px, transparent 1px),
+    radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.95), rgba(253,226,237,0) 70%);
+  background-size: 40px 40px, 40px 40px, 100% 100%;
+  background-position: center center;
+  box-shadow: 0 24px 60px rgba(190,24,93,0.18), inset 0 0 40px rgba(255,255,255,0.8);
   animation: gxMapFloat 7.5s ease-in-out infinite;
 }
-/* ไม่ต้องมี grabbing state แล้ว */
 
 .gx-worldmap-inner {
   position: absolute;
   inset: 0;
   transform: translate(var(--gx-tx, 0%), var(--gx-ty, 0%));
-  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
   will-change: transform;
 }
 
@@ -526,55 +518,64 @@
   width: 100%;
   height: 100%;
   display: block;
+  filter: drop-shadow(0 15px 25px rgba(0,0,0,0.08));
 }
 
-/* ─── ทวีป (fill ผ่าน CSS เพื่อให้เปลี่ยนธีมได้ในอนาคต) ─── */
+/* ─── ทวีป (Continents) ─── */
 .gx-lands .gx-land {
   fill: var(--gx-land-color, #EC4899);
-  stroke: rgba(255,255,255,0.85);
-  stroke-width: 0.7;
+  stroke: rgba(255,255,255,0.9);
+  stroke-width: 0.8;
   stroke-linejoin: round;
   cursor: pointer;
-  transition: fill 0.35s ease-out, transform 0.4s ease-out, opacity 0.35s ease-out;
+  transition: fill 0.4s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease, filter 0.4s ease;
   transform-box: fill-box;
   transform-origin: center;
 }
-.gx-lands .gx-land-asia          { --gx-land-color: #F59E0B; } /* เอเชีย: สีเหลืองอำพัน (Amber) สว่างตา โดดเด่น */
-.gx-lands .gx-land-europe        { --gx-land-color: #3B82F6; } /* ยุโรป: สีน้ำเงินสว่าง (Blue) ดูน่าเชื่อถือ เป็นทางการ */
-.gx-lands .gx-land-africa        { --gx-land-color: #10B981; } /* แอฟริกา: สีเขียวมรกต (Emerald) สบายตา สื่อถึงธรรมชาติ */
-.gx-lands .gx-land-north_america { --gx-land-color: #6366F1; } /* อเมริกาเหนือ: สีม่วงคราม (Indigo) ดูล้ำสมัย สไตล์ Tech */
-.gx-lands .gx-land-south_america { --gx-land-color: #EF4444; } /* อเมริกาใต้: สีแดงสด (Red) ดึงดูดสายตา มีพลัง */
-.gx-lands .gx-land-oceania       { --gx-land-color: #06B6D4; } /* โอเชียเนีย: สีฟ้าอมเขียว (Cyan) สื่อถึงมหาสมุทรที่ล้อมรอบ */
-/* hover — ทวีปโป่ง/สว่าง + ยกขึ้นเล็กน้อย ให้รู้สึกมีมิติ */
-.gx-lands .gx-land:hover {
-  filter: brightness(1.15) drop-shadow(0 4px 10px rgba(190,24,93,0.32));
-  transform: translateY(-2px) scale(1.02);
-}
-/* active — ทวีปที่เลือกกระพริบเบา ๆ ให้ดึงสายตา */
-.gx-lands .gx-land.is-active {
-  filter: brightness(1.18) drop-shadow(0 4px 12px rgba(190,24,93,0.4));
-  animation: gxLandBreathe 2.6s ease-in-out infinite;
-}
-/* ทวีปที่ไม่ได้ถูกเลือก dim ลงนิดหน่อยเมื่อมีการเลือก */
-.gx-lands:has(.is-active) .gx-land:not(.is-active) { opacity: 0.86; }
 
-/* ─── flight paths (เส้นประโค้ง) ─── */
+/* รหัสสีทวีปแบบ Modern Tech Palette */
+.gx-lands .gx-land-asia          { --gx-land-color: #F59E0B; } 
+.gx-lands .gx-land-europe        { --gx-land-color: #3B82F6; } 
+.gx-lands .gx-land-africa        { --gx-land-color: #10B981; } 
+.gx-lands .gx-land-north_america { --gx-land-color: #6366F1; } 
+.gx-lands .gx-land-south_america { --gx-land-color: #EF4444; } 
+.gx-lands .gx-land-oceania       { --gx-land-color: #06B6D4; } 
+
+/* 🌟 SPOTLIGHT EFFECT: ทำให้ทวีปอื่นที่ไม่ได้ชี้ "ดรอปลงนิดเดียว" โดยไม่เสียสีสันเดิม */
+.gx-lands:has(.gx-land:hover) .gx-land:not(:hover),
+.gx-lands:has(.gx-land.is-active) .gx-land:not(.is-active) { 
+  opacity: 0.9; /* ปรับให้เกือบชัดเต็ม 100% */
+  filter: brightness(0.9); /* เอาความเทาออกทั้งหมด เหลือแค่หรี่ไฟลง 10% ให้ดูมีมิติ */
+  transform: scale(0.98);
+}
+
+/* SPOTLIGHT EFFECT: ทำให้ทวีปอื่นที่ไม่ได้ชี้ "มืดลงและดูจางไป" (เน้นจุดโฟกัส) */
+.gx-lands:has(.gx-land:hover) .gx-land:not(:hover),
+.gx-lands:has(.gx-land.is-active) .gx-land:not(.is-active) { 
+  opacity: 0.35; 
+  filter: grayscale(60%) brightness(0.8);
+  transform: scale(0.98);
+}
+
+/* ─── เส้นการบิน (Glowing Flight Paths) ─── */
 .gx-flightpaths .gx-flightpath {
   fill: none;
-  stroke: rgba(190,24,93,0.55);
-  stroke-width: 1.1;
-  stroke-dasharray: 3 5;
+  stroke: rgba(255, 255, 255, 0.8);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 6;
   stroke-linecap: round;
-  animation: gxFlightDash 6s linear infinite;
+  filter: drop-shadow(0 0 5px rgba(236,72,153,0.6));
+  animation: gxFlightDash 15s linear infinite;
 }
 
-/* ─── sparkle particles ─── */
+/* ─── ละอองแสง (Hologram Sparkles) ─── */
 .gx-sparkles .gx-sparkle {
   fill: rgba(255,255,255,0.9);
-  animation: gxSparkle 3.2s ease-in-out infinite;
+  filter: drop-shadow(0 0 4px #fff);
+  animation: gxSparkle 3s ease-in-out infinite alternate;
 }
 
-/* pins overlay = ตรงตำแหน่งเดียวกับ SVG (ทั้งคู่ absolute inset:0 ในกล่องเดียวกัน) */
+/* ─── หมุดทวีป (Floating Pins) ─── */
 .gx-pins-overlay {
   position: absolute;
   inset: 0;
@@ -591,45 +592,46 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  min-width: 78px;
-  height: 34px;
-  padding: 0 12px 0 10px;
+  gap: 8px;
+  min-width: 85px;
+  height: 38px;
+  padding: 0 14px 0 10px;
   border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.85);
-  background: rgba(255,255,255,0.9);
-  color: #8b1245;
+  border: 1px solid rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(8px);
+  color: #74133c;
   font-family: 'Prompt', sans-serif;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 800;
   cursor: pointer;
-  box-shadow: 0 10px 22px rgba(116,19,60,0.18);
-  transition: transform 0.28s cubic-bezier(0.22,1,0.36,1),
-              background 0.22s ease,
-              box-shadow 0.28s ease;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1), 0 0 0 4px rgba(255,255,255,0.4);
+  animation: floatPin 4s ease-in-out infinite;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-/* จุดวงกลมด้านซ้ายของ pin — pulse/glow เบาๆ ตลอดเวลา
-   (ล้อ pattern จาก compare-deco.js ที่ใช้ soft box-shadow เป็นวงกระพริบ) */
+
 .gx-continent-pin .gx-pin-dot {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: #ec4899;
-  box-shadow: 0 0 0 4px rgba(236,72,153,0.18);
-  animation: gxPinPulse 2.4s ease-in-out infinite;
+  box-shadow: 0 0 0 4px rgba(236,72,153,0.25);
+  animation: gxPinPulse 2s ease-out infinite;
 }
+
 .gx-continent-pin:hover,
-.gx-continent-pin:focus-visible,
 .gx-continent-pin.is-active {
-  transform: translate(-50%, -50%) scale(1.1);
   background: #fff;
-  box-shadow: 0 18px 36px rgba(190,24,93,0.28), 0 0 0 3px rgba(236,72,153,0.18);
-  outline: none;
+  color: #be185d;
+  box-shadow: 0 15px 35px rgba(190,24,93,0.3), 0 0 0 5px rgba(236,72,153,0.2);
+  transform: translate(-50%, -60%) scale(1.15) !important;
+  animation-play-state: paused;
 }
 .gx-continent-pin.is-active .gx-pin-dot {
   background: #be185d;
-  box-shadow: 0 0 0 6px rgba(190,24,93,0.22);
+  box-shadow: 0 0 10px #be185d, 0 0 0 6px rgba(190,24,93,0.3);
 }
+
 .gx-globe-hint {
   position: absolute;
   left: 28px;
@@ -643,32 +645,40 @@
 }
 
 /* ─────────────────────────────────────────────
-   Keyframes สำหรับแผนที่โลกแบบแบน
+   KEYFRAMES (แอนิเมชันสุดล้ำ)
    ────────────────────────────────────────── */
 @keyframes gxMapFloat {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-6px); }
+  0%, 100% { transform: translateY(0) rotateX(0deg); }
+  50%      { transform: translateY(-8px) rotateX(2deg); }
+}
+@keyframes floatPin {
+  0%, 100% { transform: translate(-50%, -50%); }
+  50%      { transform: translate(-50%, -65%); }
 }
 @keyframes gxPinPulse {
-  0%, 100% { box-shadow: 0 0 0 4px rgba(236,72,153,0.18); }
-  50%      { box-shadow: 0 0 0 8px rgba(236,72,153,0.05); }
+  0%   { box-shadow: 0 0 0 0 rgba(236,72,153,0.6); }
+  70%  { box-shadow: 0 0 0 12px rgba(236,72,153,0); }
+  100% { box-shadow: 0 0 0 0 rgba(236,72,153,0); }
 }
 @keyframes gxFlightDash {
-  from { stroke-dashoffset: 0;   }
-  to   { stroke-dashoffset: -48; }
+  from { stroke-dashoffset: 200; }
+  to   { stroke-dashoffset: 0; }
 }
 @keyframes gxSparkle {
-  0%, 100% { opacity: 0.15; transform: scale(0.9); transform-origin: center; }
-  50%      { opacity: 0.95; transform: scale(1.25); }
+  0%   { opacity: 0; transform: scale(0.5); }
+  50%  { opacity: 1; transform: scale(1.5); }
+  100% { opacity: 0; transform: scale(0.5); }
 }
-/* respect prefers-reduced-motion: ปิด animation ทั้งหมดของแผนที่ */
+
 @media (prefers-reduced-motion: reduce) {
-  .gx-worldmap,
-  .gx-continent-pin .gx-pin-dot,
-  .gx-flightpaths .gx-flightpath,
-  .gx-sparkles .gx-sparkle { animation: none !important; }
+  .gx-worldmap, .gx-continent-pin, .gx-continent-pin .gx-pin-dot,
+  .gx-flightpaths .gx-flightpath, .gx-sparkles .gx-sparkle { animation: none !important; }
   .gx-worldmap-inner { transition: none !important; }
 }
+
+/* ─────────────────────────────────────────────
+   UI PANELS & CARDS (ส่วนที่เหลือของหมวดที่ 6)
+   ────────────────────────────────────────── */
 .gx-selection-grid {
   display: grid;
   grid-template-columns: minmax(0, 0.88fr) minmax(360px, 1.12fr);
@@ -1074,6 +1084,7 @@
   font-weight: 800;
 }
 
+/* Responsive adjustments */
 @media (max-width: 980px) {
   .gx-hero,
   .gx-selection-grid,
