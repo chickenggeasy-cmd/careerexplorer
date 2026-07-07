@@ -539,13 +539,12 @@
   transform-box: fill-box;
   transform-origin: center;
 }
-.gx-lands .gx-land-asia          { --gx-land-color: #EC4899; }
-.gx-lands .gx-land-europe        { --gx-land-color: #F472B6; }
-.gx-lands .gx-land-africa        { --gx-land-color: #D6336C; }
-.gx-lands .gx-land-north_america { --gx-land-color: #DB2777; }
-.gx-lands .gx-land-south_america { --gx-land-color: #C2185B; }
-.gx-lands .gx-land-oceania       { --gx-land-color: #E11D66; }
-
+.gx-lands .gx-land-asia          { --gx-land-color: #F59E0B; } /* เอเชีย: สีเหลืองอำพัน (Amber) สว่างตา โดดเด่น */
+.gx-lands .gx-land-europe        { --gx-land-color: #3B82F6; } /* ยุโรป: สีน้ำเงินสว่าง (Blue) ดูน่าเชื่อถือ เป็นทางการ */
+.gx-lands .gx-land-africa        { --gx-land-color: #10B981; } /* แอฟริกา: สีเขียวมรกต (Emerald) สบายตา สื่อถึงธรรมชาติ */
+.gx-lands .gx-land-north_america { --gx-land-color: #6366F1; } /* อเมริกาเหนือ: สีม่วงคราม (Indigo) ดูล้ำสมัย สไตล์ Tech */
+.gx-lands .gx-land-south_america { --gx-land-color: #EF4444; } /* อเมริกาใต้: สีแดงสด (Red) ดึงดูดสายตา มีพลัง */
+.gx-lands .gx-land-oceania       { --gx-land-color: #06B6D4; } /* โอเชียเนีย: สีฟ้าอมเขียว (Cyan) สื่อถึงมหาสมุทรที่ล้อมรอบ */
 /* hover — ทวีปโป่ง/สว่าง + ยกขึ้นเล็กน้อย ให้รู้สึกมีมิติ */
 .gx-lands .gx-land:hover {
   filter: brightness(1.15) drop-shadow(0 4px 10px rgba(190,24,93,0.32));
