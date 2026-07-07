@@ -1,7 +1,50 @@
 /**
  * Career Explorer Pro - Render Logic (Upgraded & Refactored)
- * อัปเดตล่าสุด: เพิ่ม Accessibility (a11y) และคืนค่า Design ตัวหนังสือใหญ่แบบดั้งเดิม
+ * อัปเดตล่าสุด: เพิ่ม Accessibility (a11y) และคืนค่า Design ตัวหนังสือใหญ่แบบดั้งเดิม พร้อมระบบ Toggle ค่าเงิน Global
  */
+
+// ── INJECT CURRENCY TOGGLE CSS ──
+const currStyle = document.createElement('style');
+currStyle.textContent = `
+  body[data-currency="THB"] .show-usd { display: none !important; }
+  body[data-currency="USD"] .show-thb { display: none !important; }
+  .currency-toggle-btn {
+    background: rgba(216, 27, 122, 0.1);
+    color: #D81B7A;
+    border: 1px solid rgba(216, 27, 122, 0.4);
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-family: 'Prompt', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .currency-toggle-btn:hover {
+    background: #D81B7A;
+    color: #fff;
+  }
+`;
+document.head.appendChild(currStyle);
+
+// ── CURRENCY STATE & TOGGLE FUNCTION ──
+let globalCurrency = 'THB'; // ค่าเริ่มต้น
+document.body.setAttribute('data-currency', globalCurrency);
+
+window.toggleCurrency = function() {
+  globalCurrency = globalCurrency === 'THB' ? 'USD' : 'THB';
+  document.body.setAttribute('data-currency', globalCurrency);
+  
+  // อัปเดตข้อความปุ่มทุกจุดในหน้าจอ
+  document.querySelectorAll('.currency-toggle-btn').forEach(btn => {
+    btn.innerHTML = globalCurrency === 'THB' 
+      ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> สลับเป็น USD ($)' 
+      : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 1h6M12 1v22M15 23H9M6 10h12M6 14h12"></path></svg> สลับเป็น THB (฿)';
+  });
+};
 
 // ── GLOBAL CONFIGURATION ──
 const CAT_CONFIG = {
@@ -78,8 +121,6 @@ const GLOBAL_EXPLORER = {
   usdThbRate: 35,
   continents: [
     {
-      // pinX/pinY = ตำแหน่งบนแผนที่แบน 2D (Equirectangular ที่ครอบ lat 84..-56)
-      // เลือกจากค่าเซ็นทรอยด์คร่าวๆ ของทวีป — วาง marker ให้ตกกลางแผ่นดินพอดี
       id: 'asia', nameT: 'เอเชีย', nameE: 'Asia', pinX: '74%', pinY: '33%',
       countries: [
         { id: 'th', code: 'TH', flag: '🇹🇭', nameT: 'ไทย', nameE: 'Thailand', market: 1.00, note: 'ฐานข้อมูลตั้งต้น' },
@@ -134,8 +175,6 @@ let globalSelectedContinentId = 'asia';
 let globalSelectedCountryId = 'th';
 let globalExploreMode = 'world';
 let globalGlobeReady = false;
-// Pan offsets (% of container). Drag adjusts these; setGlobalGlobeForContinent
-// centers the map softly on the selected continent.
 let globalPanX = 0;
 let globalPanY = 0;
 
@@ -223,18 +262,8 @@ function setExploreMode(mode = 'world') {
 
 window.setExploreMode = setExploreMode;
 
-/* ─────────────────────────────────────────────────────────────
-   FLAT WORLD-MAP HELPERS
-   ────────────────────────────────────────────────────────────
-   แผนที่โลกใช้ SVG path จริงจาก Natural Earth 110m (ผ่านสคริปต์
-   สร้าง WORLD_MAP_PATHS ในไฟล์ js/world-map-data.js). สีของแต่ละ
-   ทวีปควบคุมด้วย CSS class `gx-land-<id>` เท่านั้น เพื่อให้
-   เปลี่ยนธีม/dark mode ในอนาคตได้ง่าย
-────────────────────────────────────────────────────────────── */
-
 const WORLD_MAP_VIEW = { w: 1000, h: 560 };
 
-// พิกัดโดยประมาณของทวีปแต่ละใน viewBox (ใช้วาดเส้น flight path)
 const WORLD_MAP_PIN_XY = {
   asia:          { x: 740, y: 185 },
   europe:        { x: 520, y: 135 },
@@ -244,11 +273,10 @@ const WORLD_MAP_PIN_XY = {
   oceania:       { x: 860, y: 425 },
 };
 
-/** วาด <path> ของทวีปทั้งหมดลงใน #gxLandsGroup ครั้งเดียว */
 function renderWorldMapLands() {
   const group = document.getElementById('gxLandsGroup');
   if (!group || group.dataset.ready === '1') return;
-  if (typeof WORLD_MAP_PATHS === 'undefined') return; // data file ยังไม่โหลด
+  if (typeof WORLD_MAP_PATHS === 'undefined') return; 
   const svgNS = 'http://www.w3.org/2000/svg';
   const frag = document.createDocumentFragment();
   GLOBAL_EXPLORER.continents.forEach(cont => {
@@ -258,7 +286,6 @@ function renderWorldMapLands() {
     p.setAttribute('d', d);
     p.setAttribute('class', `gx-land gx-land-${cont.id}`);
     p.setAttribute('data-continent', cont.id);
-    // คลิกที่แผ่นดินให้เลือกทวีปด้วย (นอกเหนือจาก pin) — เพิ่ม UX
     p.addEventListener('click', () => window.selectGlobalContinent(cont.id));
     frag.appendChild(p);
   });
@@ -266,7 +293,6 @@ function renderWorldMapLands() {
   group.dataset.ready = '1';
 }
 
-/** ลากเส้นประโค้ง flight-path เชื่อมทวีปเบา ๆ 3 เส้น */
 function renderWorldMapFlightPaths() {
   const g = document.getElementById('gxFlightPaths');
   if (!g || g.dataset.ready === '1') return;
@@ -281,7 +307,6 @@ function renderWorldMapFlightPaths() {
     const p1 = WORLD_MAP_PIN_XY[a];
     const p2 = WORLD_MAP_PIN_XY[b];
     if (!p1 || !p2) return;
-    // เส้นโค้งควอดราติก: ยกจุดกลางขึ้นเล็กน้อย
     const mx = (p1.x + p2.x) / 2;
     const my = Math.min(p1.y, p2.y) - Math.abs(p2.x - p1.x) * 0.18;
     const path = document.createElementNS(svgNS, 'path');
@@ -292,19 +317,17 @@ function renderWorldMapFlightPaths() {
   g.dataset.ready = '1';
 }
 
-/** โปรยจุดประกาย (sparkle) รอบขอบแผนที่ */
 function renderWorldMapSparkles(count = 14) {
   const g = document.getElementById('gxSparkles');
   if (!g || g.dataset.ready === '1') return;
   const svgNS = 'http://www.w3.org/2000/svg';
-  // seed แบบตายตัวเพื่อให้ตำแหน่งคงที่ไม่กระตุกเวลา re-render
   const seeded = (i) => {
     const s = Math.sin(i * 12.9898) * 43758.5453;
     return s - Math.floor(s);
   };
   for (let i = 0; i < count; i++) {
     const angle = (seeded(i) * Math.PI * 2);
-    const r = 220 + seeded(i + 99) * 60; // ระยะจากจุดกลาง (viewBox 1000×560 → กลาง 500,280)
+    const r = 220 + seeded(i + 99) * 60; 
     const x = 500 + Math.cos(angle) * r * 1.6;
     const y = 280 + Math.sin(angle) * r * 0.85;
     if (x < 20 || x > 980 || y < 20 || y > 540) continue;
@@ -319,7 +342,6 @@ function renderWorldMapSparkles(count = 14) {
   g.dataset.ready = '1';
 }
 
-/** อัปเดต CSS transform สำหรับ pan */
 function applyGlobalMapTransform() {
   const inner = document.getElementById('gxWorldmapInner');
   if (!inner) return;
@@ -329,8 +351,6 @@ function applyGlobalMapTransform() {
 
 function setGlobalGlobeForContinent(continent) {
   if (!continent) return;
-  // ตามที่ผู้ใช้ขอ: ไม่ต้อง auto-pan แผนที่เมื่อคลิกเลือกทวีปแล้ว
-  // แค่ไฮไลต์แผ่นดินของทวีปที่ถูกเลือกก็พอ (แผนที่จะอยู่นิ่ง)
   document.querySelectorAll('.gx-land').forEach(el => {
     el.classList.toggle('is-active', el.dataset.continent === continent.id);
   });
@@ -346,8 +366,6 @@ function renderGlobalExplorerUI() {
   const countrySummary = document.getElementById('globalCountrySummary');
 
   if (pins) {
-    // ปุ่ม pin ทวีป: มี aria-label ภาษาไทย, focusable (tab ได้)
-    // ตำแหน่งใช้ CSS var --x/--y จาก pinX/pinY (% ของกล่องแผนที่)
     pins.innerHTML = GLOBAL_EXPLORER.continents.map(item => `
       <button class="gx-continent-pin ${item.id === globalSelectedContinentId ? 'is-active' : ''}"
         type="button"
@@ -389,27 +407,37 @@ function renderGlobalExplorerUI() {
     const entry = getAverageGlobalSalary('entry');
     const mid = getAverageGlobalSalary('mid');
     const senior = getAverageGlobalSalary('senior');
+    
+    // Toggle Button SVG icon logic based on state
+    const toggleIcon = globalCurrency === 'THB' 
+      ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> สลับเป็น USD ($)'
+      : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 1h6M12 1v22M15 23H9M6 10h12M6 14h12"></path></svg> สลับเป็น THB (฿)';
+
     salaryPreview.innerHTML = `
       <div class="gx-salary-context">
         <div class="gx-salary-eyebrow">SALARY CONVERTER</div>
         <h3><span class="gx-flag-chip" aria-hidden="true">${flagImgInline(country.code, country.nameT)}</span> ${country.nameT} · ${country.nameE}</h3>
-        <p>${country.note} ใช้ฐานเงินเดือนอาชีพเดิมในระบบ และแปลงเป็นค่าเงินบาทกับดอลลาร์สหรัฐแบบประมาณการ</p>
-        <button type="button" class="gx-next-btn" onclick="setExploreMode('careers')">ไปสำรวจสายงานในประเทศนี้</button>
+        <p>${country.note} ใช้ฐานเงินเดือนอาชีพเดิมในระบบ และแปลงเป็นค่าเงินแบบประมาณการ</p>
+        
+        <button type="button" class="currency-toggle-btn" onclick="toggleCurrency()">
+          ${toggleIcon}
+        </button>
+
+        <div style="margin-top: 16px;">
+          <button type="button" class="gx-next-btn" onclick="setExploreMode('careers')">ไปสำรวจสายงานในประเทศนี้</button>
+        </div>
       </div>
       <div class="gx-salary-stat">
         <div class="gx-stat-label">Entry เฉลี่ย</div>
-        <div class="gx-stat-thb">${entry.thbText}</div>
-        <div class="gx-stat-usd">${entry.usdText}</div>
+        <div class="gx-stat-value"><span class="show-thb">${entry.thbText}</span><span class="show-usd">${entry.usdText}</span></div>
       </div>
       <div class="gx-salary-stat">
         <div class="gx-stat-label">Mid เฉลี่ย</div>
-        <div class="gx-stat-thb">${mid.thbText}</div>
-        <div class="gx-stat-usd">${mid.usdText}</div>
+        <div class="gx-stat-value"><span class="show-thb">${mid.thbText}</span><span class="show-usd">${mid.usdText}</span></div>
       </div>
       <div class="gx-salary-stat">
         <div class="gx-stat-label">Senior เฉลี่ย</div>
-        <div class="gx-stat-thb">${senior.thbText}</div>
-        <div class="gx-stat-usd">${senior.usdText}</div>
+        <div class="gx-stat-value"><span class="show-thb">${senior.thbText}</span><span class="show-usd">${senior.usdText}</span></div>
       </div>
     `;
   }
@@ -420,7 +448,7 @@ function renderGlobalExplorerUI() {
       <div class="gx-summary-copy">
         <div class="gx-summary-label">ประเทศที่เลือกตอนนี้</div>
         <h3>${country.nameT} · ${country.nameE}</h3>
-        <p>${country.note} · เงินเดือนทุกอาชีพจะแสดงทั้ง THB และ USD</p>
+        <p>${country.note}</p>
       </div>
       <button type="button" class="gx-summary-btn" onclick="setExploreMode('world')">เปลี่ยนประเทศ</button>
     `;
@@ -432,33 +460,22 @@ function initGlobalGlobeInteractions() {
   if (!map || globalGlobeReady) return;
   globalGlobeReady = true;
 
-  // 1) ฉีด path ทวีป, flight paths, sparkle, ripple, plane เข้า SVG (ครั้งเดียว)
   renderWorldMapLands();
   renderWorldMapFlightPaths();
   renderWorldMapSparkles();
   renderWorldMapPlane();
 
-  // 2) โฟกัสทวีปเริ่มต้น (ไฮไลต์แผ่นดินอย่างเดียว — ไม่มี pan)
   setGlobalGlobeForContinent(getGlobalContinent());
-
-  // 3) ไม่ผูก drag/pan อีกต่อไป — แผนที่จะอยู่นิ่งตามคำขอ
-  // การ interactive มีแค่: คลิก pin, คลิกที่แผ่นดิน (เพิ่ม ripple), hover เห็นทวีปโป่ง
   map.style.cursor = 'default';
 }
 
-/**
- * ripple: ปล่อยวงแหวนขยายออกจากตำแหน่งที่คลิกทวีป
- * เรียกจาก selectGlobalContinent เพื่อให้ทุกวิธีการเลือกทวีป (pin/card/แผ่นดิน)
- * ได้ feedback แบบเดียวกัน
- */
 function spawnContinentRipple(continentId) {
-  const g = document.getElementById('gxFlightPaths')?.parentNode; // ใช้ svg เดียวกัน
+  const g = document.getElementById('gxFlightPaths')?.parentNode; 
   const overlay = document.getElementById('gxRippleLayer');
   if (!overlay) return;
   const xy = WORLD_MAP_PIN_XY[continentId];
   if (!xy) return;
   const svgNS = 'http://www.w3.org/2000/svg';
-  // สร้างวงกลม 2 วง — วงในเข้ม, วงนอกจาง — หมุนออกจากศูนย์กลาง
   [1, 2].forEach((n) => {
     const c = document.createElementNS(svgNS, 'circle');
     c.setAttribute('cx', xy.x);
@@ -466,21 +483,15 @@ function spawnContinentRipple(continentId) {
     c.setAttribute('r', 4);
     c.setAttribute('class', `gx-ripple gx-ripple-${n}`);
     overlay.appendChild(c);
-    // ลบทิ้งหลัง animation จบ (1.4s + delay)
     setTimeout(() => c.remove(), 1600);
   });
 }
 
-/**
- * เครื่องบินการ์ตูนบินตามเส้น flight-path เพียงลำเดียว — สร้าง <animateMotion>
- * ที่วิ่งวนซ้ำเรื่อยๆ เปลี่ยนเส้นทางทุกครั้งเมื่อวนครบ
- */
 function renderWorldMapPlane() {
   const svg = document.querySelector('.gx-worldmap-svg');
   const paths = document.querySelectorAll('#gxFlightPaths .gx-flightpath');
   if (!svg || !paths.length) return;
   const svgNS = 'http://www.w3.org/2000/svg';
-  // สร้าง group ที่มีสัญลักษณ์เครื่องบิน (path รูป ✈ แบบ vector)
   const plane = document.createElementNS(svgNS, 'g');
   plane.setAttribute('class', 'gx-plane');
   plane.innerHTML = `
@@ -489,7 +500,6 @@ function renderWorldMapPlane() {
           fill="#be185d" stroke="#fff" stroke-width="0.6" stroke-linejoin="round"/>
   `;
   svg.appendChild(plane);
-  // แต่ละเส้น flight-path มี id? — เพิ่ม id แล้วสร้าง <animateMotion> อ้างถึง
   paths.forEach((p, i) => { p.id = `gxFlight${i}`; });
   const anim = document.createElementNS(svgNS, 'animateMotion');
   anim.setAttribute('dur', '9s');
@@ -500,12 +510,10 @@ function renderWorldMapPlane() {
   anim.appendChild(mpath);
   plane.appendChild(anim);
 
-  // สลับเส้นทางทุกครั้งที่จบรอบ (ให้เครื่องบินบินไปยังคู่ทวีปใหม่)
   let idx = 0;
   anim.addEventListener('endEvent', () => {
     idx = (idx + 1) % paths.length;
     mpath.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `#gxFlight${idx}`);
-    // restart animation manually
     anim.beginElement?.();
   });
 }
@@ -514,7 +522,6 @@ window.selectGlobalContinent = function (continentId) {
   const continent = getGlobalContinent(continentId);
   globalSelectedContinentId = continent.id;
   globalSelectedCountryId = continent.countries[0].id;
-  // เพิ่ม ripple feedback บริเวณกึ่งกลางทวีป — สนุกกว่าเลือกเฉยๆ
   spawnContinentRipple(continent.id);
   setGlobalGlobeForContinent(continent);
   renderGlobalExplorerUI();
@@ -599,22 +606,30 @@ function createJobCard(job, cat) {
           <div class="jcn-arrow" aria-hidden="true">${DETAIL_ICONS.arrowRight}</div>
         </div>
         <div class="jcn-tags">${tagsHtml}</div>
+        
         <div class="jcn-global-salary">
-          <div class="jcn-gs-country">เงินเดือนใน${country.nameT}</div>
+          <div class="jcn-gs-country">เงินเดือนใน${country.nameT} / เดือน</div>
           <div class="jcn-gs-values">
-            <span>${salaryEntry.thbText}</span>
-            <span>${salaryEntry.usdText}</span>
+            <span class="show-thb">${salaryEntry.thbText}</span>
+            <span class="show-usd">${salaryEntry.usdText}</span>
           </div>
         </div>
+        
         <div class="jcn-salary-footer">
           <div class="jcn-sf-item">
             <div class="jcn-sf-label">เริ่มต้น</div>
-            <div class="jcn-sf-value">${salaryEntry.thbText}</div>
+            <div class="jcn-sf-value">
+              <span class="show-thb">${salaryEntry.thbText}</span>
+              <span class="show-usd">${salaryEntry.usdText}</span>
+            </div>
           </div>
           <div class="jcn-sf-divider"></div>
           <div class="jcn-sf-item">
             <div class="jcn-sf-label">ระดับสูง</div>
-            <div class="jcn-sf-value">${salarySenior.thbText}</div>
+            <div class="jcn-sf-value">
+              <span class="show-thb">${salarySenior.thbText}</span>
+              <span class="show-usd">${salarySenior.usdText}</span>
+            </div>
           </div>
           <div class="jcn-sf-arrow-wrap" aria-hidden="true">${DETAIL_ICONS.arrowRightSm}</div>
         </div>
@@ -643,7 +658,6 @@ async function showCategory(catId) {
         <div class="cph-overlay" style="background: ${grad};"></div>
         <div class="cph-content">
           <div class="cph-eyebrow"><span class="cph-dot"></span> สายงาน</div>
-          <!-- 🛠️ a11y: แก้กลับเป็น style="margin:0;" เฉยๆ เพื่อให้ CSS คลาส cph-title ของคุณทำงานได้เต็มที่ตัวใหญ่ๆ เหมือนเดิม -->
           <h1 class="cph-title" style="margin:0;">${emoji} ${cat.nameT}</h1>
           <p class="cph-sub">${cat.nameE}</p>
           <div class="cph-meta">
@@ -706,6 +720,10 @@ function showJob(jobId, catId) {
       </div>
     `;
   }
+  
+  const toggleIcon = globalCurrency === 'THB' 
+    ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> สลับเป็น USD ($)' 
+    : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 1h6M12 1v22M15 23H9M6 10h12M6 14h12"></path></svg> สลับเป็น THB (฿)';
 
   document.getElementById('detailContent').innerHTML = `
     <div class="detail-hero-banner">
@@ -721,7 +739,6 @@ function showJob(jobId, catId) {
         <div class="dhb-header">
           <div class="dhb-icon-wrap" aria-hidden="true">${job.icon}</div>
           <div class="dhb-title-group">
-            <!-- 🛠️ a11y: คืนค่า style ให้ CSS ของคุณทำงานได้ -->
             <h1 class="dhb-title-th" style="margin:0;">${job.nameT}</h1>
             <div class="dhb-title-en">${job.nameE}</div>
           </div>
@@ -733,7 +750,6 @@ function showJob(jobId, catId) {
       </div>
     </div>
 
-    <!-- ── Stat Strip ── -->
     <div class="detail-stat-strip">
       <div class="dss-item">
         <div class="dss-icon" aria-hidden="true">${icon('graduation', { color: '#be185d' })}</div>
@@ -755,7 +771,10 @@ function showJob(jobId, catId) {
         <div class="dss-icon" aria-hidden="true">${icon('wallet', { color: '#16a34a' })}</div>
           <div class="dss-text">
             <div class="dss-label">เงินเดือนเริ่มต้น</div>
-          <div class="dss-value">${salaryEntry.thbText} · ${salaryEntry.usdText}</div>
+          <div class="dss-value">
+            <span class="show-thb">${salaryEntry.thbText}</span>
+            <span class="show-usd">${salaryEntry.usdText}</span>
+          </div>
         </div>
       </div>
       <div class="dss-divider"></div>
@@ -763,7 +782,10 @@ function showJob(jobId, catId) {
         <div class="dss-icon" aria-hidden="true">${icon('trophy', { color: '#b45309' })}</div>
         <div class="dss-text">
           <div class="dss-label">ระดับสูงสุด</div>
-          <div class="dss-value">${salarySenior.thbText} · ${salarySenior.usdText}</div>
+          <div class="dss-value">
+            <span class="show-thb">${salarySenior.thbText}</span>
+            <span class="show-usd">${salarySenior.usdText}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -771,7 +793,6 @@ function showJob(jobId, catId) {
     <div class="detail-grid-v2">
       <div class="detail-main-v2">
 
-        <!-- ── Education & Skills Card ── -->
         <div class="info-card-v2">
           <div class="icv2-header">
             <div class="icv2-header-icon" aria-hidden="true">${icon('graduation', { color: '#f4e9ed', size: 22 })}</div>
@@ -803,7 +824,6 @@ function showJob(jobId, catId) {
           </div>
         </div>
 
-        <!-- ── Pros / Cons Card ── -->
         <div class="info-card-v2">
           <div class="icv2-header">
             <div class="icv2-header-icon" aria-hidden="true">${icon('scale', { color: '#f8f0f3', size: 22 })}</div>
@@ -823,30 +843,51 @@ function showJob(jobId, catId) {
 
       </div>
 
-      <!-- ── Sidebar ── -->
       <div class="detail-sidebar-v2">
 
-        <!-- Salary Card -->
         <div class="salary-card-v2">
-          <h2 class="scv2-title" style="margin:0;">
-            <span aria-hidden="true">${icon('barChart', { color: '#be185d', style: 'margin-right:6px;' })}</span> โครงสร้างเงินเดือนใน${country.nameT}
-          </h2>
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 12px; flex-wrap:wrap; gap:10px;">
+            <h2 class="scv2-title" style="margin:0;">
+              <span aria-hidden="true">${icon('barChart', { color: '#be185d', style: 'margin-right:6px;' })}</span> โครงสร้างเงินเดือนใน${country.nameT}
+            </h2>
+            <button type="button" class="currency-toggle-btn" onclick="toggleCurrency()" style="margin-top:0;">
+              ${toggleIcon}
+            </button>
+          </div>
+          
           <div class="scv2-row">
-            <div class="scv2-header"><span class="scv2-level">เริ่มต้น (Entry)</span><span class="scv2-amount">${salaryEntry.thbText}<small>${salaryEntry.usdText}</small></span></div>
-            <div class="scv2-bar-track" role="img" aria-label="เงินเดือนเริ่มต้น ${salaryEntry.thbText} หรือ ${salaryEntry.usdText}"><div class="scv2-bar-fill entry" id="bar2-entry"></div></div>
+            <div class="scv2-header">
+              <span class="scv2-level">เริ่มต้น (Entry)</span>
+              <span class="scv2-amount">
+                <span class="show-thb">${salaryEntry.thbText}</span>
+                <span class="show-usd">${salaryEntry.usdText}</span>
+              </span>
+            </div>
+            <div class="scv2-bar-track" role="img" aria-label="เงินเดือนเริ่มต้น"><div class="scv2-bar-fill entry" id="bar2-entry"></div></div>
           </div>
           <div class="scv2-row">
-            <div class="scv2-header"><span class="scv2-level">มีประสบการณ์ (Mid)</span><span class="scv2-amount">${salaryMid.thbText}<small>${salaryMid.usdText}</small></span></div>
-            <div class="scv2-bar-track" role="img" aria-label="เงินเดือนระดับกลาง ${salaryMid.thbText} หรือ ${salaryMid.usdText}"><div class="scv2-bar-fill mid" id="bar2-mid"></div></div>
+            <div class="scv2-header">
+              <span class="scv2-level">มีประสบการณ์ (Mid)</span>
+              <span class="scv2-amount">
+                <span class="show-thb">${salaryMid.thbText}</span>
+                <span class="show-usd">${salaryMid.usdText}</span>
+              </span>
+            </div>
+            <div class="scv2-bar-track" role="img" aria-label="เงินเดือนระดับกลาง"><div class="scv2-bar-fill mid" id="bar2-mid"></div></div>
           </div>
           <div class="scv2-row">
-            <div class="scv2-header"><span class="scv2-level">ระดับสูง / ผู้เชี่ยวชาญ</span><span class="scv2-amount">${salarySenior.thbText}<small>${salarySenior.usdText}</small></span></div>
-            <div class="scv2-bar-track" role="img" aria-label="เงินเดือนระดับสูง ${salarySenior.thbText} หรือ ${salarySenior.usdText}"><div class="scv2-bar-fill senior" id="bar2-senior"></div></div>
+            <div class="scv2-header">
+              <span class="scv2-level">ระดับสูง / ผู้เชี่ยวชาญ</span>
+              <span class="scv2-amount">
+                <span class="show-thb">${salarySenior.thbText}</span>
+                <span class="show-usd">${salarySenior.usdText}</span>
+              </span>
+            </div>
+            <div class="scv2-bar-track" role="img" aria-label="เงินเดือนระดับสูง"><div class="scv2-bar-fill senior" id="bar2-senior"></div></div>
           </div>
           <div class="scv2-note"><span aria-hidden="true">${DETAIL_ICONS.info}</span> แปลงจากฐานข้อมูลเดิมด้วยตัวคูณตลาดแรงงาน${country.nameT} และอัตรา 1 USD ≈ ${GLOBAL_EXPLORER.usdThbRate} THB</div>
         </div>
 
-        <!-- Growth Card -->
         <div class="growth-card-v2">
           <div class="growth-indicator"><span aria-hidden="true">${icon('trendUp', { style: 'margin-right:6px;' })}</span> แนวโน้มการเติบโต</div>
           <h2 class="gcv2-title" style="margin:0;">
@@ -855,7 +896,6 @@ function showJob(jobId, catId) {
           <p class="gcv2-text">${job.growth}</p>
         </div>
 
-        <!-- Related Skills Card -->
         <div class="detail-related-card">
           <h2 class="drc-title" style="margin:0;">
             <span aria-hidden="true">${icon('link', { color: '#be185d', style: 'margin-right:6px;' })}</span> ทักษะที่เกี่ยวข้อง
