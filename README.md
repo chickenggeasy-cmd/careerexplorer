@@ -47,7 +47,7 @@ career-explorer/
 ├── js/
 │   ├── data-loader.js          — ⭐ ตัวโหลดข้อมูล "dual-mode": ลอง Supabase ก่อน ถ้าล่ม/ต่อไม่ได้ค่อย fallback ไปไฟล์ js/data/*.js
 │   ├── world-map-data.js       — เส้นขอบทวีปจริงแบบ SVG path (Natural Earth 110m, auto-generated — คอมเมนต์บอกว่าห้ามแก้มือ)
-│   ├── render.js               — ศูนย์กลาง render ทุกหน้า + เก็บข้อมูลทวีป/ประเทศ/ตัวคูณเงินเดือนของ Global Career Map (ตัวแปร 
+│   ├── render.js               — ศูนย์กลาง render ทุกหน้า + เก็บข้อมูลทวีป/ประเทศ/ตัวคูณเงินเดือนของ Global Career Map (ตัวแปร) 
 │   ├── router.js               — SPA routing ด้วย History API + hash
 │   ├── search.js                — ค้นหาแบบ real-time
 │   ├── quiz.js                  — แบบทดสอบ 20 ข้อ + คำนวณคะแนน (inject CSS ของหน้าตัวเองผ่าน JS)
