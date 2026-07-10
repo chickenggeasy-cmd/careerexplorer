@@ -1,6 +1,7 @@
 /**
  * Career Explorer Pro - Render Logic (Upgraded & Refactored)
  * อัปเดตล่าสุด: เพิ่ม Accessibility (a11y) และคืนค่า Design ตัวหนังสือใหญ่แบบดั้งเดิม พร้อมระบบ Toggle ค่าเงิน Global
+ *                + ดึงอัตราแลกเปลี่ยน USD/THB สดจาก Frankfurter API (ฟรี ไม่ต้องมี key)
  */
 
 // ── INJECT CURRENCY TOGGLE CSS ──
@@ -37,11 +38,11 @@ document.body.setAttribute('data-currency', globalCurrency);
 window.toggleCurrency = function() {
   globalCurrency = globalCurrency === 'THB' ? 'USD' : 'THB';
   document.body.setAttribute('data-currency', globalCurrency);
-  
+
   // อัปเดตข้อความปุ่มทุกจุดในหน้าจอ
   document.querySelectorAll('.currency-toggle-btn').forEach(btn => {
-    btn.innerHTML = globalCurrency === 'THB' 
-      ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> สลับเป็น USD ($)' 
+    btn.innerHTML = globalCurrency === 'THB'
+      ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> สลับเป็น USD ($)'
       : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 1h6M12 1v22M15 23H9M6 10h12M6 14h12"></path></svg> สลับเป็น THB (฿)';
   });
 };
@@ -118,7 +119,7 @@ function icon(svgKey, { color = 'currentColor', size = null, style = '' } = {}) 
 }
 
 const GLOBAL_EXPLORER = {
-  usdThbRate: 35,
+  usdThbRate: 35, // ค่าสำรอง จะถูก override ด้วยค่าจริงจาก fetchUsdThbRate()
   continents: [
     {
       id: 'asia', nameT: 'เอเชีย', nameE: 'Asia', pinX: '74%', pinY: '33%',
@@ -170,6 +171,37 @@ const GLOBAL_EXPLORER = {
     },
   ],
 };
+
+// ─── LIVE USD/THB EXCHANGE RATE (Frankfurter API — ฟรี ไม่ต้องมี key) ───
+// ใช้ค่านี้กับทุกประเทศทั้ง 18 ประเทศ เพื่อแปลง THB ↔ USD
+// ถ้า API ล่ม จะ fallback ใช้ค่า 35 ที่ตั้งไว้ใน GLOBAL_EXPLORER.usdThbRate
+async function fetchUsdThbRate() {
+  try {
+    const res = await fetch('https://api.frankfurter.dev/v1/latest?from=USD&to=THB');
+    if (!res.ok) throw new Error('API status ' + res.status);
+    const data = await res.json();
+    const rate = data && data.rates && data.rates.THB;
+    if (typeof rate === 'number' && rate > 0) {
+      GLOBAL_EXPLORER.usdThbRate = rate;
+      console.log('[FX] Live USD/THB rate =', rate);
+      // รีเฟรช UI ถ้าหน้า explore เปิดอยู่ (ไม่ error ถ้ายังไม่พร้อม)
+      try { if (typeof renderGlobalExplorerUI === 'function') renderGlobalExplorerUI(); } catch (e) {}
+      try {
+        if (typeof renderCategories === 'function' && document.getElementById('catGrid') && window.DATA?.categories?.length) {
+          renderCategories();
+        }
+      } catch (e) {}
+      return rate;
+    }
+  } catch (err) {
+    console.warn('[FX] ใช้ค่าสำรอง 35 THB (ดึง API ไม่สำเร็จ):', err && err.message ? err.message : err);
+  }
+  return GLOBAL_EXPLORER.usdThbRate;
+}
+window.fetchUsdThbRate = fetchUsdThbRate;
+
+// รีเฟรชค่าเงินทุก 1 ชั่วโมง เผื่อผู้ใช้เปิดค้างไว้นาน
+setInterval(fetchUsdThbRate, 60 * 60 * 1000);
 
 let globalSelectedContinentId = 'asia';
 let globalSelectedCountryId = 'th';
@@ -276,7 +308,7 @@ const WORLD_MAP_PIN_XY = {
 function renderWorldMapLands() {
   const group = document.getElementById('gxLandsGroup');
   if (!group || group.dataset.ready === '1') return;
-  if (typeof WORLD_MAP_PATHS === 'undefined') return; 
+  if (typeof WORLD_MAP_PATHS === 'undefined') return;
   const svgNS = 'http://www.w3.org/2000/svg';
   const frag = document.createDocumentFragment();
   GLOBAL_EXPLORER.continents.forEach(cont => {
@@ -327,7 +359,7 @@ function renderWorldMapSparkles(count = 14) {
   };
   for (let i = 0; i < count; i++) {
     const angle = (seeded(i) * Math.PI * 2);
-    const r = 220 + seeded(i + 99) * 60; 
+    const r = 220 + seeded(i + 99) * 60;
     const x = 500 + Math.cos(angle) * r * 1.6;
     const y = 280 + Math.sin(angle) * r * 0.85;
     if (x < 20 || x > 980 || y < 20 || y > 540) continue;
@@ -407,9 +439,9 @@ function renderGlobalExplorerUI() {
     const entry = getAverageGlobalSalary('entry');
     const mid = getAverageGlobalSalary('mid');
     const senior = getAverageGlobalSalary('senior');
-    
+
     // Toggle Button SVG icon logic based on state
-    const toggleIcon = globalCurrency === 'THB' 
+    const toggleIcon = globalCurrency === 'THB'
       ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> สลับเป็น USD ($)'
       : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 1h6M12 1v22M15 23H9M6 10h12M6 14h12"></path></svg> สลับเป็น THB (฿)';
 
@@ -418,7 +450,7 @@ function renderGlobalExplorerUI() {
         <div class="gx-salary-eyebrow">SALARY CONVERTER</div>
         <h3><span class="gx-flag-chip" aria-hidden="true">${flagImgInline(country.code, country.nameT)}</span> ${country.nameT} · ${country.nameE}</h3>
         <p>${country.note} ใช้ฐานเงินเดือนอาชีพเดิมในระบบ และแปลงเป็นค่าเงินแบบประมาณการ</p>
-        
+
         <button type="button" class="currency-toggle-btn" onclick="toggleCurrency()">
           ${toggleIcon}
         </button>
@@ -470,7 +502,7 @@ function initGlobalGlobeInteractions() {
 }
 
 function spawnContinentRipple(continentId) {
-  const g = document.getElementById('gxFlightPaths')?.parentNode; 
+  const g = document.getElementById('gxFlightPaths')?.parentNode;
   const overlay = document.getElementById('gxRippleLayer');
   if (!overlay) return;
   const xy = WORLD_MAP_PIN_XY[continentId];
@@ -606,7 +638,7 @@ function createJobCard(job, cat) {
           <div class="jcn-arrow" aria-hidden="true">${DETAIL_ICONS.arrowRight}</div>
         </div>
         <div class="jcn-tags">${tagsHtml}</div>
-        
+
         <div class="jcn-global-salary">
           <div class="jcn-gs-country">เงินเดือนใน${country.nameT} / เดือน</div>
           <div class="jcn-gs-values">
@@ -614,7 +646,7 @@ function createJobCard(job, cat) {
             <span class="show-usd">${salaryEntry.usdText}</span>
           </div>
         </div>
-        
+
         <div class="jcn-salary-footer">
           <div class="jcn-sf-item">
             <div class="jcn-sf-label">เริ่มต้น</div>
@@ -720,9 +752,9 @@ function showJob(jobId, catId) {
       </div>
     `;
   }
-  
-  const toggleIcon = globalCurrency === 'THB' 
-    ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> สลับเป็น USD ($)' 
+
+  const toggleIcon = globalCurrency === 'THB'
+    ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> สลับเป็น USD ($)'
     : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 1h6M12 1v22M15 23H9M6 10h12M6 14h12"></path></svg> สลับเป็น THB (฿)';
 
   document.getElementById('detailContent').innerHTML = `
@@ -854,7 +886,7 @@ function showJob(jobId, catId) {
               ${toggleIcon}
             </button>
           </div>
-          
+
           <div class="scv2-row">
             <div class="scv2-header">
               <span class="scv2-level">เริ่มต้น (Entry)</span>
@@ -885,7 +917,7 @@ function showJob(jobId, catId) {
             </div>
             <div class="scv2-bar-track" role="img" aria-label="เงินเดือนระดับสูง"><div class="scv2-bar-fill senior" id="bar2-senior"></div></div>
           </div>
-          <div class="scv2-note"><span aria-hidden="true">${DETAIL_ICONS.info}</span> แปลงจากฐานข้อมูลเดิมด้วยตัวคูณตลาดแรงงาน${country.nameT} และอัตรา 1 USD ≈ ${GLOBAL_EXPLORER.usdThbRate} THB</div>
+          <div class="scv2-note"><span aria-hidden="true">${DETAIL_ICONS.info}</span> แปลงจากฐานข้อมูลเดิมด้วยตัวคูณตลาดแรงงาน${country.nameT} และอัตรา 1 USD ≈ ${GLOBAL_EXPLORER.usdThbRate.toFixed(2)} THB (สดจาก Frankfurter)</div>
         </div>
 
         <div class="growth-card-v2">
@@ -938,6 +970,9 @@ function showJob(jobId, catId) {
 }
 
 window.onload = async () => {
+  // ดึงค่าเงิน USD/THB สดก่อน (มี fallback = 35 ถ้า API ล่ม จึงไม่ block ระบบ)
+  await fetchUsdThbRate();
+
   await loadAllCategories();
   renderCategories();
   if (typeof startSlider === 'function') startSlider();
